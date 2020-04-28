@@ -1,0 +1,45 @@
+@import "../../variables.scss";
+.table{
+    background: $light-blue;
+    border-radius: 10px;
+}
+.center-icons{
+    display: flex;
+    height: auto;
+    flex-wrap: wrap;
+    padding: 21px 14%;
+    .box-50{
+        width: 47%;
+        border: solid 1px;
+        margin: 1%;
+        background: $light-blue;
+        border:solid 1px $light-blue-border;
+        h2{
+            margin: 0px;
+            text-align: center;
+            font-size: large;
+        }
+        img{
+            display: flex;
+            width: 100%;
+        }
+    }
+    .box-100{
+        width:100%;
+        margin: 1% 2% 1% 1%;
+        display: flex;
+        background: $light-blue;
+        border:solid 1px $light-blue-border;
+        h2{
+            display: flex;
+            width: 54%;
+            text-align: center;
+            align-self: center;
+            font-size: large;
+        }
+        img{
+            display: flex;
+            width: 42%;
+        }
+    }
+}

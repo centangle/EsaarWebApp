@@ -1,0 +1,6 @@
+@import "../../variables.scss";
+ @include for-size(phone-only) {
+    .grid{
+        flex-basis: 100%;
+    }
+}

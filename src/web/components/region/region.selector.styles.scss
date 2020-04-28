@@ -1,0 +1,27 @@
+@import "../../variables.scss";
+.region-selector{
+    display: flex;
+    flex-wrap: wrap;
+    select{
+        padding:10px;
+    }
+    .add-btn{
+        display: block;
+        padding: 10px;
+        margin:0px;
+        margin-left: 10px;
+    }
+}
+.item-holder{
+    width: 98%;
+    background: #f6faff;
+    margin: 20px 10px;
+    th,td{
+        border-bottom:solid 1px #ccc;
+        padding: 5px 0;
+    }
+    
+    table{
+        width:98%;
+    }
+}

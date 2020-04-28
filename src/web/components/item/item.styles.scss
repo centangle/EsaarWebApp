@@ -1,0 +1,25 @@
+@import "../../variables.scss";
+.added-items{
+    padding: 10px 0px;
+    margin-top: 20px;
+    .item{
+        background: blue;
+        color: #fff;
+        padding: 10px;
+        border-radius: 7px;
+        display: initial;
+        width: auto;
+        margin: 10px;
+    }
+    .remove{
+        position: absolute;
+        margin-top: -2%;
+        border: solid 1px red;
+        width: 18px;
+        text-align: center;
+        color: red;
+        margin-left: 0%;
+        border-radius: 12px;
+        background: #fff;
+    }
+}
