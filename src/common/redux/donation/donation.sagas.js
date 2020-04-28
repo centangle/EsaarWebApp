@@ -43,14 +43,14 @@ export function* addDonationAsync(action){
 export function* addApprovalAsync(action){
     try {
         const currentUser = yield select(selectCurrentUser);
-        const donation = yield fetch(url + "/api/DonationRequest/Update", {
-            method: 'PUT',
+        const donation = yield fetch(url + "/api/DonationRequest/UpdateStatus?donationRequestOrganizationId="+action.payload.donationRequestOrganizationId+"&status="+action.payload.status+"&note="+action.payload.note, {
+            method: 'POST',
             withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
             },
-            body: JSON.stringify(action.payload)
+            body: JSON.stringify(action.payload.items)
         }).then(async (response) => {
             if (response.status >= 205) {
                 const result = await response.json();

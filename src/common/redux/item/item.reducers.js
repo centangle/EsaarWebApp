@@ -3,11 +3,27 @@ import {itemTypes} from './item.types';
 const INITIAL_STATE = {
   sider:false,
   items:[],
-  periferalItems:[]
+  periferalItems:[],
+  modal:false
 };
 let newItems = [];
 const item = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+      case 'OPEN_MODAL':
+        return{
+          ...state,
+          modal:true
+        }
+      case 'CLOSE_MODAL':
+        return{
+          ...state,
+          modal:false
+        }
+      case 'ADD_DONATION_APPROVAL_SUCCESS':
+        return{
+          ...state,
+          modal:false
+        }
       case 'FETCH_ITEM_SUCCESS':
         return {
           ...state,
@@ -22,7 +38,7 @@ const item = (state = INITIAL_STATE, action) => {
         newItems = [];
         state.items && state.items.forEach((item, index)=>{
           if(item && item.Id===action.payload.item.Id){
-            item.ApprovedQuantityUOM = {Id:parseInt(action.payload.ApprovedQuantityUOM)}
+            item[action.payload.type] = {Id:action.payload[action.payload.type]}
           }
           newItems.push(item);
         });
@@ -34,7 +50,7 @@ const item = (state = INITIAL_STATE, action) => {
         newItems = [];
         state.items && state.items.forEach((item, index)=>{
           if(item && item.Id===action.payload.item.Id){
-            item.ApprovedQuantity = action.payload.ApprovedQuantity
+            item[action.payload.type] = action.payload[action.payload.type]
           }
           newItems.push(item);
         })
