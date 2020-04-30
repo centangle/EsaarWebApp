@@ -164,7 +164,13 @@ const organization = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         requestsLoading: false,
-        requests: action.payload
+        requests: {
+          items:action.payload.result,
+          totalItemsCount:action.payload.totalItemsCount,
+          activePage:action.payload.activePage,
+          itemsCountPerPage:action.payload.itemsCountPerPage,
+          pageRangeDisplayed:action.payload.pageRangeDisplayed
+        }
       }
     case 'FETCH_ORG_MEMBERS_SUCCESS':
       return {

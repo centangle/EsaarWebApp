@@ -4,15 +4,15 @@ import { compose } from 'redux';
 
 import { uomLoading } from '../../../common/redux/uom/uom.selectors';
 import WithSpinner from '../with-spinner/with-spinner.component';
-import Uom from './uom.component';
+import UomList from './uom.list.component';
 
 const mapStateToProps = createStructuredSelector({
   isLoading: uomLoading
 });
 
-const UomInput = compose(
+const UomListOverview = compose(
   connect(mapStateToProps),
   WithSpinner
-)(Uom);
+)(UomList);
 
-export default UomInput;
+export default UomListOverview;

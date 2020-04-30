@@ -35,6 +35,6 @@ export function* fetchUom(){
 export function* settingSagas() {
   yield all([
     call(addSettingStart),
-    call(fetchUom)
+    //call(fetchUom)
   ]);
 }

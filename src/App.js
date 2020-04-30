@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import Spinner from './web/components/spinner/spinner.component';
 import ErrorBoundary from './web/components/error-boundary/error-boundary.component';
 
-import './App.css';
+import './App.scss';
 import Header from './web/components/header/header.component';
 import HomePage from './web/pages/home.page';
 import LoginPage from './web/pages/login.page';

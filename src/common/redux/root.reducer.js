@@ -11,6 +11,8 @@ import request from './request/request.reducers';
 import upload from './upload/upload.reducer';
 import donation from './donation/donation.reducers';
 import region from './region/region.reducers';
+import uom from './uom/uom.reducers';
+import event from './event/event.reducers';
 const persistConfig = {
   key: 'root',
   storage,
@@ -26,6 +28,8 @@ const rootReducer = combineReducers({
   request,
   upload,
   donation,
-  region
+  region,
+  uom,
+  event
 });
 export default persistReducer(persistConfig, rootReducer);

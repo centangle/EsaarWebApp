@@ -43,10 +43,8 @@ const RequestAdder = ({ dispatch,match,statuses,request,items,modal }) => {
         }else{
             dispatch({type:'DONATION_UOM_CHANGED',payload:{ApprovedQuantityUOM:e.target.value,item,type:'ApprovedQuantityUOM'}});
         }
-        
     }
     const handleQuantityChange = (e,item) =>{
-        console.log(e.target.value);
         if(state.Status==='Delivered'){
             dispatch({type:'DONATION_QUANTITY_CHANGED',payload:{DeliveredQuantity:e.target.value,item,type:'DeliveredQuantity'}});
         }else if(state.Status==='Collected'){

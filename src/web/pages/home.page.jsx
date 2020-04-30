@@ -8,6 +8,7 @@ import { PageHolder } from './page.styles';
 import Home from '../components/home/home.component';
 import OrganizationPage from './organization.page';
 import ItemPage from './item.page';
+import UomPage from './uom.page';
 import RequestPage from './request.page';
 import DonationPage from './donation.page';
 
@@ -60,6 +61,11 @@ const HomePage = ({ match }) => {
                         exact
                         path="/items/:id"
                         component={ItemPage}
+                    />
+                    <Route
+                        exact
+                        path="/uoms"
+                        component={UomPage}
                     />
                     <Route
                         exact

@@ -29,45 +29,46 @@ const OrganizationDetail = ({ organization,match, dispatch, fetchOrgItemsStart,f
     const id = match.params.id;
     const slug = match.params.slug;
     useEffect(() => {
+        const params = {activePage:1,itemsCountPerPage:2,pageRangeDisplayed:5};
         switch (match.params.slug) {
             case 'requests':
-                return fetchOrgRequestsStart('FETCH_ORG_REQUESTS_START',id);
+                return fetchOrgRequestsStart({type:'FETCH_ORG_REQUESTS_START',id,params});
             case 'packages':
-                fetchOrgRequestsStart('FETCH_ORG_ITEMS_START',id);
-                return fetchOrgRequestsStart('FETCH_ORG_PACKAGES_START',id);
+                fetchOrgRequestsStart({type:'FETCH_ORG_ITEMS_START',id,params});
+                return fetchOrgRequestsStart({type:'FETCH_ORG_PACKAGES_START',id,params});
             case 'volunteers':
-                return fetchOrgRequestsStart('FETCH_ORG_MEMBERS_START',id,'Volunteer');
+                return fetchOrgRequestsStart({type:'FETCH_ORG_MEMBERS_START',id,userType:'Volunteer',params});
             case 'modarators':
-                return fetchOrgRequestsStart('FETCH_ORG_MEMBERS_START',id,'Moderator');
+                return fetchOrgRequestsStart({type:'FETCH_ORG_MEMBERS_START',id,userType:'Moderator',params});
             case 'members':
-                return fetchOrgRequestsStart('FETCH_ORG_MEMBERS_START',id,'Member');
+                return fetchOrgRequestsStart({type:'FETCH_ORG_MEMBERS_START',id,userType:'Member',params});
             case 'owners':
-                return fetchOrgRequestsStart('FETCH_ORG_MEMBERS_START',id,'Owner');
+                return fetchOrgRequestsStart({type:'FETCH_ORG_MEMBERS_START',id,userType:'Owner',params});
             case 'campaigns':
-                fetchOrgRequestsStart('FETCH_ORG_ITEMS_START',id);
-                return fetchOrgRequestsStart('FETCH_ORG_CAMPAIGNS_START',id);
+                fetchOrgRequestsStart({type:'FETCH_ORG_ITEMS_START',id,params});
+                return fetchOrgRequestsStart({type:'FETCH_ORG_CAMPAIGNS_START',id,params});
             case 'donate':
-                return fetchOrgRequestsStart('FETCH_ORG_ITEMS_START',id);
+                return fetchOrgRequestsStart({type:'FETCH_ORG_ITEMS_START',id,params});
             case 'get-donation':
-                return fetchOrgRequestsStart('FETCH_ORG_ITEMS_START',id);
+                return fetchOrgRequestsStart({type:'FETCH_ORG_ITEMS_START',id,params});
             case 'offices':
-                return fetchOrgRequestsStart('FETCH_ORG_OFFICES_START',id,'Offices');
+                return fetchOrgRequestsStart({type:'FETCH_ORG_OFFICES_START',id,userType:'Offices',params});
             case 'accounts':
-                return fetchOrgRequestsStart('FETCH_ORG_ACCOUNTS_START',id,'Accounts');
+                return fetchOrgRequestsStart({type:'FETCH_ORG_ACCOUNTS_START',id,userType:'Accounts',params});
                 //return fetchOrgCampaignsStart(organization.Id);
             case 'items':
-                fetchOrgRequestsStart('FETCH_PERIFERAL_ITEMS_START',id)
-                return fetchOrgRequestsStart('FETCH_ORG_ITEMS_START',id);
+                fetchOrgRequestsStart({type:'FETCH_PERIFERAL_ITEMS_START',id,params})
+                return fetchOrgRequestsStart({type:'FETCH_ORG_ITEMS_START',id,params});
             case 'attachments':
-                return fetchOrgRequestsStart('FETCH_ORG_ATTACHMENTS_START',id);
+                return fetchOrgRequestsStart({type:'FETCH_ORG_ATTACHMENTS_START',id,params});
             case 'regions':
-                fetchOrgRequestsStart('FETCH_COUNTRIES_START',id);
-                return fetchOrgRequestsStart('FETCH_ORG_REGIONS_START',id);
+                fetchOrgRequestsStart({type:'FETCH_COUNTRIES_START',id,params});
+                return fetchOrgRequestsStart({type:'FETCH_ORG_REGIONS_START',id,params});
             case undefined:
-                fetchOrgRequestsStart('FETCH_ORG_CAMPAIGNS_START',id);
-                fetchOrgRequestsStart('FETCH_ORG_OFFICES_START',id,'Offices');
-                fetchOrgRequestsStart('FETCH_ORG_ATTACHMENTS_START',id,'Attachments');
-                return fetchOrgRequestsStart('FETCH_ORG_CATEGORIES_START',id);
+                fetchOrgRequestsStart({type:'FETCH_ORG_CAMPAIGNS_START',id,params});
+                fetchOrgRequestsStart({type:'FETCH_ORG_OFFICES_START',id,userType:'Offices',params});
+                fetchOrgRequestsStart({type:'FETCH_ORG_ATTACHMENTS_START',id,userType:'Attachments',params});
+                return fetchOrgRequestsStart({type:'FETCH_ORG_CATEGORIES_START',id,params});
             default:
                 return;
         }

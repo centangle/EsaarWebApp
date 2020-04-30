@@ -51,14 +51,14 @@ const setting = (state = INITIAL_STATE, action) => {
       return {
         ...state
       }
-    case settingTypes.FETCH_UOM_SUCCESS:
-      return {
-        ...state,
-        uoms: action.payload.result.reduce((obj, item) => {
-          obj[item.Id] = item
-          return obj
-        }, {})
-      }
+    // case settingTypes.FETCH_UOM_SUCCESS:
+    //   return {
+    //     ...state,
+    //     uoms: action.payload.result.reduce((obj, item) => {
+    //       obj[item.Id] = item
+    //       return obj
+    //     }, {})
+    //   }
     default:
       return state;
   }
