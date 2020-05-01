@@ -32,7 +32,7 @@ const OrganiztionAdder = ({dispatch,logo}) =>{
            <div className='two-panel'>
                 <div className='uploader'>
                     <UploadedComponent logo />
-                    <UploaderComponent title="Add Logo" type="file" item="1" />
+                    <UploaderComponent title="Add Logo" type="Logo" item="1" />
                 </div>
                 <div className='input-holder'>
                     <input placeholder='Name' type='text' onChange={handleChange} name="Name" value={Name} />

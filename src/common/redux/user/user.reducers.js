@@ -3,7 +3,9 @@ const toaster = require('../../../web/components/toaster/index');
 const INITIAL_STATE = {
   usersByIds:{},
   socket:false,
-  currentUser:null
+  currentUser:null,
+  isSigningIn:false,
+  isSigningUp:false
 };
 
 const user = (state = INITIAL_STATE, action) => {

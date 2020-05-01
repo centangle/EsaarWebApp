@@ -14,7 +14,7 @@ class UploaderComponent extends React.Component {
         const {type,item} = this.props;
         const [ ...file ] = e.target.files || e.dataTransfer.files;
         file.forEach((f)=>{
-            this.props.onUpload({file:f,type:'Logo',item});
+            this.props.onUpload({file:f,type,item});
         })
     }
 
