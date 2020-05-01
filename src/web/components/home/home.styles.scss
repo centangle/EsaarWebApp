@@ -1,45 +1,73 @@
 @import "../../variables.scss";
-.table{
+.table {
+    margin-top: .5em;
+}
+
+.rdt_TableCol,
+.rdt_TableBody * {
+    font-size: 14px !important;
+    color: $theme-color !important;
+}
+
+.rdt_Table {
     background: $light-blue;
     border-radius: 10px;
 }
-.center-icons{
+
+.rdt_TableCol_Sortable {
+    font-weight: bold;
+}
+
+.rdt_TableHeader {
+    padding-left: 5px !important;
+    color: $theme-color !important;
+}
+
+.center-icons {
     display: flex;
     height: auto;
-    flex-wrap: wrap;
-    padding: 21px 14%;
-    .box-50{
-        width: 47%;
-        border: solid 1px;
-        margin: 1%;
+    /* flex-wrap: wrap;
+    margin: 0px auto; */
+    max-width: 767px;
+    .box-50 {
+        /*  width: 47%;
+        margin: 1%; */
         background: $light-blue;
-        border:solid 1px $light-blue-border;
-        h2{
-            margin: 0px;
+        border: solid 1px;
+        border: solid 1px $light-blue-border;
+        margin: 0 20px 15px 0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: $default-transition;
+        opacity: .8;
+        h2 {
+            margin: 10px;
             text-align: center;
             font-size: large;
         }
-        img{
-            display: flex;
-            width: 100%;
+        img {
+            max-width: 300px;
         }
     }
-    .box-100{
-        width:100%;
-        margin: 1% 2% 1% 1%;
+     :hover {
+        opacity: 1;
+        background: #e7eef7;
+    }
+    .box-100 {
+        /* width: 100%; */
+        /* margin: 1% 2% 1% 1%; */
         display: flex;
         background: $light-blue;
-        border:solid 1px $light-blue-border;
-        h2{
-            display: flex;
-            width: 54%;
-            text-align: center;
-            align-self: center;
-            font-size: large;
+        border: solid 1px $light-blue-border;
+        justify-content: center;
+        align-items: center;
+        h2 {
+            margin: 0 10px;
         }
-        img{
-            display: flex;
-            width: 42%;
+        img {
+            /* display: flex;
+            width: auto;
+            max-height: 150px; */
         }
     }
 }
