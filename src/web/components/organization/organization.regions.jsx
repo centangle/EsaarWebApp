@@ -6,7 +6,7 @@ import { TitleWithAction, FormHolder } from './organization.styles';
 import Modal from '../modal/modal.component';
 import RegionSelector from '../region/region.selector';
 
-import { fetchUomStart } from '../../../common/redux/setting/setting.actions';
+import { fetchUomStart } from '../../../common/redux/uom/uom.actions';
 
 const OrganizationRegions = ({ regions, organizations, dispatch, organization, fetchUomStart,form,newRegions }) => {
   useEffect(() => {

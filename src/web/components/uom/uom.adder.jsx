@@ -1,32 +1,54 @@
-import React,{useState} from 'react';
-import {connect} from 'react-redux'
-const UomAdder = ({dispatch}) =>{
-    const [state,setState] = useState({Name:'',NativeName:'',Description:'',ImageUrl:'',ImageInBase64:''})
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { FormHolder } from './uom.styles';
+const UomAdder = ({ dispatch, uom }) => {
+    const [state, setState] = useState({
+        Name: uom?uom.Name:'', NativeName:uom?uom.NativeName: '',
+        Description:uom?uom.Description: '', NoOfBaseUnit:uom?uom.NoOfBaseUnit: ''
+    })
     const handleClick = () => {
+        let type='ADD_UOM_START';
+        let Id = 0;
+        if(uom){
+            type='UPDATE_UOM_START';
+            Id = uom.Id;
+        }
         dispatch({
-            type: 'ADD_UOM_START',
+            type,
             payload: {
+                ...uom,
                 "Name": state.Name,
                 "NativeName": state.NativeName,
                 "Description": state.Description,
-                "IsCartItem": false,
-                "Id": 0
+                "NoOfBaseUnit":state.NoOfBaseUnit,
+                "Id": Id
             }
         })
     }
-    const handleChange = (event) =>{
-        setState({...state,[event.target.name]:event.target.value})
+    const handleChange = (event) => {
+        setState({ ...state, [event.target.name]: event.target.value })
     }
-    const {Name,NativeName,Description,ImageUrl,ImageInBase64} = state;
+    const { Name, NativeName, Description,NoOfBaseUnit } = state;
     return (
-        <div>
-            <h2>Item</h2>
-            <input placeholder='Name' type='text' onChange={handleChange} name="Name" value={Name} />
-            <input placeholder='Native Name' type='text' onChange={handleChange} name="NativeName" value={NativeName} />
-            <input placeholder='Description' type='text' onChange={handleChange} name="Description" value={Description} />
-            <button onClick={handleClick}>Add Item</button>
-        </div>
+        <FormHolder>
+            <h2>Add/Edit Unit of measurement</h2>
+            <div className='two-panel'>
+                <div className='input-holder'>
+                    <input placeholder='Name' type='text' onChange={handleChange} name="Name" value={Name} />
+                    <input placeholder='Native Name' type='text' onChange={handleChange} name="NativeName" value={NativeName} />
+                    <input placeholder='Base Unit' type='text' onChange={handleChange} name="NoOfBaseUnit" value={NoOfBaseUnit} />
+                    <textarea placeholder='Description' type='text' onChange={handleChange} name="Description" value={Description}></textarea>
+                    <button onClick={handleClick}>Save UOM</button>
+                </div>
+            </div>
+        </FormHolder>
     )
 }
-export default connect()(UomAdder);
+const mapState = (state) => {
+    const { uom } = state;
+    return {
+        uom: uom.current
+    }
+}
+export default connect(mapState)(UomAdder);
 

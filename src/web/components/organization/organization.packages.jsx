@@ -8,7 +8,7 @@ import UploaderComponent from '../uploader/uploader.component';
 import UploadedComponent from '../uploader/uploaded.component';
 import UomInput from '../uom/uom.overview';
 
-import { fetchUomStart } from '../../../common/redux/setting/setting.actions';
+import { fetchUomStart } from '../../../common/redux/uom/uom.actions';
 import ItemWithQtySelector from '../item/item.withqty.selector';
 
 const OrganizationPackages = ({ packages, organizations, dispatch, organization, fetchUomStart }) => {

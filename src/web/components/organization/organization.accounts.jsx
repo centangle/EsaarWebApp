@@ -7,7 +7,7 @@ import Modal from '../modal/modal.component';
 import UploaderComponent from '../uploader/uploader.component';
 import UploadedComponent from '../uploader/uploaded.component';
 
-import { fetchUomStart } from '../../../common/redux/setting/setting.actions';
+import { fetchUomStart } from '../../../common/redux/uom/uom.actions';
 
 const OrganizationAccounts = ({ accounts, organizations, dispatch, organization, fetchUomStart, form }) => {
     useEffect(() => {

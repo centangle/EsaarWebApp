@@ -88,7 +88,7 @@ button{
     margin: 20px;
     margin-left: auto;
 }
-`
+`;
 export const White30 = styled.div`
     position: absolute;
     right: 20px;

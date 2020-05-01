@@ -7,6 +7,10 @@ export const addUomSuccess = uom => ({
   type: uomTypes.ADD_UOM_SUCCESS,
   payload: uom
 });
+export const removeUomFailure = error=>({
+  type:uomTypes.REMOVE_UOM_FAILURE,
+  payload:error
+})
 export const fetchUomSuccess = collections =>({
   type:uomTypes.FETCH_UOM_SUCCESS,
   payload:collections
@@ -28,4 +32,16 @@ export const fetchPeriferalUomStart = () =>({
 export const fetchPeriferalUomSuccess = collections=>({
   type:uomTypes.FETCH_PERIFERAL_UOMS_SUCCESS,
   payload:collections
-})
+});
+export const removeUomSuccess = collections =>({
+  type:uomTypes.REMOVE_UOM_SUCCESS,
+  payload:collections
+});
+export const updateUomSuccess = collections =>({
+  type:uomTypes.UPDATE_UOM_SUCCESS,
+  payload:collections
+});
+export const updateUomFailure = error =>({
+  type:uomTypes.UPDATE_UOM_FAILURE,
+  payload:error
+});

@@ -11,7 +11,7 @@ import ItemPage from './item.page';
 import UomPage from './uom.page';
 import RequestPage from './request.page';
 import DonationPage from './donation.page';
-
+import Setting from './setting.page';
 const HomePage = ({ match }) => {
     const [state, setState] = useState({ position: 'absolute', top: '105px' });
     useLayoutEffect(() => {
@@ -86,6 +86,11 @@ const HomePage = ({ match }) => {
                         exact
                         path="/donation-requests/:id"
                         component={DonationPage}
+                    />
+                    <Route
+                        exact
+                        path="/settings"
+                        component={Setting}
                     />
                 </Suspense>
             </PageHolder>
