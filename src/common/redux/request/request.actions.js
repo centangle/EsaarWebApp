@@ -35,8 +35,9 @@ export const addRequestFailure = error => ({
   type: requestTypes.ADD_REQUEST_FAILURE,
   payload: error
 });
-export const fetchRequestStart = () => ({
-  type: requestTypes.FETCH_REQUEST_START
+export const fetchRequestStart = (params) => ({
+  type: requestTypes.FETCH_REQUEST_START,
+  params
 });
 export const fetchRequestStatus = () =>({
   type:requestTypes.FETCH_REQUEST_STATUS_START

@@ -1,9 +1,9 @@
-import { takeLatest, all, call,put,select,takeEvery } from 'redux-saga/effects';
+import { takeLatest, all, call, put, select, takeEvery } from 'redux-saga/effects';
 import { donationTypes } from './donation.types';
 import { selectCurrentUser } from "../user/user.selectors";
 import {
-    addDonationSuccess,addDonationFailure,
-    addDonationApprovalSuccess,addDonationApprovalFailure,
+    addDonationSuccess, addDonationFailure,
+    addDonationApprovalSuccess, addDonationApprovalFailure,
     fetchDonationRequestSuccess,
     fetchDonationRequestThreadSuccess,
     fetchDonationDetailsSuccess,
@@ -12,8 +12,8 @@ import {
 } from './donation.actions';
 import { apiLink } from '../api.links';
 const url = apiLink;
-export function* addDonationAsync(action){
-     try {
+export function* addDonationAsync(action) {
+    try {
         const currentUser = yield select(selectCurrentUser);
         const donation = yield fetch(url + "/api/DonationRequest/Create", {
             method: 'POST',
@@ -27,7 +27,7 @@ export function* addDonationAsync(action){
             if (response.status >= 205) {
                 const result = await response.json();
                 return { ...result, error: true };
-            }else{
+            } else {
                 return response.json();
             }
         });
@@ -40,10 +40,10 @@ export function* addDonationAsync(action){
         yield put(addDonationFailure(error));
     }
 }
-export function* addApprovalAsync(action){
+export function* addApprovalAsync(action) {
     try {
         const currentUser = yield select(selectCurrentUser);
-        const donation = yield fetch(url + "/api/DonationRequest/UpdateStatus?donationRequestOrganizationId="+action.payload.donationRequestOrganizationId+"&status="+action.payload.status+"&note="+action.payload.note, {
+        const donation = yield fetch(url + "/api/DonationRequest/UpdateStatus?donationRequestOrganizationId=" + action.payload.donationRequestOrganizationId + "&status=" + action.payload.status + "&note=" + action.payload.note, {
             method: 'POST',
             withCredentials: true,
             headers: {
@@ -55,7 +55,7 @@ export function* addApprovalAsync(action){
             if (response.status >= 205) {
                 const result = await response.json();
                 return { ...result, error: true };
-            }else{
+            } else {
                 return response.json();
             }
         });
@@ -68,9 +68,14 @@ export function* addApprovalAsync(action){
         yield put(addDonationFailure(error));
     }
 }
-export function* fetchRequestAsync() {
+export function* fetchRequestAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const q = "recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    let q = "recordsPerPage=" + action.params.itemsCountPerPage
+        + "&currentPage=" + action.params.activePage
+        + "&orderDir=Asc"
+        + "&calculateTotal=true"
+        + "&disablePagination=false";
+    //const q = "recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/DonationRequest/GetPaginated?" + q, {
         method: "GET",
         withCredentials: true,
@@ -82,7 +87,11 @@ export function* fetchRequestAsync() {
         if (response.status >= 205) {
             return { result, error: true };
         }
-        return { ok: true, result: result.Items };
+        return {
+            ok: true, result: result.Items,
+            ...action.params,
+            totalItemsCount: result.TotalCount
+        };
     });
     if (response.ok) {
         yield put(fetchDonationRequestSuccess(response));
@@ -128,10 +137,10 @@ export function* fetchRequestStatusAsync() {
         yield put(fetchRequestStatusSuccess(response));
     }
 }
-export function* fetchDonationDetailsAsync(action){
+export function* fetchDonationDetailsAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     //const q = "recordsPerPage=0&type=General&currentPage=1&orderDir=Desc&disablePagination=true&entityType=Organization&entityId=" + action.payload;
-    const response = yield fetch(url + "/api/DonationRequest/Get?organizationRequestId="+action.payload, {
+    const response = yield fetch(url + "/api/DonationRequest/Get?organizationRequestId=" + action.payload, {
         method: "GET",
         withCredentials: true,
         credentials: 'include',
@@ -151,7 +160,7 @@ export function* fetchDonationDetailsAsync(action){
 export function* fetchDonationItemsAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     //const q = "recordsPerPage=0&type=General&currentPage=1&orderDir=Desc&disablePagination=true&entityType=Organization&entityId=" + action.payload;
-    const response = yield fetch(url + "/api/DonationRequest/GetItems?organizationRequestId="+action.payload, {
+    const response = yield fetch(url + "/api/DonationRequest/GetItems?organizationRequestId=" + action.payload, {
         method: "GET",
         withCredentials: true,
         credentials: 'include',
@@ -168,7 +177,7 @@ export function* fetchDonationItemsAsync(action) {
         yield put(fetchDonationItemsSuccess(response));
     }
 }
-export function* addDonation(){
+export function* addDonation() {
     yield takeLatest(donationTypes.ADD_DONATION_START, addDonationAsync)
 }
 export function* fetchRequest() {
@@ -180,13 +189,13 @@ export function* fetchThread() {
 export function* fetchRequestStatus() {
     yield takeLatest(donationTypes.FETCH_DONATION_REQUEST_STATUS_START, fetchRequestStatusAsync)
 }
-export function* fetchDonationItems(){
+export function* fetchDonationItems() {
     yield takeLatest(donationTypes.FETCH_DONATION_ITEMS_START, fetchDonationItemsAsync)
 }
-export function* fetchDonationDetails(){
+export function* fetchDonationDetails() {
     yield takeLatest(donationTypes.FETCH_DONATION_DETAILS_START, fetchDonationDetailsAsync)
 }
-export function* addApproval(){
+export function* addApproval() {
     yield takeLatest(donationTypes.ADD_DONATION_APPROVAL_START, addApprovalAsync)
 }
 export function* donationSagas() {

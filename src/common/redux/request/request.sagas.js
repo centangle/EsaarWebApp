@@ -10,9 +10,14 @@ import {
 } from './request.actions';
 import { apiLink } from '../api.links';
 const url = apiLink;
-export function* fetchRequestAsync() {
+export function* fetchRequestAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const q = "recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    let q = "recordsPerPage=" + action.params.itemsCountPerPage
+        + "&currentPage=" + action.params.activePage
+        + "&orderDir=Asc"
+        + "&calculateTotal=true"
+        + "&disablePagination=false";
+    //const q = "recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/OrganizationRequest/GetPaginated?" + q, {
         method: "GET",
         withCredentials: true,
@@ -24,7 +29,11 @@ export function* fetchRequestAsync() {
         if (response.status >= 205) {
             return { result, error: true };
         }
-        return { ok: true, result: result.Items };
+        return {
+            ok: true, result: result.Items,
+            ...action.params,
+            totalItemsCount: result.TotalCount
+        };
     });
     if (response.ok) {
         yield put(fetchRequestSuccess(response));
@@ -151,7 +160,7 @@ export function* updateRequestAsync(action) {
         yield put(addRequestFailure(error));
     }
 }
-export function* modifyRegionsAsync(action){
+export function* modifyRegionsAsync(action) {
     try {
         const currentUser = yield select(selectCurrentUser);
         const request = yield fetch(url + "/api/OrganizationMember/UpdateOrganizationMembershipRegions", {
@@ -178,11 +187,11 @@ export function* modifyRegionsAsync(action){
         yield put(addRequestFailure(error));
     }
 }
-export function* assignRequestAsync(action){
+export function* assignRequestAsync(action) {
     try {
         const currentUser = yield select(selectCurrentUser);
-        const q = "organizationId="+action.payload.organizationId+"&requestId="+action.payload.requestId;
-        const request = yield fetch(url + "/api/OrganizationRequest/AssignRequest?"+q, {
+        const q = "organizationId=" + action.payload.organizationId + "&requestId=" + action.payload.requestId;
+        const request = yield fetch(url + "/api/OrganizationRequest/AssignRequest?" + q, {
             method: 'PUT',
             withCredentials: true,
             headers: {
@@ -200,7 +209,7 @@ export function* assignRequestAsync(action){
         if (request.error) {
             yield put(addRequestFailure(request));
         } else {
-            yield put(assignRequestSuccess({ request,result:action.payload }));
+            yield put(assignRequestSuccess({ request, result: action.payload }));
         }
     } catch (error) {
         yield put(addRequestFailure(error));
@@ -224,11 +233,11 @@ export function* addRequestThreadStart() {
 export function* fetchRequestStatus() {
     yield takeLatest(requestTypes.FETCH_REQUEST_STATUS_START, fetchRequestStatusAsync)
 }
-export function* assignRequest(){
-    yield takeLatest(requestTypes.ASSIGN_REQUEST_START,assignRequestAsync)
+export function* assignRequest() {
+    yield takeLatest(requestTypes.ASSIGN_REQUEST_START, assignRequestAsync)
 }
-export function* modifyRegions(){
-    yield takeLatest(requestTypes.MODIFY_REQUEST_REGIONS,modifyRegionsAsync)
+export function* modifyRegions() {
+    yield takeLatest(requestTypes.MODIFY_REQUEST_REGIONS, modifyRegionsAsync)
 }
 export function* requestSagas() {
     yield all([

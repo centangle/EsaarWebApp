@@ -28,6 +28,10 @@ const request = (state = INITIAL_STATE, action) => {
     case 'FETCH_REQUEST_SUCCESS':
       return {
         ...state,
+        totalItemsCount: action.payload.totalItemsCount,
+        activePage: action.payload.activePage,
+        itemsCountPerPage: action.payload.itemsCountPerPage,
+        pageRangeDisplayed: action.payload.pageRangeDisplayed,
         requests: action.payload.result.reduce((obj, item) => {
           obj[item.Id] = item
           return obj

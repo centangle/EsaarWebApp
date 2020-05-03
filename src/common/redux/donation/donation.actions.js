@@ -27,8 +27,9 @@ export const fetchDonationItemsStart = id=>({
   type: donationTypes.FETCH_DONATION_ITEMS_START,
   payload: id
 });
-export const fetchDonationRequestStart = () => ({
-  type: donationTypes.FETCH_DONATION_REQUEST_START
+export const fetchDonationRequestStart = (params) => ({
+  type: donationTypes.FETCH_DONATION_REQUEST_START,
+  params
 });
 export const fetchDonationDetailsStart = (Id)=>({
   type: donationTypes.FETCH_DONATION_DETAILS_START,

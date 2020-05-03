@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Spinner from '../components/spinner/spinner.component';
 import { fetchRequestStart,fetchRequestThreadStart,fetchRequestStatus } from '../../common/redux/request/request.actions';
+import { params } from '../../common/utility/request';
 const RequestOverview = lazy(() =>
 import('../components/request/request.overview')
 )
@@ -13,7 +14,7 @@ const RequestPage = ({ match, fetchRequestStart,fetchRequestThreadStart,fetchReq
   const [state,setState] = useState({match});
   useEffect(() => {
     if(state.match.params.id===undefined){
-      fetchRequestStart();
+      fetchRequestStart(params);
     }else{
       fetchRequestThreadStart(state.match.params.id);
     }
@@ -43,7 +44,7 @@ const mapState = (state) => {
   }
 }
 const mapDispatch = dispatch => ({
-  fetchRequestStart: () => dispatch(fetchRequestStart()),
+  fetchRequestStart: (params) => dispatch(fetchRequestStart(params)),
   fetchRequestThreadStart: (Id)=>dispatch(fetchRequestThreadStart(Id)),
   fetchRequestStatus:()=>dispatch(fetchRequestStatus()),
   dispatch

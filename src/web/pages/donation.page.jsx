@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Spinner from '../components/spinner/spinner.component';
 import { fetchDonationRequestStart,fetchDonationRequestStatus } from '../../common/redux/donation/donation.actions';
+import { params } from '../../common/utility/request';
 const RequestOverview = lazy(() =>
 import('../components/donation-request/request.overview')
 )
@@ -13,7 +14,7 @@ const DonationPage = ({ match,fetchDonationRequestStart,fetchDonationRequestStat
   const [state,setState] = useState({match});
   useEffect(() => {
     if(state.match.params.id===undefined){
-        fetchDonationRequestStart();
+        fetchDonationRequestStart(params);
     }
   }, [fetchDonationRequestStart,state.match]);
   useEffect(()=>{
@@ -41,7 +42,7 @@ const mapState = (state) => {
   }
 }
 const mapDispatch = dispatch => ({
-  fetchDonationRequestStart: () => dispatch(fetchDonationRequestStart()),
+  fetchDonationRequestStart: (params) => dispatch(fetchDonationRequestStart(params)),
   fetchDonationRequestStatus:()=>dispatch(fetchDonationRequestStatus()),
   dispatch
 });

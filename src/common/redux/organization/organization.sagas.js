@@ -492,7 +492,13 @@ export function* fetchOrgRequestsAsync(action) {
 }
 export function* fetchOrgPackagesAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const q = "organizationId=" + action.payload + "&itemType=Package&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    const q = "organizationId=" + action.payload
+        + "&recordsPerPage=" + action.params.itemsCountPerPage
+        + "&currentPage=" + action.params.activePage
+        + "&orderDir=Asc"
+        + "&itemType=Package"
+        + "&disablePagination=false";
+    //const q = "organizationId=" + action.payload + "&itemType=Package&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/OrganizationItem/GetPaginated?" + q, {
         method: "GET",
         withCredentials: true,
@@ -504,7 +510,12 @@ export function* fetchOrgPackagesAsync(action) {
         if (response.status >= 205) {
             return { result, error: true };
         }
-        return { ok: true, result: result.Items };
+        return {
+            ok: true,
+            result: result.Items,
+            ...action.params,
+            totalItemsCount: result.TotalCount,
+        };
     });
     if (response.ok) {
         yield put(fetchOrgPackagesSuccess(response.result));
@@ -552,7 +563,13 @@ export function* fetchOrgCategoriesAsync(action) {
 }
 export function* fetchOrgCampaignAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    const q = "organizationId=" + action.payload
+        + "&recordsPerPage=" + action.params.itemsCountPerPage
+        + "&currentPage=" + action.params.activePage
+        + "&orderDir=Asc"
+        + "&calculateTotal=true"
+        + "&disablePagination=false";
+    //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/Campaign/GetPaginated?" + q, {
         method: "GET",
         withCredentials: true,
