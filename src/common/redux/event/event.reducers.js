@@ -4,7 +4,8 @@ const INITIAL_STATE = {
   sider:false,
   events:[],
   periferalItems:[],
-  modal:false
+  modal:false,
+  form:{}
 };
 let newItems = [];
 const event = (state = INITIAL_STATE, action) => {

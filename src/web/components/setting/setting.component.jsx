@@ -7,6 +7,7 @@ const settings = () => {
             <SettingsHolder>
                 <Link to='/uoms'>Units of Measurements</Link>
                 <Link to='/items'>Items</Link>
+                <Link to='/events'>Events</Link>
             </SettingsHolder>
 
         </div>

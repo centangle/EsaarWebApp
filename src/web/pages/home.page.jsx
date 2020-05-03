@@ -12,6 +12,7 @@ import UomPage from './uom.page';
 import RequestPage from './request.page';
 import DonationPage from './donation.page';
 import Setting from './setting.page';
+import EventPage from './event.page';
 const HomePage = ({ match }) => {
     const [state, setState] = useState({ position: 'absolute', top: '105px' });
     useLayoutEffect(() => {
@@ -91,6 +92,11 @@ const HomePage = ({ match }) => {
                         exact
                         path="/settings"
                         component={Setting}
+                    />
+                    <Route
+                        exact
+                        path="/events"
+                        component={EventPage}
                     />
                 </Suspense>
             </PageHolder>

@@ -6,7 +6,7 @@ import { apiLink } from '../api.links';
 const url = apiLink;
 export function* fetchEventAsync() {
   const currentUser = yield select(selectCurrentUser);
-  const response = yield fetch(url + "/api/Event/GetAllEvents?dataStructure=Tree", {
+  const response = yield fetch(url + "/api/Event/GetPaginated", {
     method: "GET",
     withCredentials: true,
     credentials: 'include',
