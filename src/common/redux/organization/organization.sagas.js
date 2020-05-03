@@ -33,12 +33,15 @@ import { apiLink } from '../api.links';
 const url = apiLink;
 export function* fetchOrganizationAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-        const q = "recordsPerPage="+action.params.itemsCountPerPage
-                +"&currentPage="+action.params.activePage
-                +"&orderDir=Asc"
-                +"&calculateTotal=true"
-                +"&disablePagination=false";
-    const response = yield fetch(url + "/api/Organization/GetPaginated?"+q, {
+    let q = "recordsPerPage=" + action.params.itemsCountPerPage
+        + "&currentPage=" + action.params.activePage
+        + "&orderDir=Asc"
+        + "&calculateTotal=true"
+        + "&disablePagination=false";
+    if (action.params.name) {
+        q += "&name=" + action.params.name
+    }
+    const response = yield fetch(url + "/api/Organization/GetPaginated?" + q, {
         method: "GET",
         withCredentials: true,
         credentials: 'include',
@@ -49,10 +52,11 @@ export function* fetchOrganizationAsync(action) {
         if (response.status >= 205) {
             return { result, error: true };
         }
-        return { ok: true, 
-        result: result.Items,
+        return {
+            ok: true,
+            result: result.Items,
             ...action.params,
-            totalItemsCount:result.TotalCount
+            totalItemsCount: result.TotalCount
         };
     });
     if (response.ok) {
@@ -453,14 +457,14 @@ export function* fetchOrgItemsAsync(action) {
     }
 }
 export function* fetchOrgRequestsAsync(action) {
-    
+
     const currentUser = yield select(selectCurrentUser);
-    const q = "organizationId=" + action.payload 
-                + "&recordsPerPage="+action.params.itemsCountPerPage
-                +"&currentPage="+action.params.activePage
-                +"&orderDir=Asc"
-                +"&calculateTotal=true"
-                +"&disablePagination=false";
+    const q = "organizationId=" + action.payload
+        + "&recordsPerPage=" + action.params.itemsCountPerPage
+        + "&currentPage=" + action.params.activePage
+        + "&orderDir=Asc"
+        + "&calculateTotal=true"
+        + "&disablePagination=false";
     const response = yield fetch(url + "/api/OrganizationRequest/GetPaginated?" + q, {
         method: "GET",
         withCredentials: true,
@@ -476,7 +480,7 @@ export function* fetchOrgRequestsAsync(action) {
             ok: true,
             result: result.Items,
             ...action.params,
-            totalItemsCount:result.TotalCount,
+            totalItemsCount: result.TotalCount,
             // activePage:action.payload.activePage,
             // itemsCountPerPage:action.payload.itemsCountPerPage,
             // pageRangeDisplayed:action.payload.pageRangeDisplayed

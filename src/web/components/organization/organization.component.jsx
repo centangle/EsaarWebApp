@@ -7,6 +7,7 @@ import Modal from '../modal/modal.component';
 import {TitleWithAction} from './organization.styles';
 import Search from '../search/search.component';
 import Pagination from "react-js-pagination";
+import { params } from '../../../common/utility/request';
 const Organzation = ({ data, dispatch,form,activePage,totalItemsCount,pageRangeDisplayed,itemsCountPerPage }) => {
   let history = useHistory();
   const [state, setState] = useState({ treeData: data });
@@ -21,7 +22,7 @@ const Organzation = ({ data, dispatch,form,activePage,totalItemsCount,pageRangeD
     history.push(history.location.pathname + '/' + obj.Id);
   }
   const handleSearch = (term,filters) =>{
-    console.log(term,filters);
+    dispatch({ type: 'FETCH_ORGANIZATION_START',params:{...params,name:term} });
   }
   const handlePageChange = (page) =>{
     dispatch({
