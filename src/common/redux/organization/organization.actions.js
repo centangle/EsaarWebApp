@@ -117,8 +117,9 @@ export const addOrganizationFailure = error => ({
   type: organizationTypes.ADD_ORGANIZATION_FAILURE,
   payload: error
 });
-export const fetchOrganizationStart = () => ({
-  type: organizationTypes.FETCH_ORGANIZATION_START
+export const fetchOrganizationStart = (params) => ({
+  type: organizationTypes.FETCH_ORGANIZATION_START,
+  params
 });
 export const fetchOrgDetailStart = (Id) => ({
   type: organizationTypes.FETCH_ORG_DETAIL,

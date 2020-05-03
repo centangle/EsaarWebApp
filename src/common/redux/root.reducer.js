@@ -16,7 +16,7 @@ import event from './event/event.reducers';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: [user]//['cardsById','listsById','boardsById','currentUser','isGuest','currentBoardId','customersById']
+  whitelist: ['user']//['cardsById','listsById','boardsById','currentUser','isGuest','currentBoardId','customersById']
 };
 
 const rootReducer = combineReducers({

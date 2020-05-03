@@ -4,26 +4,27 @@ import { connect } from 'react-redux';
 import Spinner from '../components/spinner/spinner.component';
 import { fetchOrganizationStart, fetchOrgDetailStart } from '../../common/redux/organization/organization.actions';
 import { fetchPeriferalItemStart } from '../../common/redux/item/item.actions';
+import { params } from '../../common/utility/request';
+
 const OrganzationOverview = lazy(() =>
   import('../components/organization/organization.overview')
 );
-const RequestsOverview = lazy(() =>
-  import('../components/organization/requests.overview')
-);
+
 const OrganzationDetail = lazy(() =>
   import('../components/organization/organization.detail.overview')
 );
-const Donate = lazy(() =>
-  import('../components/donate/donate.component')
-);
+
+
 const OrganzationPage = ({ match, fetchOrganizationStart, fetchOrgDetailStart, fetchPeriferalItemStart }) => {
-  const [state, setState] = useState({ match });
+  
+  const [state, setState] = useState({ match,params });
   const page =  match.params.id;
+  
   useEffect(() => {
-    if (state.match.params.id === undefined) {
-      fetchOrganizationStart();
+    if (state.match.params.id === undefined && state.params!==undefined) {
+      fetchOrganizationStart(state.params);
     }
-  }, [state.match.params.id,fetchOrganizationStart]);
+  }, [state.match.params.id,fetchOrganizationStart,state.params]);
   useEffect(()=>{
     if(page!==undefined)
     fetchOrgDetailStart(page);
@@ -55,7 +56,7 @@ const mapState = (state) => {
   }
 }
 const mapDispatch = dispatch => ({
-  fetchOrganizationStart: () => dispatch(fetchOrganizationStart()),
+  fetchOrganizationStart: (params) => dispatch(fetchOrganizationStart(params)),
   fetchOrgDetailStart: (Id) => dispatch(fetchOrgDetailStart(Id)),
   fetchPeriferalItemStart: () => dispatch(fetchPeriferalItemStart()),
   dispatch

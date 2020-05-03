@@ -12,7 +12,7 @@ const INITIAL_STATE = {
   current: {},
   offices: [],
   accounts: [],
-  regions:[],
+  regions: [],
   campaignsLoading: false,
   itemsLoading: false,
   requestsLoading: false,
@@ -24,7 +24,7 @@ const INITIAL_STATE = {
   volunteerJoining: false,
   moderatorJoining: false,
   memberJoining: false,
-  regionsLoading:false,
+  regionsLoading: false,
   logo: null,
   form: {}
 };
@@ -73,9 +73,9 @@ const organization = (state = INITIAL_STATE, action) => {
     case 'ADD_ORGANIZATION_FAILURE':
       return {
         ...state,
-        form: { ...state.form, error: action.payload,modal:true }
+        form: { ...state.form, error: action.payload, modal: true }
       }
-    
+
     case 'FETCH_ORG_OFFICES_START':
       return {
         ...state,
@@ -116,15 +116,15 @@ const organization = (state = INITIAL_STATE, action) => {
         campaignsLoading: false
       }
     case 'FETCH_ORG_REGIONS_START':
-      return{
+      return {
         ...state,
-        regionsLoading:true
+        regionsLoading: true
       }
     case 'FETCH_ORG_REGIONS_SUCCESS':
-      return{
+      return {
         ...state,
-        regions:action.payload.result,
-        regionsLoading:false,
+        regions: action.payload.result,
+        regionsLoading: false,
       }
     case 'REQUEST_START':
       return {
@@ -143,7 +143,7 @@ const organization = (state = INITIAL_STATE, action) => {
         volunteerJoining: false,
         moderatorJoining: false,
         memberJoining: false,
-        form:{modal:false}
+        form: { modal: false }
       }
     case 'FETCH_ORG_REQUESTS_START':
       return {
@@ -165,11 +165,11 @@ const organization = (state = INITIAL_STATE, action) => {
         ...state,
         requestsLoading: false,
         requests: {
-          items:action.payload.result,
-          totalItemsCount:action.payload.totalItemsCount,
-          activePage:action.payload.activePage,
-          itemsCountPerPage:action.payload.itemsCountPerPage,
-          pageRangeDisplayed:action.payload.pageRangeDisplayed
+          items: action.payload.result,
+          totalItemsCount: action.payload.totalItemsCount,
+          activePage: action.payload.activePage,
+          itemsCountPerPage: action.payload.itemsCountPerPage,
+          pageRangeDisplayed: action.payload.pageRangeDisplayed
         }
       }
     case 'FETCH_ORG_MEMBERS_SUCCESS':
@@ -223,6 +223,10 @@ const organization = (state = INITIAL_STATE, action) => {
     case 'FETCH_ORGANIZATION_SUCCESS':
       return {
         ...state,
+        totalItemsCount: action.payload.totalItemsCount,
+        activePage: action.payload.activePage,
+        itemsCountPerPage: action.payload.itemsCountPerPage,
+        pageRangeDisplayed: action.payload.pageRangeDisplayed,
         organizations: action.payload.result.reduce((obj, item) => {
           obj[item.Id] = item
           return obj

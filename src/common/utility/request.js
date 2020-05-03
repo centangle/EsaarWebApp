@@ -15,3 +15,4 @@ export const remapChildren = () =>{
     
 }
 export const baseUrl = 'http://charity.hostober.pk';
+export const params = {activePage:1,itemsCountPerPage:2,pageRangeDisplayed:5};

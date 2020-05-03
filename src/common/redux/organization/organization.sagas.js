@@ -13,6 +13,7 @@ import {
     addAttachmentSuccess,
     addOrgRegionFailure,
     addOrgRegionSuccess,
+    fetchOrganizationStart,
     fetchOrganizationSuccess,
     fetchOrgDetailSuccess, fetchOrgItemsSuccess,
     fetchOrgRequestsSuccess,
@@ -30,9 +31,14 @@ import {
 } from './organization.actions';
 import { apiLink } from '../api.links';
 const url = apiLink;
-export function* fetchOrganizationAsync() {
+export function* fetchOrganizationAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const response = yield fetch(url + "/api/Organization/GetAllOrganizations?dataStructure=Tree", {
+        const q = "recordsPerPage="+action.params.itemsCountPerPage
+                +"&currentPage="+action.params.activePage
+                +"&orderDir=Asc"
+                +"&calculateTotal=true"
+                +"&disablePagination=false";
+    const response = yield fetch(url + "/api/Organization/GetPaginated?"+q, {
         method: "GET",
         withCredentials: true,
         credentials: 'include',
@@ -43,7 +49,11 @@ export function* fetchOrganizationAsync() {
         if (response.status >= 205) {
             return { result, error: true };
         }
-        return { ok: true, result };
+        return { ok: true, 
+        result: result.Items,
+            ...action.params,
+            totalItemsCount:result.TotalCount
+        };
     });
     if (response.ok) {
         yield put(fetchOrganizationSuccess(response));
@@ -151,6 +161,7 @@ export function* addOrganizationAsync(action) {
             yield put(addOrganizationFailure(organization));
         } else {
             yield put(addOrganizationSuccess({ organization }));
+            yield put(fetchOrganizationStart({}));
         }
     } catch (error) {
         yield put(addOrganizationFailure(error));

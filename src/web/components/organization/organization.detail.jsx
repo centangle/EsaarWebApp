@@ -22,14 +22,13 @@ import OrganizationSidebar from './organization.sidebar';
 import OrganizationHome from './organization.home';
 import DonateSideBar from '../donate/donate.sidebar.component';
 import './organization.styles.scss';
-
+import { params } from '../../../common/utility/request';
 
 const OrganizationDetail = ({ organization,match, dispatch, fetchOrgItemsStart,fetchOrgRequestsStart,fetchOrgCampaignsStart, volunteerJoining, moderatorJoining, memberJoining }) => {
     const [state, setState] = useState({ match });
     const id = match.params.id;
     const slug = match.params.slug;
     useEffect(() => {
-        const params = {activePage:1,itemsCountPerPage:2,pageRangeDisplayed:5};
         switch (match.params.slug) {
             case 'requests':
                 return fetchOrgRequestsStart({type:'FETCH_ORG_REQUESTS_START',id,params});
