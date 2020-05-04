@@ -1,41 +1,43 @@
 @import "../../variables.scss";
-.org-actions{
-    
-}
-h1{
+.org-actions {}
+
+h1 {
     font-size: 30px;
     font-weight: 600;
     line-height: 35px;
     margin: 10px 0 10px 8px;
     text-align: left;
-    color:$dark-blue;
+    color: $dark-blue;
 }
-h2{
+
+h2 {
     font-size: 22px;
     font-weight: 600;
     line-height: 25px;
     margin: 18px 0px 10px 8px;
     text-align: left;
-    color:$dark-blue;
+    color: $dark-blue;
 }
-.inline-tr{
+
+.inline-tr {
     display: flex;
-    margin-bottom:10px;
-    .note{
-        width:100%;
+    margin-bottom: 10px;
+    .note {
+        width: 100%;
     }
-    .save-btn{
+    .save-btn {
         margin-left: auto;
     }
-    img{
-        width:50px;
+    img {
+        width: 50px;
     }
-    input{
+    input {
         margin: 0 10px;
         padding: 8px;
     }
 }
-.org-logo{
+
+.org-logo {
     width: 100px;
     display: flex;
     align-items: center;
@@ -47,30 +49,32 @@ h2{
     border-radius: 10px;
     background: $silver;
     text-align: center;
-    img{
+    img {
         width: 100%;
         height: 100%;
+        object-fit: contain;
     }
 }
-.description{
+
+.description {
     padding: 8px 0px 10px 8px;
 }
-.icon-drop-round{
+
+.icon-drop-round {
     width: 45px;
     float: right;
     border-radius: 50px;
     margin-left: 20px;
-    .dropdown-button{
+    .dropdown-button {
         min-height: 30px;
         border-radius: 50%;
         background: $silver;
         border: solid 1px $silver-dark;
         display: flex;
         justify-content: center;
-        .dropdown-button-indicator{
+        .dropdown-button-indicator {
             display: none;
         }
-        .dropdown-single-arrow{
-        }
+        .dropdown-single-arrow {}
     }
 }
