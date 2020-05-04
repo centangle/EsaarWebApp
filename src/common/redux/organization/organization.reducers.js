@@ -136,7 +136,7 @@ const organization = (state = INITIAL_STATE, action) => {
     case 'REQUEST_SUCCESS':
     case 'REQUEST_FAILURE':
       if (action.payload.result && action.payload.result.ExceptionMessage)
-        toaster.error("Notification Message", action.payload.result.ExceptionMessage, { timeOut: 5000 })
+        toaster.error("Notification Message", action.payload.result.ExceptionMessage, { timeOut: 50000 })
       //alert(action.payload.result.ExceptionMessage);
       return {
         ...state,
@@ -181,7 +181,11 @@ const organization = (state = INITIAL_STATE, action) => {
     case 'FETCH_ORG_ITEMS_SUCCESS':
       return {
         ...state,
-        items: action.payload,
+        items: action.payload.result,
+        totalItemsCount: action.payload.totalItemsCount,
+        activePage: action.payload.activePage,
+        itemsCountPerPage: action.payload.itemsCountPerPage,
+        pageRangeDisplayed: action.payload.pageRangeDisplayed,
         itemsLoading: false
       }
     case 'FETCH_ORG_PACKAGES_START':
@@ -223,6 +227,7 @@ const organization = (state = INITIAL_STATE, action) => {
     case 'FETCH_ORGANIZATION_SUCCESS':
       return {
         ...state,
+        form: {},
         totalItemsCount: action.payload.totalItemsCount,
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
@@ -261,6 +266,8 @@ const organization = (state = INITIAL_STATE, action) => {
         items: state.items.filter(i => i.Item.Id !== action.payload.request.itemId)
       }
     case 'REMOVE_ORG_ITEMS_FAILURE':
+      if (action.payload.organization && action.payload.organization.result.ExceptionMessage)
+        toaster.error("Notification Message", action.payload.organization.result.ExceptionMessage, { timeOut: 50000 })
       return {
         ...state
       }

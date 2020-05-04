@@ -159,7 +159,7 @@ export const removeOrgItemSuccess = (item)=>({
   payload:item
 });
 export const addOrgItemFailure = (item)=>({
-  type:organizationTypes.ADD_ORGANIZATION_FAILURE,
+  type:organizationTypes.REMOVE_ORG_ITEMS_FAILURE,
   payload:item
 });
 export const removeOrgItemFailure = (item)=>({

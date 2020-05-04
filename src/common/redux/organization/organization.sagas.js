@@ -1,6 +1,7 @@
 import { takeLatest, all, call, put, select, takeEvery, takeLeading } from 'redux-saga/effects';
 import { organizationTypes } from './organization.types';
 import { selectCurrentUser } from "../user/user.selectors";
+import { params } from '../../utility/request';
 import {
     addOrganizationSuccess, addOrganizationFailure,
     addCampaignSuccess, addCampaignFailure,
@@ -165,7 +166,7 @@ export function* addOrganizationAsync(action) {
             yield put(addOrganizationFailure(organization));
         } else {
             yield put(addOrganizationSuccess({ organization }));
-            yield put(fetchOrganizationStart({}));
+            yield put(fetchOrganizationStart(params));
         }
     } catch (error) {
         yield put(addOrganizationFailure(error));
@@ -438,7 +439,14 @@ export function* orgRequestAsync(action) {
 export function* fetchOrgItemsAsync(action) {
     //GET /api/OrganizationItem/GetPaginated
     const currentUser = yield select(selectCurrentUser);
-    const q = "organizationId=" + action.payload + "&itemType=General&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    const q = "organizationId=" + action.payload
+        + "&recordsPerPage=" + action.params.itemsCountPerPage
+        + "&currentPage=" + action.params.activePage
+        + "&orderDir=Asc"
+        + "&itemType=General"
+        + "&calculateTotal=true"
+        + "&disablePagination=false";
+    //const q = "organizationId=" + action.payload + "&itemType=General&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/OrganizationItem/GetPaginated?" + q, {
         method: "GET",
         withCredentials: true,
@@ -450,10 +458,15 @@ export function* fetchOrgItemsAsync(action) {
         if (response.status >= 205) {
             return { result, error: true };
         }
-        return { ok: true, result: result.Items };
+        return {
+            ok: true,
+            result: result.Items,
+            ...action.params,
+            totalItemsCount: result.TotalCount,
+        };
     });
     if (response.ok) {
-        yield put(fetchOrgItemsSuccess(response.result));
+        yield put(fetchOrgItemsSuccess(response));
     }
 }
 export function* fetchOrgRequestsAsync(action) {

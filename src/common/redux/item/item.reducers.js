@@ -1,4 +1,5 @@
 import { itemTypes } from './item.types';
+const toaster = require('../../../web/components/toaster/index');
 
 const INITIAL_STATE = {
   sider: false,
@@ -38,6 +39,12 @@ const item = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         logo: action.uploadType === 'ItemLogo' ? action.meta : null
+      }
+    case 'ADD_ITEM_FAILURE':
+      if (action.payload.result && action.payload.result.ExceptionMessage)
+        toaster.error("Notification Message", action.payload.result.ExceptionMessage, { timeOut: 100000 })
+      return{
+        ...state
       }
     case 'ADD_DONATION_APPROVAL_SUCCESS':
       return {

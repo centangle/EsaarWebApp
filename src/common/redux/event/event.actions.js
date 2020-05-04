@@ -19,6 +19,7 @@ export const addEventFailure = error => ({
   type: eventTypes.ADD_EVENT_FAILURE,
   payload: error
 });
-export const fetchEventStart = () => ({
-  type: eventTypes.FETCH_EVENT_START
+export const fetchEventStart = (params) => ({
+  type: eventTypes.FETCH_EVENT_START,
+  params
 });

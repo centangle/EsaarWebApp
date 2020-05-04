@@ -157,11 +157,13 @@ export function* changeItemAsync(action) {
         });
         if (item.error) {
             yield put(addItemFailure(item));
+            yield put(fetchItemStart());
         } else {
             yield put(addItemSuccess({ item }));
         }
     } catch (error) {
         yield put(addItemFailure(error));
+        yield put(fetchItemStart());
     }
 }
 export function* addItemStart() {
