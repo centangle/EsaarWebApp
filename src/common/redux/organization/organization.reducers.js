@@ -84,6 +84,10 @@ const organization = (state = INITIAL_STATE, action) => {
     case 'FETCH_ORG_OFFICES_SUCCESS':
       return {
         ...state,
+        totalItemsCount: action.payload.totalItemsCount,
+        activePage: action.payload.activePage,
+        itemsCountPerPage: action.payload.itemsCountPerPage,
+        pageRangeDisplayed: action.payload.pageRangeDisplayed,
         officesLoading: false,
         offices: action.payload.result
       }
@@ -96,7 +100,11 @@ const organization = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         accountsLoading: false,
-        accounts: action.payload.result
+        accounts: action.payload.result,
+        totalItemsCount: action.payload.totalItemsCount,
+        activePage: action.payload.activePage,
+        itemsCountPerPage: action.payload.itemsCountPerPage,
+        pageRangeDisplayed: action.payload.pageRangeDisplayed,
       }
     case 'FETCH_ORG_ATTACHMENTS_START':
       return {
@@ -107,12 +115,21 @@ const organization = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         attachmentsLoading: false,
-        attachments: action.payload.result
+        attachments: action.payload.result,
+        accounts: action.payload.result,
+        totalItemsCount: action.payload.totalItemsCount,
+        activePage: action.payload.activePage,
+        itemsCountPerPage: action.payload.itemsCountPerPage,
+        pageRangeDisplayed: action.payload.pageRangeDisplayed,
       }
     case 'FETCH_ORG_CAMPAIGNS_SUCCESS':
       return {
         ...state,
-        campaigns: action.payload,
+        campaigns: action.payload.result,
+        totalItemsCount: action.payload.totalItemsCount,
+        activePage: action.payload.activePage,
+        itemsCountPerPage: action.payload.itemsCountPerPage,
+        pageRangeDisplayed: action.payload.pageRangeDisplayed,
         campaignsLoading: false
       }
     case 'FETCH_ORG_REGIONS_START':
@@ -124,6 +141,10 @@ const organization = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         regions: action.payload.result,
+        totalItemsCount: action.payload.totalItemsCount,
+        activePage: action.payload.activePage,
+        itemsCountPerPage: action.payload.itemsCountPerPage,
+        pageRangeDisplayed: action.payload.pageRangeDisplayed,
         regionsLoading: false,
       }
     case 'REQUEST_START':
@@ -176,7 +197,11 @@ const organization = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         membersLoading: false,
-        members: action.payload
+        members: action.payload.result,
+        totalItemsCount: action.payload.totalItemsCount,
+        activePage: action.payload.activePage,
+        itemsCountPerPage: action.payload.itemsCountPerPage,
+        pageRangeDisplayed: action.payload.pageRangeDisplayed,
       }
     case 'FETCH_ORG_ITEMS_SUCCESS':
       return {
@@ -196,7 +221,11 @@ const organization = (state = INITIAL_STATE, action) => {
     case 'FETCH_ORG_PACKAGES_SUCCESS':
       return {
         ...state,
-        packages: action.payload,
+        packages: action.payload.result,
+        totalItemsCount: action.payload.totalItemsCount,
+        activePage: action.payload.activePage,
+        itemsCountPerPage: action.payload.itemsCountPerPage,
+        pageRangeDisplayed: action.payload.pageRangeDisplayed,
         packagesLoading: false
       }
     case 'FETCH_ORG_PACKAGES_FAILURE':
@@ -216,6 +245,7 @@ const organization = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         form: {
+          ...state.form,
           modal: false
         }
       }

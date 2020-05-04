@@ -166,3 +166,23 @@ export const removeOrgItemFailure = (item)=>({
   type:organizationTypes.REMOVE_ORG_ITEMS_FAILURE,
   payload:item
 });
+export const fetchOrgPackagesStart = ({params,payload})=>({
+  type:organizationTypes.FETCH_ORG_PACKAGES_START,
+  params,
+  payload
+});
+export const fetchOrgOfficesStart = ({params,payload})=>({
+  type:organizationTypes.FETCH_ORG_OFFICES_START,
+  params,
+  payload
+});
+export const fetchOrgAccountsStart = ({params,payload})=>({
+  type:organizationTypes.FETCH_ORG_ACCOUNTS_START,
+  params,
+  payload
+});
+export const fetchAttachmentsStart = ({params,payload})=>({
+  type:organizationTypes.FETCH_ORG_ATTACHMENTS_START,
+  params,
+  payload
+});

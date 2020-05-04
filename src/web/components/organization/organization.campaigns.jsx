@@ -10,8 +10,9 @@ import UomInput from '../uom/uom.overview';
 
 import { fetchUomStart } from '../../../common/redux/uom/uom.actions';
 import ItemWithQtySelector from '../item/item.withqty.selector';
+import Pagination from "react-js-pagination";
 
-const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organization, fetchUomStart,form }) => {
+const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organization, fetchUomStart,form,activePage,totalItemsCount,pageRangeDisplayed,itemsCountPerPage }) => {
   useEffect(() => {
     fetchUomStart();
   }, [fetchUomStart]);
@@ -77,18 +78,24 @@ const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organizatio
       ...state,
       addedItems: {
         ...state.addedItems,
-        [input.Item.value]: { Item: input.Item, ItemQuantity: input.ItemQuantity, ItemUOM: input.ItemUOM }
+        [input.Item.Id]: { Item: input.Item, ItemQuantity: input.ItemQuantity, ItemUOM: input.ItemUOM }
       }
     });
   }
   const handleRemove = (item) => {
     //console.log(item,state.addedItems);
     const filteredKeys = state.addedItems;
-    delete filteredKeys[item.value];
+    delete filteredKeys[item.Id];
     setState({
       ...state,
       addedItems: { ...filteredKeys }
     });
+  }
+    const handlePageChange = (page) =>{
+    dispatch({
+      type:'FETCH_ORG_CAMPAIGNS_START',payload:organization.Id,
+      params:{activePage:page,totalItemsCount,pageRangeDisplayed,itemsCountPerPage}
+      })
   }
   return (
     <>
@@ -127,6 +134,13 @@ const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organizatio
           columns={columns}
           data={mappedData}
         />
+        <Pagination
+          activePage={activePage}
+          itemsCountPerPage={itemsCountPerPage}
+          totalItemsCount={totalItemsCount}
+          pageRangeDisplayed={pageRangeDisplayed}
+          onChange={handlePageChange.bind(this)}
+        />
       </div>
     </>
   )
@@ -138,7 +152,11 @@ const mapState = (state) => {
     organizations: organization.organizations,
     organization: organization.current,
     items: organization.items,
-    form:organization.form
+    form:organization.form,
+    activePage:organization && organization.activePage ?organization.activePage:0,
+    totalItemsCount:organization && organization.totalItemsCount ?organization.totalItemsCount:0,
+    itemsCountPerPage:organization && organization.itemsCountPerPage ?organization.itemsCountPerPage:0,
+    pageRangeDisplayed:organization && organization.pageRangeDisplayed ?organization.pageRangeDisplayed:0
   }
 }
 const mapDispatch = dispatch => ({

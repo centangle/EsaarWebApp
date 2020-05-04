@@ -12,6 +12,7 @@ import {
     addAccountFailure,
     addAttachmentFailure,
     addAttachmentSuccess,
+    fetchAttachmentsStart,
     addOrgRegionFailure,
     addOrgRegionSuccess,
     fetchOrganizationStart,
@@ -19,11 +20,14 @@ import {
     fetchOrgDetailSuccess, fetchOrgItemsSuccess,
     fetchOrgRequestsSuccess,
     fetchOrgPackagesSuccess,
+    fetchOrgPackagesStart,
     fetchOrgCampaignsSuccess,
     fetchOrgCategoriesSuccess,
     fetchOrgMembersSuccess,
     fetchOrgAccountsSuccess,
+    fetchOrgAccountsStart,
     fetchOrgOfficesSuccess,
+    fetchOrgOfficesStart,
     fetchOrgAttachmentsSuccess,
     fetchOrgRegionsSuccess,
     requestSuccess, requestFailure,
@@ -66,7 +70,16 @@ export function* fetchOrganizationAsync(action) {
 }
 export function* fetchOrgAccountsAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    let q = "recordsPerPage=" + action.params.itemsCountPerPage
+        + "&organizationId=" + action.payload
+        + "&currentPage=" + action.params.activePage
+        + "&orderDir=Asc"
+        + "&calculateTotal=true"
+        + "&disablePagination=false";
+    // if (action.params.name) {
+    //     q += "&name=" + action.params.name
+    // }
+    //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/OrganizationAccount/GetPaginated?" + q, {
         method: "GET",
         withCredentials: true,
@@ -78,7 +91,12 @@ export function* fetchOrgAccountsAsync(action) {
         if (response.status >= 205) {
             return { result, error: true };
         }
-        return { ok: true, result: result.Items };
+        return {
+            ok: true,
+            result: result.Items,
+            ...action.params,
+            totalItemsCount: result.TotalCount,
+        };
     });
     if (response.ok) {
         yield put(fetchOrgAccountsSuccess(response));
@@ -86,7 +104,13 @@ export function* fetchOrgAccountsAsync(action) {
 }
 export function* fetchOrgOfficesAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    const q = "organizationId=" + action.payload
+        + "&recordsPerPage=" + action.params.itemsCountPerPage
+        + "&currentPage=" + action.params.activePage
+        + "&orderDir=Asc"
+        + "&itemType=Package"
+        + "&disablePagination=false";
+    //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/OrganizationOffice/GetPaginated?" + q, {
         method: "GET",
         withCredentials: true,
@@ -98,7 +122,12 @@ export function* fetchOrgOfficesAsync(action) {
         if (response.status >= 205) {
             return { result, error: true };
         }
-        return { ok: true, result: result.Items };
+        return {
+            ok: true,
+            result: result.Items,
+            ...action.params,
+            totalItemsCount: result.TotalCount,
+        };
     });
     if (response.ok) {
         yield put(fetchOrgOfficesSuccess(response));
@@ -106,7 +135,13 @@ export function* fetchOrgOfficesAsync(action) {
 }
 export function* fetchOrgAttachmentsAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    const q = "organizationId=" + action.payload
+        + "&recordsPerPage=" + action.params.itemsCountPerPage
+        + "&currentPage=" + action.params.activePage
+        + "&orderDir=Asc"
+        + "&itemType=Package"
+        + "&disablePagination=false";
+    //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/OrganizationAttachment/GetPaginated?" + q, {
         method: "GET",
         withCredentials: true,
@@ -118,7 +153,12 @@ export function* fetchOrgAttachmentsAsync(action) {
         if (response.status >= 205) {
             return { result, error: true };
         }
-        return { ok: true, result: result.Items };
+        return {
+            ok: true,
+            result: result.Items,
+            ...action.params,
+            totalItemsCount: result.TotalCount,
+        };
     });
     if (response.ok) {
         yield put(fetchOrgAttachmentsSuccess(response));
@@ -126,7 +166,13 @@ export function* fetchOrgAttachmentsAsync(action) {
 }
 export function* fetchOrgRegionsAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    const q = "organizationId=" + action.payload
+        + "&recordsPerPage=" + action.params.itemsCountPerPage
+        + "&currentPage=" + action.params.activePage
+        + "&orderDir=Asc"
+        + "&itemType=Package"
+        + "&disablePagination=false";
+    //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/OrganizationRegion/GetPaginated?" + q, {
         method: "GET",
         withCredentials: true,
@@ -138,7 +184,12 @@ export function* fetchOrgRegionsAsync(action) {
         if (response.status >= 205) {
             return { result, error: true };
         }
-        return { ok: true, result: result.Items };
+        return {
+            ok: true,
+            result: result.Items,
+            ...action.params,
+            totalItemsCount: result.TotalCount,
+        };
     });
     if (response.ok) {
         yield put(fetchOrgRegionsSuccess(response));
@@ -220,6 +271,7 @@ export function* addPackageAsync(action) {
         if (organization.error) {
             yield put(addPackageFailure(organization));
         } else {
+            yield put(fetchOrgPackagesStart({ params, payload: action.payload.Organization.Id }));
             yield put(addPackageSuccess({ organization }));
         }
     } catch (error) {
@@ -247,6 +299,7 @@ export function* addOfficeAsync(action) {
         if (organization.error) {
             yield put(addOfficeFailure(organization));
         } else {
+            yield put(fetchOrgOfficesStart({ params, payload: action.payload.Organization.Id }));
             yield put(addOfficeSuccess({ organization }));
         }
     } catch (error) {
@@ -275,6 +328,7 @@ export function* addAttachmentsAsync(action) {
         if (organization.error) {
             yield put(addAttachmentFailure(organization));
         } else {
+            yield put(fetchAttachmentsStart({ params, payload: action.payload.organizationId }))
             yield put(addAttachmentSuccess({ organization }));
         }
     } catch (error) {
@@ -330,6 +384,7 @@ export function* addAccountAsync(action) {
         if (organization.error) {
             yield put(addAccountFailure(organization));
         } else {
+            yield put(fetchOrgAccountsStart({ params, payload: action.payload.Organization.Id }))
             yield put(addAccountSuccess({ organization }));
         }
     } catch (error) {
@@ -531,12 +586,18 @@ export function* fetchOrgPackagesAsync(action) {
         };
     });
     if (response.ok) {
-        yield put(fetchOrgPackagesSuccess(response.result));
+        yield put(fetchOrgPackagesSuccess(response));
     }
 }
 export function* fetchOrgMembersAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const q = "organizationId=" + action.payload + "&type=" + action.userType + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    let q = "organizationId=" + action.payload
+        + "&recordsPerPage=" + action.params.itemsCountPerPage
+        + "&currentPage=" + action.params.activePage
+        + "&orderDir=Asc"
+        + "&type=" + action.userType
+        + "&disablePagination=false";
+    //const q = "organizationId=" + action.payload + "&type=" + action.userType + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/OrganizationMember/GetPaginated?" + q, {
         method: "GET",
         withCredentials: true,
@@ -548,10 +609,15 @@ export function* fetchOrgMembersAsync(action) {
         if (response.status >= 205) {
             return { result, error: true };
         }
-        return { ok: true, result: result.Items };
+        return {
+            ok: true,
+            result: result.Items,
+            ...action.params,
+            totalItemsCount: result.TotalCount,
+        };
     });
     if (response.ok) {
-        yield put(fetchOrgMembersSuccess(response.result));
+        yield put(fetchOrgMembersSuccess(response));
     }
 }
 export function* fetchOrgCategoriesAsync(action) {
@@ -594,10 +660,15 @@ export function* fetchOrgCampaignAsync(action) {
         if (response.status >= 205) {
             return { result, error: true };
         }
-        return { ok: true, result: result.Items };
+        return {
+            ok: true,
+            result: result.Items,
+            ...action.params,
+            totalItemsCount: result.TotalCount,
+        };
     });
     if (response.ok) {
-        yield put(fetchOrgCampaignsSuccess(response.result));
+        yield put(fetchOrgCampaignsSuccess(response));
     }
 }
 export function* addItemAsync(action) {
