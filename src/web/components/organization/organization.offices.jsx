@@ -6,10 +6,10 @@ import { TitleWithAction, FormHolder } from './organization.styles';
 import Modal from '../modal/modal.component';
 import UploaderComponent from '../uploader/uploader.component';
 import UploadedComponent from '../uploader/uploaded.component';
-
+import Pagination from "react-js-pagination";
 import { fetchUomStart } from '../../../common/redux/uom/uom.actions';
 
-const OrganizationOffices = ({ offices, organizations, dispatch, organization, fetchUomStart,form }) => {
+const OrganizationOffices = ({ offices, organizations, dispatch, organization, fetchUomStart,form,activePage,totalItemsCount,pageRangeDisplayed,itemsCountPerPage }) => {
   useEffect(() => {
     fetchUomStart();
   }, [fetchUomStart]);
@@ -61,7 +61,12 @@ const OrganizationOffices = ({ offices, organizations, dispatch, organization, f
   }
 
   const { Name, NativeName, Description, ImageUrl, ImageInBase64 } = state;
-
+  const handlePageChange = (page) =>{
+    dispatch({
+      type:'FETCH_ORG_OFFICES_START',payload:organization.Id,
+      params:{activePage:page,totalItemsCount,pageRangeDisplayed,itemsCountPerPage}
+      })
+  }
   return (
     <>
       <TitleWithAction>
@@ -93,6 +98,13 @@ const OrganizationOffices = ({ offices, organizations, dispatch, organization, f
           columns={columns}
           data={mappedData}
         />
+        <Pagination
+          activePage={activePage}
+          itemsCountPerPage={itemsCountPerPage}
+          totalItemsCount={totalItemsCount}
+          pageRangeDisplayed={pageRangeDisplayed}
+          onChange={handlePageChange.bind(this)}
+        />
       </div>
     </>
   )
@@ -104,7 +116,11 @@ const mapState = (state) => {
     organizations: organization.organizations,
     organization: organization.current,
     items: organization.items,
-    form:organization.form
+    form:organization.form,
+    activePage:organization && organization.activePage ?organization.activePage:0,
+    totalItemsCount:organization && organization.totalItemsCount ?organization.totalItemsCount:0,
+    itemsCountPerPage:organization && organization.itemsCountPerPage ?organization.itemsCountPerPage:0,
+    pageRangeDisplayed:organization && organization.pageRangeDisplayed ?organization.pageRangeDisplayed:0
   }
 }
 const mapDispatch = dispatch => ({

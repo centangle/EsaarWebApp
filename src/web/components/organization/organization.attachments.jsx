@@ -6,8 +6,10 @@ import { TitleWithAction, FormHolder } from './organization.styles';
 import Modal from '../modal/modal.component';
 import UploaderComponent from '../uploader/uploader.component';
 import UploadedComponent from '../uploader/uploaded.component';
+import Pagination from "react-js-pagination";
 const baseUrl = require('../../../common/utility/request').baseUrl;
-const OrganizationAttachments = ({ organization, attachments, organizations, dispatch, type, files, form }) => {
+
+const OrganizationAttachments = ({ organization, attachments, organizations, dispatch, type, files, form,activePage,totalItemsCount,pageRangeDisplayed,itemsCountPerPage }) => {
   let history = useHistory();
   const [state, setState] = useState({ modal: false });
   const handleClick = (obj) => {
@@ -49,6 +51,12 @@ const OrganizationAttachments = ({ organization, attachments, organizations, dis
   const handleChange = (e, f) => {
     setState({ ...state, [e.target.name]: e.target.value, file: f });
   }
+    const handlePageChange = (page) =>{
+    dispatch({
+      type:'FETCH_ORG_ATTACHMENTS_START',payload:organization.Id,
+      params:{activePage:page,totalItemsCount,pageRangeDisplayed,itemsCountPerPage}
+      })
+  }
   return (
     <div>
       <TitleWithAction>
@@ -76,6 +84,13 @@ const OrganizationAttachments = ({ organization, attachments, organizations, dis
         </Modal> : null
       }
       <GridToList handleClick={handleClick} type='ORGANIZATION' data={mappedData} />
+      <Pagination
+          activePage={activePage}
+          itemsCountPerPage={itemsCountPerPage}
+          totalItemsCount={totalItemsCount}
+          pageRangeDisplayed={pageRangeDisplayed}
+          onChange={handlePageChange.bind(this)}
+        />
     </div>
   )
 }
@@ -86,7 +101,11 @@ const mapState = (state) => {
     attachments: organization.attachments,
     organizations: organization.organizations,
     files: upload.files,
-    form: organization.form
+    form: organization.form,
+    activePage:organization && organization.activePage ?organization.activePage:0,
+    totalItemsCount:organization && organization.totalItemsCount ?organization.totalItemsCount:0,
+    itemsCountPerPage:organization && organization.itemsCountPerPage ?organization.itemsCountPerPage:0,
+    pageRangeDisplayed:organization && organization.pageRangeDisplayed ?organization.pageRangeDisplayed:0
   }
 }
 export default connect(mapState)(OrganizationAttachments);

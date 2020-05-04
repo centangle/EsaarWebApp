@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Dropdown from '../dropdown/dropdown.component';
 import { connect } from 'react-redux';
 import { ItemWithQtyHolder } from './item.styles';
 import UomInput from '../uom/uom.overview';
+import ItemInput from '../item/item.input';
 import './item.styles.scss';
-const ItemWithQtySelector = ({ items,handleAdd,handleRemove,addedItems }) => {
+const ItemWithQtySelector = ({ dispatch,items,handleAdd,handleRemove,addedItems }) => {
+    useEffect(() => {
+    //dispatch({type:'FETCH_ORG_ITEMS_START'});
+  }, [dispatch]);
     const [state, setState] = useState({ selected: { content: "Select Item" }, ItemQuantity: '',ItemUOM:'' });
     const onUomSelect = (item) => {
         setState({ ...state, ItemUOM: item });
@@ -23,12 +27,13 @@ const ItemWithQtySelector = ({ items,handleAdd,handleRemove,addedItems }) => {
         <>
         <ItemWithQtyHolder>
             <div className='item'>
-                <Dropdown
+                <ItemInput onSelect={onItemSelect} />
+                {/* <Dropdown
                     onChange={(item) => onItemSelect(item)} options={mappedItems}
                     buttonIndicator={true}
                     selectedOption={state.selected}
                     buttonIndicatorContent={state.selected.content}
-                />
+                /> */}
             </div>
             <div className='unit'>
                 <UomInput onSelect={onUomSelect} />
@@ -48,7 +53,7 @@ const ItemWithQtySelector = ({ items,handleAdd,handleRemove,addedItems }) => {
                             <div className='item' key={key}>
                                 {addedItems[key].ItemQuantity+" "}
                                 {addedItems[key].ItemUOM.Name+" "}
-                                {addedItems[key].Item.content}
+                                {addedItems[key].Item.Name}
                                 <span className='remove' onClick={()=>handleRemove(addedItems[key].Item)}>x</span>
                             </div>
                         )
