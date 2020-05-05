@@ -17,7 +17,7 @@ const GridToList = ({ data, dispatch, type, handleClick, height, links,buttonsWi
                                 {
                                     buttonsWithActions && buttonsWithActions.map(item=>{
                                         return(
-                                            <span className='link' key={item.label} onClick={()=>item.action(data[key].Id)}>{item.label}</span>
+                                            <span className='link' key={item.label} onClick={()=>item.action(data[key])}>{item.label}</span>
                                         )
                                     })
                                 }

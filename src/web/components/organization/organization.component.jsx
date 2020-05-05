@@ -74,8 +74,8 @@ const Organzation = ({
       }
     }));
   }
-  const openVolunteer = (Id) => {
-    setState({ ...state, id: Id, volunteer: true });
+  const openVolunteer = (item) => {
+    setState({ ...state, id: item.Id, volunteer: true });
   }
   const buttonsWithActions = [{ label: 'volunteer', action: openVolunteer }];
   return (
@@ -86,7 +86,7 @@ const Organzation = ({
             <div>
               <div className='input-holder'>
                 <RegionSelector isOrganizationRegion organizationId={state.id} />
-                <button onClick={(event) => handleSubmit()}>Request</button>
+                <button onClick={(event) => handleSubmit()}>Save</button>
               </div>
             </div>
           </FormHolder>

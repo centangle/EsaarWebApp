@@ -70,7 +70,7 @@ const OrganizationHeader = ({ organization, dispatch, regions }) => {
                         <div>
                             <div className='input-holder'>
                                 <RegionSelector isOrganizationRegion organizationId={organization.Id} />
-                                <button onClick={(event)=>handleSubmit()}>Request</button>
+                                <button onClick={(event)=>handleSubmit()}>Save</button>
                             </div>
                         </div>
                     </FormHolder>
