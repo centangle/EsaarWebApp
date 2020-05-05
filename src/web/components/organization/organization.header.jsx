@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import CustomButton from "../custom-button/custom-button.component";
 import Dropdown from "../dropdown/dropdown.component";
 import {
@@ -10,12 +10,12 @@ import {
   Row,
   FormHolder,
 } from "./organization.styles";
-import {connect} from "react-redux";
-import {useHistory} from "react-router-dom";
-import {baseUrl} from "../../../common/utility/request";
+import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { baseUrl } from "../../../common/utility/request";
 import Modal from "../modal/modal.component";
 import RegionSelector from "../region/region.selector";
-const OrganizationHeader = ({organization, dispatch, regions}) => {
+const OrganizationHeader = ({ organization, dispatch, regions }) => {
   const [state, setState] = useState({
     modal: false,
     type: "Member",
@@ -30,16 +30,10 @@ const OrganizationHeader = ({organization, dispatch, regions}) => {
       EntityType: "Member",
       Type: type,
     };
-    dispatch({type: "REQUEST_START", payload: data});
+    dispatch({ type: "REQUEST_START", payload: data });
     //['Owner', 'Member', 'Volunteer', 'Moderator', 'Item', 'Region']
   };
-  const handleChange = (e) => {
-    if (e.value === "Volunteer" || e.value === "Moderator") {
-      openModal(e.value);
-    } else {
-      handleJoin(e.value);
-    }
-  };
+
   const hangleGo = (slug) => {
     history.push("/organizations/" + organization.Id + "/" + slug);
   };
@@ -56,76 +50,68 @@ const OrganizationHeader = ({organization, dispatch, regions}) => {
       modal: false,
     });
   };
+
+  const handleChange = (e) => {
+    if (e.value === 'Volunteer' || e.value === 'Moderator') {
+      openModal(e.value);
+    } else {
+      handleJoin(e.value);
+    }
+  }
+
   const handleSubmit = (e) => {
-    handleJoin(
-      state.type,
-      Object.keys(regions).map((key) => {
-        return {
-          RegionLevel: regions[key].RegionLevel,
-          Region: {
-            Id: regions[key][regions[key].RegionLevel].Id,
-          },
-        };
-      })
-    );
-  };
+    handleJoin(state.type, Object.keys(regions).map(key => {
+      return {
+        RegionLevel: regions[key].RegionLevel,
+        Region: {
+          Id: regions[key][regions[key].RegionLevel].Id
+        }
+      }
+    }));
+  }
   return (
     <Row>
-      <div className="org-logo">
-        <img src={baseUrl + "/" + organization.ImageUrl} alt="logo" />
+      <div className='org-logo'>
+        <img src={baseUrl + '/' + organization.ImageUrl} alt='logo' />
       </div>
-      {state.modal ? (
-        <Modal closeModal={closeModal}>
+      {
+        state.modal ? <Modal closeModal={closeModal}>
           <FormHolder>
             <div>
-              <div className="input-holder">
-                <RegionSelector
-                  isOrganizationRegion
-                  organizationId={organization.Id}
-                />
-                <button
-                  className="btn btn-success"
-                  onClick={(event) => handleSubmit()}
-                >
-                  <i className="fa fa-save"></i> Request
-                </button>
+              <div className='input-holder'>
+                <RegionSelector isOrganizationRegion organizationId={organization.Id} />
+                <button onClick={(event) => handleSubmit()}>Save</button>
               </div>
             </div>
           </FormHolder>
-        </Modal>
-      ) : null}
-      <div className="org-actions">
+        </Modal> : null
+      }
+      <div className='org-actions'>
         <h1>{organization.Name}</h1>
-        <div className="org-buttons">
-          <CustomButton handleClick={() => handleJoin("Member")}>
-            Member
-          </CustomButton>
-          <CustomButton handleClick={() => hangleGo("donate")}>
-            Donate
-          </CustomButton>
-          <CustomButton handleClick={() => hangleGo("get-donation")}>
-            Request
-          </CustomButton>
+        <div className='org-buttons'>
+          <CustomButton handleClick={() => handleJoin('Member')}>Member</CustomButton>
+          <CustomButton handleClick={() => hangleGo('donate')}>Donate</CustomButton>
+          <CustomButton handleClick={() => hangleGo('get-donation')}>Request</CustomButton>
           <Dropdown
             className="icon-drop-round"
             options={[
-              {value: "Volunteer", content: "Join as Volunteer"},
-              {value: "Moderator", content: "Request Moderation"},
+              { value: 'Volunteer', content: 'Join as Volunteer' },
+              { value: 'Moderator', content: 'Request Moderation' }
             ]}
             onChange={(e) => handleChange(e)}
             buttonIndicator={true}
             //buttonIndicatorContent={''}
-            resetValue={""}
-            selectedOption={"expense"}
-            //PreBuildOptions={ColorPicker}
+            resetValue={''}
+            selectedOption={'expense'}
+          //PreBuildOptions={ColorPicker}
           />
         </div>
       </div>
     </Row>
-  );
-};
+  )
+}
 const mapState = (state) => {
-  const {region} = state;
+  const { region } = state;
   return {
     regions: region.regions,
   };

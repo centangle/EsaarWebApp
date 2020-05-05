@@ -33,13 +33,13 @@ const RequestDetail = ({
   ]);
   const [state, setState] = useState({modal: false});
   const TimelineIcon = ({title}) => {
-    return <span className={"customIcon " + title}>{title}</span>;
+    return <span className="customIcon">{title}</span>;
   };
   const openModal = () => {
-    setState({...state, modal: true});
+    setState({...state, modal: true, type: "donation"});
   };
   const closeModal = () => {
-    setState({...state, modal: false});
+    setState({...state, modal: false, type: "donation"});
   };
   const handleSubmit = () => {
     const payloadRegions = Object.keys(regions).map((key) => {
@@ -70,17 +70,13 @@ const RequestDetail = ({
         <h2 className="tread-title">Request Thread</h2>
         {request && request.CanUpdateRegions ? (
           <span className="tread-actions">
-            <button className="btn btn-primary" onClick={openModal}>
-              Update Regions
-            </button>
+            <button onClick={openModal}>Update Regions</button>
           </span>
         ) : null}
         {state.modal ? (
           <Modal closeModal={closeModal}>
             <RegionSelector />
-            <button className="btn btn-success" onClick={handleSubmit}>
-              Save Regions
-            </button>
+            <button onClick={handleSubmit}>Save Regions</button>
           </Modal>
         ) : null}
         <span className="tread-topic">
@@ -104,7 +100,7 @@ const RequestDetail = ({
                 key={reply.Id}
                 className="vertical-timeline-element--education"
                 date={moment(reply.CreatedDate, "YYYY-MM-DD").fromNow()}
-                /* iconStyle={{background: "rgb(233, 30, 99)", color: "#fff"}} */
+                iconStyle={{background: "rgb(233, 30, 99)", color: "#fff"}}
                 icon={<TimelineIcon title={reply.Status} />}
               >
                 <h3 className="vertical-timeline-element-title">
@@ -145,4 +141,5 @@ const mapDispatch = (dispatch) => {
     fetchDonationItemsStart: (Id) => dispatch(fetchDonationItemsStart(Id)),
   };
 };
+
 export default connect(mapState, mapDispatch)(RequestDetail);
