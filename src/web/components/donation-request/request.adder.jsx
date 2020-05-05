@@ -28,12 +28,12 @@ const RequestAdder = ({ dispatch,match,statuses,request,items,modal }) => {
     }
     const handleChange = (event) => {
         if(event.target.value==='Approved' || event.target.value==='Collected' || event.target.value==='Delivered' || event.target.name==='StatusNote'){
-            dispatch({type:'OPEN_MODAL'})
+            dispatch({type:'OPEN_MODAL',payload:{}})
         }
         setState({ ...state, [event.target.name]: event.target.value });
     }
     const handleClose = ()  =>{
-        dispatch({type:'CLOSE_MODAL'});
+        dispatch({type:'CLOSE_MODAL',payload:{}});
     }
     const handleDrop = (e,item) =>{
         if(state.Status==='Delivered'){

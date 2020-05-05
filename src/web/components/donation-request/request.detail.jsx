@@ -20,10 +20,10 @@ const RequestDetail = ({ match, replies, request, dispatch, regions,fetchDonatio
         )
     }
     const openModal = () => {
-        setState({ ...state, modal: true });
+        setState({ ...state, modal: true,type:'donation' });
     }
     const closeModal = () => {
-        setState({ ...state, modal: false });
+        setState({ ...state, modal: false,type:'donation' });
     }
     const handleSubmit = () => {
         const payloadRegions = Object.keys(regions).map(key => {

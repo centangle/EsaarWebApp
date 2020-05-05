@@ -4,3 +4,27 @@
         flex-basis: 100%;
     }
 }
+.grid{
+    .grid-links{
+        position: absolute;
+        margin-top: 70px;
+        width: 17%;
+        .link{
+            display: flex;
+            justify-content: center;
+            border: solid 1px;
+            margin: 10px 70px;
+            padding: 5px;
+            background: #ccc;
+            opacity: 0;
+            border-radius: 20px;
+            text-transform: capitalize;
+            text-decoration: none;
+        }
+    }
+    &:hover{
+        .link{
+            opacity: 1;
+        }
+    }
+}

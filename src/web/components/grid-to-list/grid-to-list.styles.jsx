@@ -83,7 +83,7 @@ export const ItemHolder = styled.div`
         position: relative;
         word-break: break-word;
       }
-      div {
+      .name {
         width: 100%;
       }
     }

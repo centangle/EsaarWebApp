@@ -22,7 +22,7 @@ const OrganizationHeader = ({ organization, dispatch, regions }) => {
             "EntityType": "Member",
             "Type": type,
         };
-        dispatch({ type: 'REQUEST_START', payload: data })
+        dispatch({ type: 'REQUEST_START', payload: data });
         //['Owner', 'Member', 'Volunteer', 'Moderator', 'Item', 'Region']
     }
     const handleChange = (e) => {
