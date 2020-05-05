@@ -1,33 +1,35 @@
 @import "../../variables.scss";
-header{
-    nav{
+header {
+    nav {
         box-shadow: $shadow;
         height: 75px;
     }
-    .center{
+    .drawer {
+        cursor: pointer;
+    }
+    .center {
         width: 100%;
         text-align: center;
         @include for-size(phone-only) {
             position: absolute;
-            top:58px;
+            top: 58px;
         }
-        @include for-size(tablet-portrait-up) {
-
-        }
-        .search{
-            background:$light-blue;
+        @include for-size(tablet-portrait-up) {}
+        .search {
+            background: $light-blue;
             width: 100%;
             margin: auto;
             border-radius: 20px;
-            img{
+            img {
                 position: relative;
                 width: 30px;
                 float: left;
                 margin: 8px;
             }
-            input{
+            input {
                 padding: 5px 10px;
                 width: 80%;
+                width: calc(100% - 70px);
                 display: flex;
                 margin-left: auto;
                 border: none;
@@ -37,18 +39,18 @@ header{
                 font-size: 18px;
             }
             @include for-size(phone-only) {
-                width:100%;
+                width: 100%;
             }
         }
     }
-    .right{
+    .right {
         padding: 0px 30px;
         margin-left: auto;
-        .notification{
+        .notification {
             background: $dark-blue;
-            width:35px;
+            width: 35px;
         }
-        .count{
+        .count {
             background: $dark-blue;
             position: absolute;
             padding: 3px;
@@ -60,14 +62,11 @@ header{
             text-align: center;
         }
     }
-    .logo{
-            align-items: center;
-            align-self: left;
-            display: flex;
-            width: 6vw;
-            height: 60px;
+    .logo {
+        align-items: center;
+        align-self: left;
+        display: flex;
+        width: 60px;
+        height: 60px;
     }
-
-    
-
 }

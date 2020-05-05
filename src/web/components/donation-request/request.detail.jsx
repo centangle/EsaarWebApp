@@ -112,5 +112,6 @@ const mapDispatch = dispatch =>{
         fetchDonationRequestThreadStart: (Id)=>dispatch(fetchDonationRequestThreadStart(Id)),
         fetchDonationItemsStart:(Id)=>dispatch(fetchDonationItemsStart(Id))
     });
-}
-export default connect(mapState,mapDispatch)(RequestDetail);
+  };
+
+export default connect(mapState, mapDispatch)(RequestDetail);
