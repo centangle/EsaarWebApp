@@ -33,7 +33,7 @@ const RequestDetail = ({
   ]);
   const [state, setState] = useState({modal: false});
   const TimelineIcon = ({title}) => {
-    return <span className="customIcon">{title}</span>;
+    return <span className={"customIcon " + title}>{title}</span>;
   };
   const openModal = () => {
     setState({...state, modal: true});
@@ -104,7 +104,7 @@ const RequestDetail = ({
                 key={reply.Id}
                 className="vertical-timeline-element--education"
                 date={moment(reply.CreatedDate, "YYYY-MM-DD").fromNow()}
-                iconStyle={{background: "rgb(233, 30, 99)", color: "#fff"}}
+                /* iconStyle={{background: "rgb(233, 30, 99)", color: "#fff"}} */
                 icon={<TimelineIcon title={reply.Status} />}
               >
                 <h3 className="vertical-timeline-element-title">
