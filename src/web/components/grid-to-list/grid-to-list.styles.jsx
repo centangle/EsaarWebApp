@@ -6,25 +6,33 @@ export const GridHolder = styled.div`
   flex-wrap: wrap;
 `;
 export const ListHolder = styled.div`
+  display: flex;
+  flex-wrap: wrap;
   & .left {
-    width: 130px;
+    /* width: 130px; */
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     img {
-      width: 90%;
+      width: 100%;
     }
   }
   & .right {
     display: flex;
-    width: 65%;
+    /* width: 65%; */
+    width: 100%;
+    .org-meta {
+      align-self: center;
+    }
   }
   & .action {
     button {
       height: 40px;
       margin: 5px;
     }
-    width: 34%;
+    /* width: 34%; */
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -36,15 +44,29 @@ export const ItemHolder = styled.div`
   h2 {
     font-size: 20px;
     line-height: 24px;
-    font-weight: 300;
+    font-weight: 700;
     margin: 0;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
+    padding: 5px;
     text-align: center;
+  }
+  span {
+    font-weight: 400;
+    font-size: 14px;
+    height: 34px;
+    overflow: hidden;
+    display: block;
+    margin-bottom: 5px;
+    color: #999;
   }
   &.list {
     display: flex;
     border-bottom: solid 1px #cbcbcb;
     padding: 10px 0px;
+
+    width: 200px;
+    flex-direction: column;
+    text-align: center;
     &:last-child {
       border-bottom: none;
     }

@@ -170,6 +170,9 @@ export const OrgSideHolder = styled.div`
       li {
         border-bottom: dashed 1px;
         padding: 0px 10px;
+        img {
+          max-width: 24px;
+        }
         span:last-child {
           margin-left: auto;
           display: block;
@@ -179,6 +182,7 @@ export const OrgSideHolder = styled.div`
         }
         span:nth-child(2) {
           padding: 0px 0 0 10px;
+          font-size: 16px;
         }
         a {
           color: #222222;

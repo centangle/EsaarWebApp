@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap');
 @import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 .page {
     position: relative;
@@ -21,6 +22,46 @@ h2 {
 
 .capitalize {
     text-transform: capitalize;
+}
+
+.btn {
+    border: 0;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #00BCD4;
+    color: #fff;
+    transition: .4s all;
+}
+
+.btn-primary {
+    background-color: #00BCD4;
+}
+
+.btn-primary:hover {
+    background-color: #07a9be;
+}
+
+.btn-success {
+    background-color: #8bc34a;
+}
+
+.btn-success:hover {
+    background-color: #4caf50;
+}
+
+.btn-transparent {
+    background: transparent;
+    color: #333;
+    border: 0;
+}
+
+.margin-auto {
+    margin: 0px auto !important;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
 }
 
 .pagination {
