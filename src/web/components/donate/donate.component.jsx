@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import GridToList from '../grid-to-list/grid-to-list.component';
 import { DonationHolder } from './donate.styles';
 import Pagination from "react-js-pagination";
+import Map from '../map/map.component';
+
 const Donate = ({ organization, items, dispatch, activePage, totalItemsCount, pageRangeDisplayed, itemsCountPerPage }) => {
     const mapItems = items.map(item => {
         return { ...item.Item, ItemUOMs: item.ItemUOMs, Description: "" }
@@ -27,6 +29,10 @@ const Donate = ({ organization, items, dispatch, activePage, totalItemsCount, pa
                 pageRangeDisplayed={pageRangeDisplayed}
                 onChange={handlePageChange.bind(this)}
             />
+            <div className='map-holder'>
+                <Map />
+            </div>
+            
         </DonationHolder>
     )
 }

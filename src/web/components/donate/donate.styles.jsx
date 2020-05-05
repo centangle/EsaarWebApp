@@ -42,5 +42,12 @@ export const CartHolder = styled.div`
         
 `
 export const DonationHolder = styled.div`
-    
+    .map-holder{
+        width: 300px;
+        height: 200px;
+        .leaflet-container{
+            width: 100%;
+            height: 100%;
+        }
+    }
 `
