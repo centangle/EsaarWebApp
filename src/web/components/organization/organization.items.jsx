@@ -4,7 +4,9 @@ import ItemSelector from '../item/item.selector';
 import { connect } from 'react-redux';
 import GridToList from '../grid-to-list/grid-to-list.component';
 import { TitleWithAction } from './organization.styles';
+import Search from "../search/search.component";
 import Pagination from "react-js-pagination";
+import { params } from "../../../common/utility/request";
 const OrganizationItems = ({ dispatch, organization, items, activePage, totalItemsCount, pageRangeDisplayed, itemsCountPerPage }) => {
     const [state, setState] = useState({ modal: false });
     const openModal = () => {
@@ -22,13 +24,21 @@ const OrganizationItems = ({ dispatch, organization, items, activePage, totalIte
     const handleClick = () => {
 
     }
-    const mappedItems = items.map(item => { return { ...item.Item } });
+    const mappedItems = items.map(item => { return { ...item } });
+    console.log(mappedItems);
     const handlePageChange = (page) => {
         dispatch({
-            type: 'FETCH_ORG_ITEMS_START', payload: organization.Id,
+            type: 'FETCH_PERIFERAL_ITEMS_START', payload: organization.Id,
             params: { activePage: page, totalItemsCount, pageRangeDisplayed, itemsCountPerPage }
         })
     }
+    const handleSearch = (term, filters) => {
+        dispatch({
+            type: "FETCH_PERIFERAL_ITEMS_START",
+            payload: organization.Id,
+            params: { ...params, name: term },
+        });
+    };
     return (
         <>
             <TitleWithAction>
@@ -40,6 +50,13 @@ const OrganizationItems = ({ dispatch, organization, items, activePage, totalIte
                     <ItemSelector selected={mappedItems} onSelect={onSelect} onDeselect={onDeselect} />
                 </Modal> : null}
             </div>
+            <Search
+                filters={{
+                    location: ["Lahore", "Islamabad"],
+                    categories: ["Education", "Health"],
+                }}
+                handleSearch={handleSearch}
+            />
             <GridToList handleClick={handleClick} type='ORGANIZATION' data={mappedItems} />
             <Pagination
                 activePage={activePage}
@@ -53,12 +70,14 @@ const OrganizationItems = ({ dispatch, organization, items, activePage, totalIte
 }
 const mapState = (state) => {
     const { organization } = state;
+    const {item} = state;
     return {
-        items: organization.items,
-        activePage: organization && organization.activePage ? organization.activePage : 0,
-        totalItemsCount: organization && organization.totalItemsCount ? organization.totalItemsCount : 0,
-        itemsCountPerPage: organization && organization.itemsCountPerPage ? organization.itemsCountPerPage : 0,
-        pageRangeDisplayed: organization && organization.pageRangeDisplayed ? organization.pageRangeDisplayed : 0
+        selectedItems: organization.items,
+        items:item.periferalItems,
+        activePage: item && item.activePage ? item.activePage : 0,
+        totalItemsCount: item && item.totalItemsCount ? item.totalItemsCount : 0,
+        itemsCountPerPage: item && item.itemsCountPerPage ? item.itemsCountPerPage : 0,
+        pageRangeDisplayed: item && item.pageRangeDisplayed ? item.pageRangeDisplayed : 0
     }
 }
 export default connect(mapState)(OrganizationItems);

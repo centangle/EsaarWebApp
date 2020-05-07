@@ -36,8 +36,7 @@ const ItemAdder = ({ dispatch,logo,current }) => {
         setState({ ...state, [event.target.name]: event.target.value })
     }
     const handleDrop = (selected) =>{
-        console.log(selected);
-        setState({...state,DefaultUOM:selected});
+        setState({...state,DefaultUOM:{value:selected.Id,label:selected.Name}});
     }
     const { Name, NativeName, Description,DefaultUOM, ImageUrl, ImageInBase64 } = state;
     return (

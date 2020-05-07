@@ -19,6 +19,9 @@ const GridToList = ({
       {Object.keys(data).map((key) => {
         return (
           <ItemHolder height={height} className="grid" key={data[key].Id}>
+            {
+              buttonsWithActions || links ? <div className='overlay'></div>:null
+            }
             <div className="grid-links">
               {buttonsWithActions &&
                 buttonsWithActions.map((item) => {
@@ -62,6 +65,7 @@ const GridToList = ({
                 <h2>{data[key].Name}</h2>
               </div>
             </div>
+            
           </ItemHolder>
         );
       })}

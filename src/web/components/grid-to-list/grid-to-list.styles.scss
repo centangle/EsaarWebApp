@@ -7,17 +7,28 @@
 
 .grid {
     position: relative;
+    &:hover{
+        .overlay{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #00000061;
+            z-index: 2;
+            border-radius: 6px;
+        }
+    }
     .grid-links {
         position: absolute;
+        z-index: 3;
         left: 0;
         right: 0;
         text-align: center;
-        top: 30%;
+        height: 60%;
+        display: flex;
+        flex-wrap: wrap;
+        padding: 16px;
         .link {
-            display: block;
-            max-width: 80px;
             margin: 8px auto;
-            padding: 0px 15px;
             background: rgba(33, 49, 94, 0.8);
             border: 1px solid #21315e;
             opacity: 0;
@@ -25,8 +36,12 @@
             text-transform: capitalize;
             text-decoration: none;
             color: #fff;
-            line-height: 34px;
             transition: .5s all;
+            width:100%;
+            align-items: center;
+            display: flex;
+            justify-content: center; 
+            height:auto;
         }
         .link:hover {
             background: rgba(246, 250, 255, 0.9);
