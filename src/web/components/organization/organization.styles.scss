@@ -66,15 +66,27 @@ h2 {
     border-radius: 50px;
     margin-left: 20px;
     .dropdown-button {
-        min-height: 30px;
+        min-height: 28px;
         border-radius: 50%;
+        cursor: pointer;
         background: $silver;
         border: solid 1px $silver-dark;
         display: flex;
         justify-content: center;
+        transition: .5s all;
         .dropdown-button-indicator {
             display: none;
         }
         .dropdown-single-arrow {}
+    }
+     :hover {
+        background: #e2e2e5;
+    }
+    .dropdown-option {
+        color: #666;
+    }
+    .dropdown-option:hover {
+        cursor: pointer;
+        color: #000;
     }
 }

@@ -76,7 +76,9 @@ const RequestDetail = ({
         {state.modal ? (
           <Modal closeModal={closeModal}>
             <RegionSelector />
-            <button onClick={handleSubmit}>Save Regions</button>
+            <button className="btn btn-primary" onClick={handleSubmit}>
+              Save Regions
+            </button>
           </Modal>
         ) : null}
         <span className="tread-topic">
