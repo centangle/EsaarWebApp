@@ -2,9 +2,12 @@
 .region-selector {
     display: flex;
     flex-wrap: wrap;
-    .dropdown{
-        min-width: 148px;
-        margin-right: 3px;
+    .dropdown {
+        min-width: 170px;
+        margin-right: 10px;
+        input {
+            margin: 0px 10px;
+        }
     }
     select {
         padding: 10px;
@@ -23,13 +26,18 @@
 
 .item-holder {
     width: 98%;
-    background: #f6faff;
+    background: #f8f9fa;
     margin: 20px 10px;
     th,
     td {
         border-bottom: solid 1px #ccc;
-        padding: 5px 0;
-        text-align: center;
+        padding: 5px 5px;
+        font-weight: normal;
+        color: #113c5e;
+        opacity: .8;
+        text-align: left;
+        font-size: 14px;
+        text-transform: capitalize;
     }
     table {
         width: 98%;

@@ -1,6 +1,7 @@
 @import "../../variables.scss";
 .table {
     margin-top: .5em;
+    padding-right: 10px;
 }
 
 .rdt_TableCol,
@@ -10,7 +11,7 @@
 }
 
 .rdt_Table {
-    background: $light-blue;
+    background: #f8f9fa;
     border-radius: 10px;
 }
 

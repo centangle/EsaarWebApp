@@ -42,7 +42,7 @@ export const ItemHolder = styled.div`
   margin-right: 1%;
   height: ${(props) => (props.height ? props.height + "px" : "auto")};
   h2 {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 24px;
     font-weight: 700;
     margin: 0;
@@ -61,7 +61,7 @@ export const ItemHolder = styled.div`
   }
   &.list {
     display: flex;
-    border-bottom: solid 1px #cbcbcb;
+    /* border-bottom: solid 1px #cbcbcb; */
     padding: 10px 0px;
 
     width: 200px;

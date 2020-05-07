@@ -2,7 +2,7 @@ import styled from "styled-components";
 export const White70 = styled.div`
   width: 75%;
   display: block;
-  padding: 30px 0px;
+  padding: 0px 0px 30px;
   .tab {
     .tab-more-button {
       float: right;
@@ -39,15 +39,17 @@ export const Row = styled.div`
 `;
 export const TitleWithAction = styled.div`
   display: flex;
+  margin: 10px 10px 0 0;
+  align-items: center;
   h2 {
     margin: 0 10px;
   }
   button {
     margin-left: auto;
     border-radius: 5px;
-    background: #f0f0f0;
+    background: #f9f9f9;
     border: solid 1px #ccc;
-    box-shadow: 3px 3px 9px 1px rgba(204, 204, 204, 0.25);
+    box-shadow: 3px 3px 5px 1px rgba(204, 204, 204, 0.2);
     padding: 10px;
     color: #21315e;
     cursor: pointer;
@@ -82,7 +84,7 @@ export const FormHolder = styled.div`
   }
   input {
     margin-right: 5px;
-    margin: 10px 10px;
+    margin: 0px 10px;
     padding: 10px;
   }
   textarea {
