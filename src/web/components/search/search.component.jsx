@@ -81,6 +81,7 @@ const Search = ({filters, handleSearch}) => {
               onChange={handleChange}
             />
             <button
+              className="btn btn-primary"
               onClick={() => handleSearch(state.term, state.selectedFilters)}
             >
               Search

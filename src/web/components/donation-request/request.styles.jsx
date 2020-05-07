@@ -20,7 +20,7 @@ export const FormHolder = styled.div`
     border: 1px solid #ccc;
     color: #727272;
     border-radius: 20px;
-    font-size: 16px;
+    font-size: 13px;
     outline: none;
   }
   .submit {
