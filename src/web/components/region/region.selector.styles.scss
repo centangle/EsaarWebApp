@@ -2,6 +2,10 @@
 .region-selector {
     display: flex;
     flex-wrap: wrap;
+    .dropdown{
+        min-width: 150px;
+        margin-right: 10px;
+    }
     select {
         padding: 10px;
         margin-right: 10px;

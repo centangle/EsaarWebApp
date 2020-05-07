@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from "react";
-import {connect} from "react-redux";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import "./region.selector.styles.scss";
-import organization from "../../../common/redux/organization/organization.reducers";
+import Select from 'react-select';
 const RegionSelector = ({
   organizationId,
   isOrganizationRegion,
@@ -17,12 +17,12 @@ const RegionSelector = ({
 }) => {
   const [state, setState] = useState({
     isInit: "TRUE",
-    RegionLevel: {...levels[Object.keys(levels)[0]]},
-    Country: {Id: "", Name: ""},
-    State: {Id: "", Name: ""},
-    District: {Id: "", Name: ""},
-    Tehsil: {Id: "", Name: ""},
-    UnionCouncil: {Id: "", Name: ""},
+    RegionLevel: { ...levels[Object.keys(levels)[0]] },
+    Country: { Id: "", Name: "" },
+    State: { Id: "", Name: "" },
+    District: { Id: "", Name: "" },
+    Tehsil: { Id: "", Name: "" },
+    UnionCouncil: { Id: "", Name: "" },
     saveable: false,
   });
   useEffect(() => {
@@ -30,210 +30,127 @@ const RegionSelector = ({
       case "TRUE":
         dispatch({
           type: "FETCH_REGION_LEVELS_START",
-          payload: {organizationId, isOrganizationRegion},
+          payload: { organizationId, isOrganizationRegion },
         });
         dispatch({
           type: "FETCH_COUNTRIES_START",
-          payload: {isOrganizationRegion: false},
+          payload: { isOrganizationRegion: false },
         });
-        setState({...state, isInit: "FALSE"});
+        setState({ ...state, isInit: "FALSE" });
         return;
       default:
         return;
     }
   }, [dispatch, isOrganizationRegion, organizationId, state]);
   useEffect(() => {
-    setState({...state, RegionLevel: {...levels[Object.keys(levels)[0]]}});
+    setState({ ...state, RegionLevel: { ...levels[Object.keys(levels)[0]] } });
   }, [levels]);
-  const handleChange = (event, item) => {
-    if (event.target.name === "Country") {
-      setState({...state, [event.target.name]: item});
+  const handleChange = (name, item) => {
+    if (name === "Country") {
+      setState({ ...state, [name]: item });
       dispatch({
         type: "FETCH_STATES_START",
         payload: {
-          countryId: event.target.value,
+          countryId: item.Id,
           isOrganizationRegion,
           organizationId,
         },
       });
-    } else if (event.target.name === "State") {
+    } else if (name === "State") {
       setState({
         ...state,
-        District: {Id: "", Name: ""},
-        Tehsil: {Id: "", Name: ""},
-        UnionCouncil: {Id: "", Name: ""},
-        [event.target.name]: item,
+        District: { Id: "", Name: "" },
+        Tehsil: { Id: "", Name: "" },
+        UnionCouncil: { Id: "", Name: "" },
+        [name]: item,
       });
       dispatch({
         type: "FETCH_DISTRICTS_START",
         payload: {
-          stateId: event.target.value,
+          stateId: item.Id,
           isOrganizationRegion,
           organizationId,
         },
       });
-    } else if (event.target.name === "District") {
+    } else if (name === "District") {
       setState({
         ...state,
-        Tehsil: {Id: "", Name: ""},
-        UnionCouncil: {Id: "", Name: ""},
-        [event.target.name]: item,
+        Tehsil: { Id: "", Name: "" },
+        UnionCouncil: { Id: "", Name: "" },
+        [name]: item,
       });
       dispatch({
         type: "FETCH_TEHSILS_START",
         payload: {
-          districtId: event.target.value,
+          districtId: item.Id,
           isOrganizationRegion,
           organizationId,
         },
       });
-    } else if (event.target.name === "Tehsil") {
+    } else if (name === "Tehsil") {
       setState({
         ...state,
-        UnionCouncil: {Id: "", Name: ""},
-        [event.target.name]: item,
+        UnionCouncil: { Id: "", Name: "" },
+        [name]: item,
       });
       dispatch({
         type: "FETCH_UCS_START",
         payload: {
-          tehsilId: event.target.value,
+          tehsilId: item.Id,
           isOrganizationRegion,
           organizationId,
         },
       });
     } else {
-      setState({...state, [event.target.name]: item});
+      setState({ ...state, [name]: item });
     }
   };
   const handleSubmit = (event) => {
     dispatch({
       type: "ADD_REGION",
-      payload: {...state, RegionLevel: state.RegionLevel.Name},
+      payload: { ...state, RegionLevel: state.RegionLevel.Name },
     });
   };
   const handleRemove = (key) => {
-    dispatch({type: "REMOVE_REGION", payload: key});
+    dispatch({ type: "REMOVE_REGION", payload: key });
   };
+  const onSelect = (name, item) => {
+    handleChange(name, item);
+  }
+  const mappedLevels = Object.keys(levels).map(key => {
+    return { value: key, label: levels[key].Name }
+  });
+  const mappedCountries = Object.keys(countries).map(key => {
+    return { value: key, label: countries[key].Name }
+  });
+  const mappedStates = Object.keys(states).map(key => {
+    return { value: key, label: states[key].Name }
+  });
+  const mappedDistricts = Object.keys(districts).map(key => {
+    return { value: key, label: districts[key].Name }
+  });
+  const mappedTehsils = Object.keys(tehsils).map(key => {
+    return { value: key, label: tehsils[key].Name }
+  });
+  const mappedUcs = Object.keys(ucs).map(key => {
+    return { value: key, label: ucs[key].Name }
+  });
   return (
     <>
       <div className="region-selector">
-        <select
-          value={state.RegionLevel.Id}
-          name="RegionLevel"
-          onChange={(event) => handleChange(event, levels[event.target.value])}
-          placeholder="select regions"
-        >
-          <option value="" disabled>
-            Select Region RegionLevel
-          </option>
-          {Object.keys(levels).map((key) => {
-            return (
-              <option value={key} key={key}>
-                {levels[key].Name}
-              </option>
-            );
-          })}
-        </select>
-        <select
-          value={state.Country.Id}
-          name="Country"
-          onChange={(event) =>
-            handleChange(event, countries[event.target.value])
-          }
-          placeholder="select Country"
-        >
-          <option value="" disabled>
-            Select Country
-          </option>
-          {Object.keys(countries).map((key) => {
-            return (
-              <option value={countries[key].Id} key={countries[key].Id}>
-                {countries[key].Name}
-              </option>
-            );
-          })}
-        </select>
+        <Select className='dropdown' defaultValue={state.RegionLevel.Id} onChange={(item) => onSelect('RegionLevel', levels[item.value])} placeholder="Select Level" options={mappedLevels} />
+        <Select className='dropdown' defaultValue={state.Country.Id} onChange={(item) => onSelect('Country', countries[item.value])} placeholder="Select Country" options={mappedCountries} />
         {state.RegionLevel.Id > 0 ? (
-          <select
-            value={state.State.Id}
-            name="State"
-            onChange={(event) =>
-              handleChange(event, states[event.target.value])
-            }
-            placeholder="select State"
-          >
-            <option value="" disabled>
-              Select State
-            </option>
-            {Object.keys(states).map((key) => {
-              return (
-                <option value={states[key].Id} key={states[key].Id}>
-                  {states[key].Name}
-                </option>
-              );
-            })}
-          </select>
+          <Select className='dropdown' defaultValue={state.State.Id} onChange={(item) => onSelect('State', states[item.value])} placeholder="Select State" options={mappedStates} />
         ) : null}
         {state.RegionLevel.Id > 1 ? (
-          <select
-            value={state.District.Id}
-            name="District"
-            onChange={(event) =>
-              handleChange(event, districts[event.target.value])
-            }
-            placeholder="select District"
-          >
-            <option value="" disabled>
-              Select District
-            </option>
-            {Object.keys(districts).map((key) => {
-              return (
-                <option value={districts[key].Id} key={districts[key].Id}>
-                  {districts[key].Name}
-                </option>
-              );
-            })}
-          </select>
+          <Select className='dropdown' defaultValue={state.District.Id} onChange={(item) => onSelect('District', districts[item.value])} placeholder="Select District" options={mappedDistricts} />
         ) : null}
         {state.RegionLevel.Id > 2 ? (
-          <select
-            value={state.Tehsil.Id}
-            name="Tehsil"
-            onChange={(event) =>
-              handleChange(event, tehsils[event.target.value])
-            }
-            placeholder="select Tehsil"
-          >
-            <option value="" disabled>
-              Select Tehsil
-            </option>
-            {Object.keys(tehsils).map((key) => {
-              return (
-                <option value={tehsils[key].Id} key={tehsils[key].Id}>
-                  {tehsils[key].Name}
-                </option>
-              );
-            })}
-          </select>
+          <Select className='dropdown' defaultValue={state.Tehsil.Id} onChange={(item) => onSelect('Tehsil', tehsils[item.value])} placeholder="Select Tehsil" options={mappedTehsils} />
         ) : null}
         {state.RegionLevel.Id > 3 ? (
-          <select
-            value={state.UnionCouncil.Id}
-            name="UnionCouncil"
-            onChange={(event) => handleChange(event, ucs[event.target.value])}
-            placeholder="select Union Council"
-          >
-            <option value="" disabled>
-              Select Union Council
-            </option>
-            {Object.keys(ucs).map((key) => {
-              return (
-                <option value={ucs[key].Id} key={ucs[key].Id}>
-                  {ucs[key].Name}
-                </option>
-              );
-            })}
-          </select>
+          <Select className='dropdown' defaultValue={state.UnionCouncil.Id} onChange={(item) => onSelect('UnionCouncil', ucs[item.value])} placeholder="Select Union Council" options={mappedUcs} />
         ) : null}
         <button onClick={handleSubmit} className="add-btn btn btn-primary">
           <i className="fa fa-map-pin"></i> Add Location
@@ -280,7 +197,7 @@ const RegionSelector = ({
   );
 };
 const mapState = (state) => {
-  const {region} = state;
+  const { region } = state;
   return {
     levels: region.levels,
     countries: region.countries,

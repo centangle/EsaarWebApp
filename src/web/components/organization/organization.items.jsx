@@ -35,7 +35,7 @@ const OrganizationItems = ({ dispatch, organization, items, activePage, totalIte
                 <h2>{organization ? organization.Name : null} Items</h2>
                 <button onClick={openModal}>Add New</button>
             </TitleWithAction>
-            <div className='btn'>
+            <div className='modal-holder'>
                 {state.modal ? <Modal closeModal={closeModal}>
                     <ItemSelector selected={mappedItems} onSelect={onSelect} onDeselect={onDeselect} />
                 </Modal> : null}
