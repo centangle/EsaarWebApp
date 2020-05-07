@@ -73,7 +73,7 @@ const OrganizationOffices = ({ offices, organizations, dispatch, organization, f
         <h2>{organization ? organization.Name : null} Offices</h2>
         <button onClick={openModal}>Add a office</button>
       </TitleWithAction>
-      <div className='btn'>
+      <div className='modal-holder'>
         {form.modal ? <Modal closeModal={closeModal}>
           <h2>Add Organization Office</h2>
           <FormHolder>

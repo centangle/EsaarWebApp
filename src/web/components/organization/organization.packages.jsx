@@ -104,7 +104,7 @@ const OrganizationPackages = ({ packages, organizations, dispatch, organization,
         <h2>{organization ? organization.Name : null} Packages</h2>
         <button onClick={openModal}>Add a package</button>
       </TitleWithAction>
-      <div className='btn'>
+      <div className='modal-holder'>
         {modal ? <Modal closeModal={closeModal}>
           <h2>Add Organization Package</h2>
           <FormHolder>

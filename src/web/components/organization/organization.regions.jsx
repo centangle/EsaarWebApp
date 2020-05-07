@@ -121,7 +121,7 @@ const OrganizationRegions = ({
         <h2>{organization ? organization.Name : null} Regions</h2>
         <button onClick={openModal}>Add/Edit a region</button>
       </TitleWithAction>
-      <div className="btn">
+      <div className="modal-holder">
         {form.modal ? (
           <Modal closeModal={closeModal}>
             <h2>Add Organization Regions</h2>

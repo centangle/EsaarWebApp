@@ -4,7 +4,9 @@ import dashboardOne from "../../../assets/dashboard1.png";
 import dashboardTwo from "../../../assets/dashboard2.png";
 import dashboardThree from "../../../assets/dashboard3.png";
 import DataTable from "../table/DataTable/DataTable";
+import { useHistory } from "react-router-dom";
 const Home = () => {
+  let history = useHistory();
   const data = [
     {
       id: 1,
@@ -47,18 +49,23 @@ const Home = () => {
       right: true,
     },
   ];
+  const handleClick = (path) => {
+    console.log(history);
+    //dispatch({ type: obj.Type.toUpperCase() + '_SELECTED', payload: obj });
+    history.push(path);
+  }
   return (
     <div className="page-right">
       <div className="center-icons">
-        <div className="box-50">
+        <div className="box-50" onClick={()=>handleClick('organizations')}>
           <img className="" src={dashboardTwo} alt="Donate Icon" />
           <h2>DONATE</h2>
         </div>
-        <div className="box-50">
+        <div className="box-50" onClick={()=>handleClick('organizations')}>
           <img className="" src={dashboardThree} alt="Request Icon" />
           <h2>REQUEST</h2>
         </div>
-        <div className="box-50">
+        <div className="box-50" onClick={()=>handleClick('organizations')}>
           <img className="" src={dashboardOne} alt="Request Icon" />
           <h2>REGISTER AS VOLUNTEER</h2>
         </div>
