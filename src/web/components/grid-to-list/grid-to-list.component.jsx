@@ -3,6 +3,7 @@ import "./grid-to-list.styles.scss";
 import {ItemHolder, GridHolder, ListHolder} from "./grid-to-list.styles";
 import {connect} from "react-redux";
 import {Link} from "react-router-dom";
+import noImage from "../../../assets/no-image.png";
 const baseUrl = require("../../../common/utility/request").baseUrl;
 
 const GridToList = ({
@@ -57,7 +58,7 @@ const GridToList = ({
               {data[key].ImageUrl ? (
                 <img alt="logo" src={baseUrl + "/" + data[key].ImageUrl} />
               ) : (
-                "icon"
+                <img alt="logo" src={noImage} />
               )}
             </div>
             <div className="right">

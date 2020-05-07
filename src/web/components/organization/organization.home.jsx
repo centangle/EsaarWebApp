@@ -2,6 +2,7 @@ import React from "react";
 import {Row} from "./organization.styles";
 import {connect} from "react-redux";
 import {baseUrl} from "../../../common/utility/request";
+import noImage from "../../../assets/no-image.png";
 const OrganizationHome = ({
   organization,
   categories,
@@ -34,7 +35,9 @@ const OrganizationHome = ({
             attachments.map((attachment) => {
               return (
                 <div key={attachment.Id} className="org-logo">
-                  <img src={baseUrl + "/" + attachment.Url} alt="img" />
+                  {attachment.Url?<img src={baseUrl + "/" + attachment.Url}
+                   onError={(e) => {e.target.src = noImage; }}
+                   alt="img" />:<img src={noImage} alt="img" />}
                 </div>
               );
             })}

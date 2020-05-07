@@ -91,6 +91,7 @@ export const ItemHolder = styled.div`
       img {
         border-radius: 10px;
         width: 100%;
+        max-height: 220px;
       }
     }
     & .right {

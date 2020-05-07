@@ -15,6 +15,7 @@ import {useHistory} from "react-router-dom";
 import {baseUrl} from "../../../common/utility/request";
 import Modal from "../modal/modal.component";
 import RegionSelector from "../region/region.selector";
+import noImage from "../../../assets/no-image.png";
 const OrganizationHeader = ({organization, dispatch, regions}) => {
   const [state, setState] = useState({
     modal: false,
@@ -75,7 +76,7 @@ const OrganizationHeader = ({organization, dispatch, regions}) => {
   return (
     <Row>
       <div className="org-logo">
-        <img src={baseUrl + "/" + organization.ImageUrl} alt="logo" />
+        {organization.ImageUrl?<img src={baseUrl + "/" + organization.ImageUrl} alt="logo" />:<img src={noImage} alt="logo" />}
       </div>
       {state.modal ? (
         <Modal closeModal={closeModal}>
