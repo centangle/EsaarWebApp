@@ -75,6 +75,13 @@ h2 {
     padding: 8px 8px;
 }
 
+input,
+textarea {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px 8px;
+}
+
 .pagination {
     display: flex;
     width: 100%;
@@ -87,6 +94,9 @@ h2 {
             text-decoration: none;
             border: solid 1px #d8dce0;
             color: #666;
+            height: 20px;
+            align-items: center;
+            display: flex;
         }
         &.active {
             a {
