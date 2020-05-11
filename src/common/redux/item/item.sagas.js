@@ -12,7 +12,7 @@ export function* fetchItemAsync() {
   const currentUser = yield select(selectCurrentUser);
   const response = yield fetch(url + "/api/Item/GetAllItems?dataStructure=Tree", {
     method: "GET",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer '+currentUser.access_token },
   }).then(async (response) => {
@@ -30,7 +30,7 @@ export function* fetchPeriferalItemAsync(){
     const currentUser = yield select(selectCurrentUser);
   const response = yield fetch(url + "/api/Item/GetPeripheralItems", {
     method: "GET",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer '+currentUser.access_token },
   }).then(async (response) => {
@@ -48,7 +48,7 @@ export function* fetchItemDetailAsync(action) {
   const currentUser = yield select(selectCurrentUser);
   const response = yield fetch(url + "/api/Item/Get"+action.payload.id, {
     method: "GET",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer '+currentUser.access_token },
   }).then(async (response) => {
@@ -67,7 +67,7 @@ export function* addItemAsync(action) {
         const currentUser = yield select(selectCurrentUser);
         const item = yield fetch(url + "/api/Item/Create", {
             method: 'POST',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer '+currentUser.access_token
@@ -95,7 +95,7 @@ export function* updateItemAsync(action) {
         const currentUser = yield select(selectCurrentUser);
         const item = yield fetch(url + "/api/Item/Update", {
             method: 'PUT',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer '+currentUser.access_token
@@ -122,7 +122,7 @@ export function* removeItemAsync(action) {
   const currentUser = yield select(selectCurrentUser);
   const response = yield fetch(url + "/api/Item/DeleteItemWithChildren/" + action.payload, {
     method: "DELETE",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
   }).then(async (response) => {
@@ -142,7 +142,7 @@ export function* changeItemAsync(action) {
         const currentUser = yield select(selectCurrentUser);
         const item = yield fetch(url + "/api/Item/UpdateMultipleItemsWithChildrens", {
             method: 'PUT',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer '+currentUser.access_token

@@ -104,7 +104,7 @@ const Organzation = ({
         </Modal>
       ) : null}
       <TitleWithAction>
-        {form.modal ? (
+        {form.orgModal ? (
           <Modal closeModal={closeModal}>
             <OrganizationAdder />
           </Modal>

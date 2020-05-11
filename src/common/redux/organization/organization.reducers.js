@@ -59,6 +59,7 @@ const organization = (state = INITIAL_STATE, action) => {
     case 'ADD_ORG_PACKAGE_SUCCESS':
     case 'ADD_ORGANIZATION_SUCCESS':
     case 'ADD_ORG_REGION_SUCCESS':
+    case 'UPDATE_ORGANIZATION_SUCCESS':
       return {
         ...state,
         logo: null,
@@ -238,7 +239,8 @@ const organization = (state = INITIAL_STATE, action) => {
         ...state,
         form: {
           ...state.form,
-          modal: true
+          modal: action.payload!=='ORG'?true:false,
+          orgModal:action.payload==='ORG'?true:false,
         }
       }
     case 'CLOSE_MODAL':
@@ -246,7 +248,8 @@ const organization = (state = INITIAL_STATE, action) => {
         ...state,
         form: {
           ...state.form,
-          modal: false
+          modal: false,
+          orgModal:false
         }
       }
     case 'FETCH_ORG_CATEGORIES_SUCCESS':
@@ -258,7 +261,7 @@ const organization = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         form: {},
-        totalItemsCount: action.payload.totalItemsCount,
+        totalItemsCount: parseInt(action.payload.totalItemsCount),
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,

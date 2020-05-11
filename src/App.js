@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense,useEffect } from 'react';
 import { Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -10,7 +10,12 @@ import Header from './web/components/header/header.component';
 import HomePage from './web/pages/home.page';
 import LoginPage from './web/pages/login.page';
 
-function App({ user }) {
+import {checkSession} from './common/redux/user/user.actions';
+
+function App({ user,checkSession }) {
+    useEffect(() => {
+    checkSession();
+  }, [checkSession]);
   if (user) {
     return (
       <div className="App">
@@ -40,7 +45,13 @@ function App({ user }) {
 }
 const mapStateToProps = (state) => {
   return {
-    user: state.user.currentUser
+    user: state.user.currentUser,
   }
 }
-export default connect(mapStateToProps)(App);
+const mapDispatch = (dispatch) => {
+  return {
+    dispatch,
+    checkSession: () => dispatch(checkSession()),
+  };
+};
+export default connect(mapStateToProps,mapDispatch)(App);

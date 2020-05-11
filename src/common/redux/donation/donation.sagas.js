@@ -17,7 +17,7 @@ export function* addDonationAsync(action) {
         const currentUser = yield select(selectCurrentUser);
         const donation = yield fetch(url + "/api/DonationRequest/Create", {
             method: 'POST',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -45,7 +45,7 @@ export function* addApprovalAsync(action) {
         const currentUser = yield select(selectCurrentUser);
         const donation = yield fetch(url + "/api/DonationRequest/UpdateStatus?donationRequestOrganizationId=" + action.payload.donationRequestOrganizationId + "&status=" + action.payload.status + "&note=" + action.payload.note, {
             method: 'POST',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -78,7 +78,7 @@ export function* fetchRequestAsync(action) {
     //const q = "recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/DonationRequest/GetPaginated?" + q, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -102,7 +102,7 @@ export function* fetchThreadAsync(action) {
     const q = "recordsPerPage=0&type=General&currentPage=1&orderDir=Desc&disablePagination=true&entityType=Donation&entityId=" + action.payload;
     const response = yield fetch(url + "/api/RequestThread/GetPaginated?" + q, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -122,7 +122,7 @@ export function* fetchRequestStatusAsync() {
     //const q = "recordsPerPage=0&type=General&currentPage=1&orderDir=Desc&disablePagination=true&entityType=Organization&entityId=" + action.payload;
     const response = yield fetch(url + "/api/DonationRequest/GetRequestStatus", {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -142,7 +142,7 @@ export function* fetchDonationDetailsAsync(action) {
     //const q = "recordsPerPage=0&type=General&currentPage=1&orderDir=Desc&disablePagination=true&entityType=Organization&entityId=" + action.payload;
     const response = yield fetch(url + "/api/DonationRequest/Get?organizationRequestId=" + action.payload, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -162,7 +162,7 @@ export function* fetchDonationItemsAsync(action) {
     //const q = "recordsPerPage=0&type=General&currentPage=1&orderDir=Desc&disablePagination=true&entityType=Organization&entityId=" + action.payload;
     const response = yield fetch(url + "/api/DonationRequest/GetItems?organizationRequestId=" + action.payload, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"

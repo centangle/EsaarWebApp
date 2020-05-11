@@ -17,7 +17,7 @@ export function* fetchEventAsync(action) {
   }
   const response = yield fetch(url + "/api/Event/GetPaginated?" + q, {
     method: "GET",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
   }).then(async (response) => {
@@ -40,7 +40,7 @@ export function* fetchEventDetailAsync(action) {
   const currentUser = yield select(selectCurrentUser);
   const response = yield fetch(url + "/api/Event/Get" + action.payload.id, {
     method: "GET",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
   }).then(async (response) => {
@@ -59,7 +59,7 @@ export function* addEventAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     const event = yield fetch(url + "/api/Event/Create", {
       method: 'POST',
-      withCredentials: true,
+      //withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'bearer ' + currentUser.access_token
@@ -87,7 +87,7 @@ export function* updateEventAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     const event = yield fetch(url + "/api/Event/UpdateMultipleEventsWithChildrens", {
       method: 'PUT',
-      withCredentials: true,
+      //withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'bearer ' + currentUser.access_token

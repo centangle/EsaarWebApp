@@ -7,6 +7,18 @@ export const addOrganizationSuccess = organization => ({
   type: organizationTypes.ADD_ORGANIZATION_SUCCESS,
   payload: organization
 });
+export const updateOrganizationSuccess = organization => ({
+  type: organizationTypes.UPDATE_ORGANIZATION_SUCCESS,
+  payload: organization
+});
+export const updateOrganizationFailure = error => ({
+  type: organizationTypes.UPDATE_ORGANIZATION_FAILURE,
+  payload: error
+});
+export const fetchOrganizationDetail = Id => ({
+  type: organizationTypes.FETCH_ORG_DETAIL,
+  payload: Id
+})
 export const addCampaignSuccess = campaign => ({
   type: organizationTypes.ADD_ORG_CAMPAIGN_SUCCESS,
   payload: campaign

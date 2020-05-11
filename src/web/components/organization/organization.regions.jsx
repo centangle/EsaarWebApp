@@ -79,10 +79,10 @@ const OrganizationRegions = ({
   ];
   const closeModal = () => {
     dispatch({type: "UNLOAD_ORG_REGIONS"});
-    dispatch({type: "CLOSE_MODAL", payload: "ORG"});
+    dispatch({type: "CLOSE_MODAL", payload: "ORG_REGION"});
   };
   const openModal = () => {
-    dispatch({type: "OPEN_MODAL", payload: "ORG"});
+    dispatch({type: "OPEN_MODAL", payload: "ORG_REGION"});
     dispatch({type: "LOAD_ORG_REGIONS", payload: regions});
   };
   const handleChange = (event) => {

@@ -20,7 +20,7 @@ export function* fetchRequestAsync(action) {
     //const q = "recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/OrganizationRequest/GetPaginated?" + q, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -44,7 +44,7 @@ export function* fetchThreadAsync(action) {
     const q = "recordsPerPage=0&type=General&currentPage=1&orderDir=Desc&disablePagination=true&entityType=Organization&entityId=" + action.payload;
     const response = yield fetch(url + "/api/RequestThread/GetPaginated?" + q, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -64,7 +64,7 @@ export function* fetchRequestStatusAsync() {
     //const q = "recordsPerPage=0&type=General&currentPage=1&orderDir=Desc&disablePagination=true&entityType=Organization&entityId=" + action.payload;
     const response = yield fetch(url + "/api/OrganizationRequest/GetRequestStatus", {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -84,7 +84,7 @@ export function* addRequestThreadAsync(action) {
         const currentUser = yield select(selectCurrentUser);
         const request = yield fetch(url + "/api/RequestThread/AddRequestThread", {
             method: 'POST',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -111,7 +111,7 @@ export function* addRequestAsync(action) {
         const currentUser = yield select(selectCurrentUser);
         const request = yield fetch(url + "/api/Request/Create", {
             method: 'POST',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -138,7 +138,7 @@ export function* updateRequestAsync(action) {
         const currentUser = yield select(selectCurrentUser);
         const request = yield fetch(url + "/api/Request/UpdateMultipleRequestsWithChildrens", {
             method: 'PUT',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -165,7 +165,7 @@ export function* modifyRegionsAsync(action) {
         const currentUser = yield select(selectCurrentUser);
         const request = yield fetch(url + "/api/OrganizationMember/UpdateOrganizationMembershipRegions", {
             method: 'POST',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -193,7 +193,7 @@ export function* assignRequestAsync(action) {
         const q = "organizationId=" + action.payload.organizationId + "&requestId=" + action.payload.requestId;
         const request = yield fetch(url + "/api/OrganizationRequest/AssignRequest?" + q, {
             method: 'PUT',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token

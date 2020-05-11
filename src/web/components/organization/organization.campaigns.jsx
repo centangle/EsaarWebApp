@@ -43,10 +43,10 @@ const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organizatio
     }
   ];
   const closeModal = () => {
-    dispatch({ type: 'CLOSE_MODAL', payload: 'ORG' });
+    dispatch({ type: 'CLOSE_MODAL', payload: 'CAMPAIGNS' });
   }
   const openModal = () => {
-    dispatch({ type: 'OPEN_MODAL', payload: 'ORG' });
+    dispatch({ type: 'OPEN_MODAL', payload: 'CAMPAIGNS' });
   }
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.value })

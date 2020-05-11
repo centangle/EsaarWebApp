@@ -16,7 +16,7 @@ export function* fetchRegionAsync() {
   const currentUser = yield select(selectCurrentUser);
   const response = yield fetch(url + "/api/Region/GetAllRegions?dataStructure=Tree", {
     method: "GET",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
   }).then(async (response) => {
@@ -35,7 +35,7 @@ export function* fetchRegionLevelAsync(action) {
   const urlPart = action.payload.isOrganizationRegion?"/api/OrganizationRegion/Levels?organizationId="+action.payload.organizationId:"/api/Region/Levels";
   const response = yield fetch(url + urlPart, {
     method: "GET",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
   }).then(async (response) => {
@@ -57,7 +57,7 @@ export function* fetchCountriesAsync(action) {
   const currentUser = yield select(selectCurrentUser);
   const response = yield fetch(url + "/api/Region/Countries?" + q, {
     method: "GET",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
   }).then(async (response) => {
@@ -82,7 +82,7 @@ export function* fetchStatesAsync(action) {
   const currentUser = yield select(selectCurrentUser);
   const response = yield fetch(url + "/api/Region/States?" + q, {
     method: "GET",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
   }).then(async (response) => {
@@ -107,7 +107,7 @@ export function* fetchDistrictsAsync(action) {
   const currentUser = yield select(selectCurrentUser);
   const response = yield fetch(url + "/api/Region/Districts?" + q, {
     method: "GET",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
   }).then(async (response) => {
@@ -132,7 +132,7 @@ export function* fetchTehsilsAsync(action) {
   const currentUser = yield select(selectCurrentUser);
   const response = yield fetch(url + "/api/Region/Tehsils?" + q, {
     method: "GET",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
   }).then(async (response) => {
@@ -157,7 +157,7 @@ export function* fetchUcsAsync(action) {
   const currentUser = yield select(selectCurrentUser);
   const response = yield fetch(url + "/api/Region/UnionCouncils?" + q, {
     method: "GET",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
   }).then(async (response) => {
@@ -175,7 +175,7 @@ export function* fetchRegionDetailAsync(action) {
   const currentUser = yield select(selectCurrentUser);
   const response = yield fetch(url + "/api/Region/Get" + action.payload.id, {
     method: "GET",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
   }).then(async (response) => {
@@ -194,7 +194,7 @@ export function* addRegionAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     const region = yield fetch(url + "/api/Region/Create", {
       method: 'POST',
-      withCredentials: true,
+      //withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'bearer ' + currentUser.access_token
@@ -221,7 +221,7 @@ export function* updateRegionAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     const region = yield fetch(url + "/api/Region/UpdateMultipleRegionsWithChildrens", {
       method: 'PUT',
-      withCredentials: true,
+      //withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'bearer ' + currentUser.access_token

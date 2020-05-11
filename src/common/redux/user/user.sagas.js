@@ -3,7 +3,7 @@ import { formEncode } from '../../utility/request';
 import { connect, subscribe } from '../live/actions';
 
 import { userTypes } from './user.types';
-import { putInitialData, signInSuccess, signUpSuccess, signUpFailure, searchGlobalComplete, signInFailure } from './user.actions';
+import { putInitialData,refreshLogin,loginError, signInSuccess, signUpSuccess, signUpFailure, searchGlobalComplete, signInFailure } from './user.actions';
 import { selectCurrentUser, selectSocket } from "./user.selectors";
 import { apiLink } from '../api.links';
 const url = apiLink;
@@ -18,10 +18,30 @@ export function* signInAsync(action) {
   const response = yield fetch(url + "/token", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json" },
-    //withCredentials: true,
+    ////withCredentials: true,
     body: formEncode(action.payload)
     //credentials: "include"
   }).then(response => response.json());
+  if (response.error) {
+    yield put(signInFailure(response));
+  } else {
+    yield put(signInSuccess(response));
+  }
+}
+export function* refreshTokenAsync(action) {
+  const response = yield fetch(url + "/refresh", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json" },
+    ////withCredentials: true,
+    body: formEncode({token:action.payload.access_token,refreshToken:action.payload.refresh_token})
+    //credentials: "include"
+  }).then(async (response) => {
+      if (response.status >= 205) {
+        const result = await response.json();
+        return { result, error: true };
+      }
+      return response.json();
+    });
   if (response.error) {
     yield put(signInFailure(response));
   } else {
@@ -47,7 +67,18 @@ export function* connectSocketAsync(action) {
     yield put(action);
   }
   //socket.on("changes",onChanges);
-
+}
+export function* checkSessionAsync(action){
+  const user = yield select(selectCurrentUser);
+  console.log(user);
+  try{
+  if(new Date()<=user.expires_in || user.expires_in===undefined){
+      yield put(refreshLogin(user))
+    }
+  }catch(error){
+    yield put(loginError(error));
+  }
+  
 }
 export function* applyUpdatesAsync(action) {
   const type = action.payload.type;
@@ -120,9 +151,16 @@ export function* signOutAsync() {
 export function* onSignOut() {
   yield takeLatest(userTypes.SIGN_OUT, signOutAsync);
 }
-
+export function* checkSession(){
+   yield takeLatest(userTypes.CHECK_USER_SESSION, checkSessionAsync);
+}
+export function* refreshToken(){
+  yield takeEvery(userTypes.REFRESH_LOGIN,refreshTokenAsync)
+}
 export function* userSagas() {
   yield all([
+    call(checkSession),
+    call(refreshToken),
     call(enterWithEmailStart),
     //call(connectSocket),
     call(applyUpdates),

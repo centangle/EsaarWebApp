@@ -19,10 +19,17 @@ export const emailSignInStart = emailAndPassword => ({
   payload: emailAndPassword
 });
 
-export const checkUserSession = () => ({
+export const checkSession = () => ({
   type: userTypes.CHECK_USER_SESSION
 });
-
+export const refreshLogin = (user) =>({
+  type:userTypes.REFRESH_LOGIN,
+  payload:user
+});
+export const loginError = error =>({
+  type:userTypes.LOGIN_FAILURE,
+  payload:error
+})
 export const signOutStart = () => ({
   type: userTypes.SIGN_OUT
 });

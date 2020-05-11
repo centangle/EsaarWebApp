@@ -9,13 +9,14 @@ import {
   fetchPeriferalUomSuccess, fetchUomStart
 } from './uom.actions';
 import { apiLink } from '../api.links';
+import { parse } from 'date-fns';
 const url = apiLink;
 
 export function* fetchUomTreeAsync() {
   const currentUser = yield select(selectCurrentUser);
   const response = yield fetch(url + "/api/UOM/GetAllUOMs?dataStructure=List", {
     method: "GET",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
   }).then(async (response) => {
@@ -33,7 +34,7 @@ export function* removeUomAsync(action) {
   const currentUser = yield select(selectCurrentUser);
   const response = yield fetch(url + "/api/UOM/DeleteUOMWithChildren/" + action.payload, {
     method: "DELETE",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
   }).then(async (response) => {
@@ -52,9 +53,10 @@ export function* removeUomAsync(action) {
 }
 export function* fetchUomAsync(action) {
   const currentUser = yield select(selectCurrentUser);
-  const response = yield fetch(url + "/api/UOM/Get?forDropDown="+action.payload, {
+  const dd = action.payload?action.payload:false;
+  const response = yield fetch(url + "/api/UOM/Get?forDropDown="+dd, {
     method: "GET",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
   }).then(async (response) => {
@@ -72,7 +74,7 @@ export function* fetchPeriferalUomAsync() {
   const currentUser = yield select(selectCurrentUser);
   const response = yield fetch(url + "/api/Uom/GetPeripheralUoms", {
     method: "GET",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
   }).then(async (response) => {
@@ -91,7 +93,7 @@ export function* fetchUomDetailAsync(action) {
   const currentUser = yield select(selectCurrentUser);
   const response = yield fetch(url + "/api/Uom/Get" + action.payload.id, {
     method: "GET",
-    withCredentials: true,
+    //withCredentials: true,
     credentials: 'include',
     headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
   }).then(async (response) => {
@@ -110,12 +112,12 @@ export function* addUomAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     const uom = yield fetch(url + "/api/UOM/Create", {
       method: 'POST',
-      withCredentials: true,
+      //withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'bearer ' + currentUser.access_token
       },
-      body: JSON.stringify(action.payload)
+      body: JSON.stringify({...action.payload,NoOfBaseUnit:parseFloat(action.payload.NoOfBaseUnit)})
     }).then(async (response) => {
       if (response.status >= 205) {
         const result = await response.json();
@@ -138,7 +140,7 @@ export function* updateUomAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     const uom = yield fetch(url + "/api/UOM/Update", {
       method: 'PUT',
-      withCredentials: true,
+      //withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'bearer ' + currentUser.access_token
@@ -166,7 +168,7 @@ export function* changeUomAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     const uom = yield fetch(url + "/api/UOM/UpdateMultipleUOMsWithChildrens", {
       method: 'PUT',
-      withCredentials: true,
+      //withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'bearer ' + currentUser.access_token

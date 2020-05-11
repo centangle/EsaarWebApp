@@ -113,6 +113,7 @@ const user = (state = INITIAL_STATE, action) => {
       toaster.success("Notification Message", action.payload.error_description, { timeOut: 5000 })
       return {
         ...state,
+        currentUser:null,
         error: action.payload,
         toasterMessage: action.payload
       };

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import CustomButton from "../custom-button/custom-button.component";
 import Dropdown from "../dropdown/dropdown.component";
 import {
@@ -10,13 +10,14 @@ import {
   Row,
   FormHolder,
 } from "./organization.styles";
-import {connect} from "react-redux";
-import {useHistory} from "react-router-dom";
-import {baseUrl} from "../../../common/utility/request";
+import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { baseUrl } from "../../../common/utility/request";
 import Modal from "../modal/modal.component";
 import RegionSelector from "../region/region.selector";
 import noImage from "../../../assets/no-image.png";
-const OrganizationHeader = ({organization, dispatch, regions}) => {
+import OrganizationAdder from "./organization.adder";
+const OrganizationHeader = ({ organization, dispatch, regions, form }) => {
   const [state, setState] = useState({
     modal: false,
     type: "Member",
@@ -31,7 +32,7 @@ const OrganizationHeader = ({organization, dispatch, regions}) => {
       EntityType: "Member",
       Type: type,
     };
-    dispatch({type: "REQUEST_START", payload: data});
+    dispatch({ type: "REQUEST_START", payload: data });
     //['Owner', 'Member', 'Volunteer', 'Moderator', 'Item', 'Region']
   };
 
@@ -55,6 +56,8 @@ const OrganizationHeader = ({organization, dispatch, regions}) => {
   const handleChange = (e) => {
     if (e.value === "Volunteer" || e.value === "Moderator") {
       openModal(e.value);
+    } else if (e.value === 'Edit') {
+      dispatch({ type: 'OPEN_MODAL', payload: 'ORG' });
     } else {
       handleJoin(e.value);
     }
@@ -73,10 +76,18 @@ const OrganizationHeader = ({organization, dispatch, regions}) => {
       })
     );
   };
+  const closeEditModal = () => {
+    dispatch({ type: "CLOSE_MODAL", payload: "ORG" });
+  };
   return (
     <Row>
+      {form.orgModal ? (
+        <Modal closeModal={closeEditModal}>
+          <OrganizationAdder current={organization} />
+        </Modal>
+      ) : null}
       <div className="org-logo">
-        {organization.ImageUrl?<img src={baseUrl + "/" + organization.ImageUrl} alt="logo" />:<img src={noImage} alt="logo" />}
+        {organization.ImageUrl ? <img src={baseUrl + organization.ImageUrl} alt="logo" /> : <img src={noImage} alt="logo" />}
       </div>
       {state.modal ? (
         <Modal closeModal={closeModal}>
@@ -113,15 +124,16 @@ const OrganizationHeader = ({organization, dispatch, regions}) => {
           <Dropdown
             className="icon-drop-round"
             options={[
-              {value: "Volunteer", content: "Join as Volunteer"},
-              {value: "Moderator", content: "Request Moderation"},
+              { value: "Volunteer", content: "Join as Volunteer" },
+              { value: "Moderator", content: "Request Moderation" },
+              { value: "Edit", content: "Edit Organization" },
             ]}
             onChange={(e) => handleChange(e)}
             buttonIndicator={true}
             //buttonIndicatorContent={''}
             resetValue={""}
             selectedOption={"expense"}
-            //PreBuildOptions={ColorPicker}
+          //PreBuildOptions={ColorPicker}
           />
         </div>
       </div>
@@ -129,9 +141,11 @@ const OrganizationHeader = ({organization, dispatch, regions}) => {
   );
 };
 const mapState = (state) => {
-  const {region} = state;
+  const { region } = state;
+  const { organization } = state;
   return {
     regions: region.regions,
+    form: organization.form
   };
 };
 export default connect(mapState)(OrganizationHeader);

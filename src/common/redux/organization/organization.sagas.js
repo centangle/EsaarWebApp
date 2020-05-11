@@ -4,6 +4,7 @@ import { selectCurrentUser } from "../user/user.selectors";
 import { params } from '../../utility/request';
 import {
     addOrganizationSuccess, addOrganizationFailure,
+    updateOrganizationFailure,updateOrganizationSuccess,
     addCampaignSuccess, addCampaignFailure,
     addPackageFailure, addPackageSuccess,
     addOfficeFailure,
@@ -15,6 +16,7 @@ import {
     fetchAttachmentsStart,
     addOrgRegionFailure,
     addOrgRegionSuccess,
+    fetchOrganizationDetail,
     fetchOrganizationStart,
     fetchOrganizationSuccess,
     fetchOrgDetailSuccess, fetchOrgItemsSuccess,
@@ -48,7 +50,7 @@ export function* fetchOrganizationAsync(action) {
     }
     const response = yield fetch(url + "/api/Organization/GetPaginated?" + q, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -82,7 +84,7 @@ export function* fetchOrgAccountsAsync(action) {
     //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/OrganizationAccount/GetPaginated?" + q, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -113,7 +115,7 @@ export function* fetchOrgOfficesAsync(action) {
     //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/OrganizationOffice/GetPaginated?" + q, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -144,7 +146,7 @@ export function* fetchOrgAttachmentsAsync(action) {
     //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/OrganizationAttachment/GetPaginated?" + q, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -175,7 +177,7 @@ export function* fetchOrgRegionsAsync(action) {
     //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/OrganizationRegion/GetPaginated?" + q, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -200,7 +202,7 @@ export function* addOrganizationAsync(action) {
         const currentUser = yield select(selectCurrentUser);
         const organization = yield fetch(url + "/api/Organization/Create", {
             method: 'POST',
-            withCredentials: true,
+            ////withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -228,7 +230,7 @@ export function* addCampaignAsync(action) {
         const currentUser = yield select(selectCurrentUser);
         const organization = yield fetch(url + "/api/Campaign/Create", {
             method: 'POST',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -255,7 +257,7 @@ export function* addPackageAsync(action) {
         const currentUser = yield select(selectCurrentUser);
         const organization = yield fetch(url + "/api/OrganizationPackage/Create", {
             method: 'POST',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -283,7 +285,7 @@ export function* addOfficeAsync(action) {
         const currentUser = yield select(selectCurrentUser);
         const organization = yield fetch(url + "/api/OrganizationOffice/Create", {
             method: 'POST',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -312,7 +314,7 @@ export function* addAttachmentsAsync(action) {
         const q = 'organizationId=' + action.payload.organizationId;//+'&attachments='+action.payload.attachments;
         const organization = yield fetch(url + "/api/OrganizationAttachment/Create?" + q, {
             method: 'PUT',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -341,7 +343,7 @@ export function* addOrgRegionAsyn(action) {
         const q = 'organizationId=' + action.payload.organizationId;//+'&attachments='+action.payload.attachments;
         const organization = yield fetch(url + "/api/OrganizationRegion/Modify?" + q, {
             method: 'POST',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -368,7 +370,7 @@ export function* addAccountAsync(action) {
         const currentUser = yield select(selectCurrentUser);
         const organization = yield fetch(url + "/api/OrganizationAccount/Create", {
             method: 'POST',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -396,7 +398,7 @@ export function* updateSingleOrganizationAsync(action) {
         const currentUser = yield select(selectCurrentUser);
         const organization = yield fetch(url + "/api/Organization/Update", {
             method: 'PUT',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -421,9 +423,9 @@ export function* updateSingleOrganizationAsync(action) {
 export function* updateOrganizationAsync(action) {
     try {
         const currentUser = yield select(selectCurrentUser);
-        const organization = yield fetch(url + "/api/Organization/UpdateMultipleOrganizationsWithChildrens", {
+        const organization = yield fetch(url + "/api/Organization/Update", {
             method: 'PUT',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -437,19 +439,20 @@ export function* updateOrganizationAsync(action) {
             return response.json();
         });
         if (organization.error) {
-            yield put(addOrganizationFailure(organization));
+            yield put(updateOrganizationFailure(organization));
         } else {
-            yield put(addOrganizationSuccess({ organization }));
+            yield put(updateOrganizationSuccess({ organization }));
+            yield put(fetchOrganizationDetail(action.payload.Id))
         }
     } catch (error) {
-        yield put(addOrganizationFailure(error));
+        yield put(updateOrganizationFailure(error));
     }
 }
 export function* fetchOrgDetailAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     const response = yield fetch(url + "/api/Organization/Get/" + action.payload, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -469,7 +472,7 @@ export function* orgRequestAsync(action) {
         const currentUser = yield select(selectCurrentUser);
         const organization = yield fetch(url + "/api/OrganizationMember/RequestMembership", {
             method: 'POST',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -504,7 +507,7 @@ export function* fetchOrgItemsAsync(action) {
     //const q = "organizationId=" + action.payload + "&itemType=General&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/OrganizationItem/GetPaginated?" + q, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -535,7 +538,7 @@ export function* fetchOrgRequestsAsync(action) {
         + "&disablePagination=false";
     const response = yield fetch(url + "/api/OrganizationRequest/GetPaginated?" + q, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -569,7 +572,7 @@ export function* fetchOrgPackagesAsync(action) {
     //const q = "organizationId=" + action.payload + "&itemType=Package&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/OrganizationItem/GetPaginated?" + q, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -600,7 +603,7 @@ export function* fetchOrgMembersAsync(action) {
     //const q = "organizationId=" + action.payload + "&type=" + action.userType + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/OrganizationMember/GetPaginated?" + q, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -625,7 +628,7 @@ export function* fetchOrgCategoriesAsync(action) {
     const q = action.payload;//"organizationId="+action.payload+"&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/Organization/GetCategories/" + q, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -651,7 +654,7 @@ export function* fetchOrgCampaignAsync(action) {
     //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/Campaign/GetPaginated?" + q, {
         method: "GET",
-        withCredentials: true,
+        //withCredentials: true,
         credentials: 'include',
         headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
         //credentials: "include"
@@ -676,7 +679,7 @@ export function* addItemAsync(action) {
         const currentUser = yield select(selectCurrentUser);
         const organization = yield fetch(url + "/api/OrganizationItem/Create", {
             method: 'POST',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -704,7 +707,7 @@ export function* removeItemAsync(action) {
         const q = "organizationId=" + action.payload.organizationId + "&itemId=" + action.payload.itemId;
         const organization = yield fetch(url + "/api/OrganizationItem/DeleteOrganizationItem?" + q, {
             method: 'DELETE',
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
@@ -728,6 +731,9 @@ export function* removeItemAsync(action) {
 }
 export function* addOrganizationStart() {
     yield takeLatest(organizationTypes.ADD_ORGANIZATION_START, addOrganizationAsync)
+}
+export function* updateOrganization() {
+    yield takeLatest(organizationTypes.UPDATE_ORGANIZATION_START, updateOrganizationAsync)
 }
 export function* changeOrder() {
     yield takeEvery(organizationTypes.ORGANIZATION_ORDER_CHANGED, updateOrganizationAsync)
@@ -804,6 +810,7 @@ export function* organizationSagas() {
     yield all([
         call(orgRequest),
         call(addOrganizationStart),
+        call(updateOrganization),
         call(addItem),
         call(addCampaign),
         call(addPackage),

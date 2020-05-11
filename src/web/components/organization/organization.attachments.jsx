@@ -17,10 +17,10 @@ const OrganizationAttachments = ({ organization, attachments, organizations, dis
     history.push('/attachments/' + obj.Id);
   }
   const closeModal = () => {
-    dispatch({ type: 'CLOSE_MODAL', payload: 'ORG' });
+    dispatch({ type: 'CLOSE_MODAL', payload: 'ATTACHMENT' });
   }
   const openModal = () => {
-    dispatch({ type: 'OPEN_MODAL', payload: 'ORG' });
+    dispatch({ type: 'OPEN_MODAL', payload: 'ATTACHMENT' });
   }
   const mappedData = attachments ? attachments.map(item => {
     return {
