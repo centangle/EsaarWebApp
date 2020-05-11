@@ -70,9 +70,12 @@ export function* connectSocketAsync(action) {
 }
 export function* checkSessionAsync(action){
   const user = yield select(selectCurrentUser);
-  console.log(user);
+  const now = new Date();
+  const utc = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
+  const userTime = new Date(user.expires_in);
+
   try{
-  if(new Date()<=user.expires_in || user.expires_in===undefined){
+  if(userTime<=utc || user.expires_in===undefined){
       yield put(refreshLogin(user))
     }
   }catch(error){
