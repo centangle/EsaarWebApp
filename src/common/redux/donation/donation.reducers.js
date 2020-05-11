@@ -40,7 +40,7 @@ const donation = (state = INITIAL_STATE, action) => {
     case 'FETCH_DONATION_REQUEST_SUCCESS':
       return {
         ...state,
-        totalItemsCount: action.payload.totalItemsCount,
+        totalItemsCount: parseInt(action.payload.totalItemsCount),
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,

@@ -85,7 +85,7 @@ const organization = (state = INITIAL_STATE, action) => {
     case 'FETCH_ORG_OFFICES_SUCCESS':
       return {
         ...state,
-        totalItemsCount: action.payload.totalItemsCount,
+        totalItemsCount: parseInt(action.payload.totalItemsCount),
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
@@ -102,7 +102,7 @@ const organization = (state = INITIAL_STATE, action) => {
         ...state,
         accountsLoading: false,
         accounts: action.payload.result,
-        totalItemsCount: action.payload.totalItemsCount,
+        totalItemsCount: parseInt(action.payload.totalItemsCount),
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
@@ -118,7 +118,7 @@ const organization = (state = INITIAL_STATE, action) => {
         attachmentsLoading: false,
         attachments: action.payload.result,
         accounts: action.payload.result,
-        totalItemsCount: action.payload.totalItemsCount,
+        totalItemsCount: parseInt(action.payload.totalItemsCount),
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
@@ -127,7 +127,7 @@ const organization = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         campaigns: action.payload.result,
-        totalItemsCount: action.payload.totalItemsCount,
+        totalItemsCount: parseInt(action.payload.totalItemsCount),
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
@@ -142,7 +142,7 @@ const organization = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         regions: action.payload.result,
-        totalItemsCount: action.payload.totalItemsCount,
+        totalItemsCount: parseInt(action.payload.totalItemsCount),
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
@@ -188,7 +188,7 @@ const organization = (state = INITIAL_STATE, action) => {
         requestsLoading: false,
         requests: {
           items: action.payload.result,
-          totalItemsCount: action.payload.totalItemsCount,
+          totalItemsCount: parseInt(action.payload.totalItemsCount),
           activePage: action.payload.activePage,
           itemsCountPerPage: action.payload.itemsCountPerPage,
           pageRangeDisplayed: action.payload.pageRangeDisplayed
@@ -199,7 +199,7 @@ const organization = (state = INITIAL_STATE, action) => {
         ...state,
         membersLoading: false,
         members: action.payload.result,
-        totalItemsCount: action.payload.totalItemsCount,
+        totalItemsCount: parseInt(action.payload.totalItemsCount),
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
@@ -208,7 +208,7 @@ const organization = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         items: action.payload.result,
-        totalItemsCount: action.payload.totalItemsCount,
+        totalItemsCount: parseInt(action.payload.totalItemsCount),
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
@@ -223,7 +223,7 @@ const organization = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         packages: action.payload.result,
-        totalItemsCount: action.payload.totalItemsCount,
+        totalItemsCount: parseInt(action.payload.totalItemsCount),
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
@@ -261,7 +261,7 @@ const organization = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         form: {},
-        totalItemsCount: parseInt(action.payload.totalItemsCount),
+        totalItemsCount: parseInt(parseInt(action.payload.totalItemsCount)),
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
