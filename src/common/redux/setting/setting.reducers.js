@@ -6,6 +6,9 @@ const INITIAL_STATE = {
   isLoading: false,
   miniLoading: false,
   uomLoading: false,
+  filter: false,
+  filterLoading: false,
+  selectedFilters:{}
 };
 
 const setting = (state = INITIAL_STATE, action) => {
@@ -20,6 +23,38 @@ const setting = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         isLoading: true
+      }
+    case 'SET_FILTERS':
+      let current = state.selectedFilters[action.payload.from]
+        ? state.selectedFilters[action.payload.from]
+        : [];
+      if (action.payload.clearOld) {
+        current = [];
+      }
+      if (!action.payload.checked) {
+        if (!current.find(i => action.payload.item.Id === i.Id))
+          current.push(action.payload.item);
+      } else {
+        current.splice(current.indexOf(action.payload.item), 1);
+      }
+
+      return {
+        ...state,
+        selectedFilters: {
+          ...state.selectedFilters,
+          [action.payload.from]: [...current],
+        },
+      }
+    case 'TOGGLE_FILTER':
+      return {
+        ...state,
+        filter: !state.filter,
+        filterLoading: true,
+      }
+    case 'TOGGLE_FILTER_SUCCESS':
+      return {
+        ...state,
+        filterLoading: false
       }
     case 'ORG_REQUESTS_START':
       return {

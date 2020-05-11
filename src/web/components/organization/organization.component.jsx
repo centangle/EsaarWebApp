@@ -1,13 +1,13 @@
-import React, {useState} from "react";
-import {connect} from "react-redux";
+import React, { useState } from "react";
+import { connect } from "react-redux";
 import OrganizationAdder from "./organization.adder";
 import GridToList from "../grid-to-list/grid-to-list.component";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Modal from "../modal/modal.component";
-import {TitleWithAction, FormHolder} from "./organization.styles";
+import { TitleWithAction, FormHolder } from "./organization.styles";
 import Search from "../search/search.component";
 import Pagination from "react-js-pagination";
-import {params} from "../../../common/utility/request";
+import { params } from "../../../common/utility/request";
 import RegionSelector from "../region/region.selector";
 const Organzation = ({
   regions,
@@ -20,21 +20,21 @@ const Organzation = ({
   itemsCountPerPage,
 }) => {
   let history = useHistory();
-  const [state, setState] = useState({treeData: data, volunteer: false, id: 0});
+  const [state, setState] = useState({ treeData: data, volunteer: false, id: 0 });
   const closeModal = () => {
-    dispatch({type: "CLOSE_MODAL", payload: "ORG"});
+    dispatch({ type: "CLOSE_MODAL", payload: "ORG" });
   };
   const handleAddOrg = () => {
-    dispatch({type: "OPEN_MODAL", payload: "ORG"});
+    dispatch({ type: "OPEN_MODAL", payload: "ORG" });
   };
   const handleClick = (obj) => {
-    dispatch({type: "ORGANIZATION_SELECTED", payload: obj});
+    dispatch({ type: "ORGANIZATION_SELECTED", payload: obj });
     history.push(history.location.pathname + "/" + obj.Id);
   };
   const handleSearch = (term, filters) => {
     dispatch({
       type: "FETCH_ORGANIZATION_START",
-      params: {...params, name: term},
+      params: { ...params, name: term,filters:[filters] },
     });
   };
   const handlePageChange = (page) => {
@@ -50,7 +50,7 @@ const Organzation = ({
     });
   };
   const closeVolunteer = () => {
-    setState({...state, volunteer: false});
+    setState({ ...state, volunteer: false });
   };
   const handleJoin = (type, regions = []) => {
     const data = {
@@ -61,7 +61,7 @@ const Organzation = ({
       EntityType: "Member",
       Type: type,
     };
-    dispatch({type: "REQUEST_START", payload: data});
+    dispatch({ type: "REQUEST_START", payload: data });
     //['Owner', 'Member', 'Volunteer', 'Moderator', 'Item', 'Region']
   };
   const handleSubmit = () => {
@@ -78,9 +78,9 @@ const Organzation = ({
     );
   };
   const openVolunteer = (item) => {
-    setState({...state, id: item.Id, volunteer: true});
+    setState({ ...state, id: item.Id, volunteer: true });
   };
-  const buttonsWithActions = [{label: "volunteer", action: openVolunteer}];
+  const buttonsWithActions = [{ label: "volunteer", action: openVolunteer }];
   return (
     <div className="page-right">
       {state.volunteer ? (
@@ -116,10 +116,7 @@ const Organzation = ({
       </TitleWithAction>
 
       <Search
-        filters={{
-          location: ["Lahore", "Islamabad"],
-          categories: ["Education", "Health"],
-        }}
+        type="organization"
         handleSearch={handleSearch}
       />
       <GridToList
@@ -140,8 +137,8 @@ const Organzation = ({
   );
 };
 const mapState = (state) => {
-  const {organization} = state;
-  const {region} = state;
+  const { organization } = state;
+  const { region } = state;
   return {
     regions: region.regions,
     data: Object.keys(organization.organizations).map((key) => {

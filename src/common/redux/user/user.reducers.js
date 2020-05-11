@@ -73,7 +73,7 @@ const user = (state = INITIAL_STATE, action) => {
     case userTypes.SIGN_IN_SUCCESS:
       return {
         ...state,
-        currentUser: action.payload,
+        currentUser: {...state.currentUser,...action.payload},
         error: null
       };
     case userTypes.SELECT_USER_PERMISSION:
@@ -101,8 +101,10 @@ const user = (state = INITIAL_STATE, action) => {
     case userTypes.CHECK_USER_SESSION:
       return {
         ...state,
+        ...action.payload,
         toasterMessage: null
       }
+
     case userTypes.SIGN_UP_FAILURE:
       toaster.error("Notification Message", action.payload.result.Message, { timeOut: 5000 })
       return{

@@ -1,4 +1,4 @@
-import React, { lazy, Suspense,useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -10,12 +10,22 @@ import Header from './web/components/header/header.component';
 import HomePage from './web/pages/home.page';
 import LoginPage from './web/pages/login.page';
 
-import {checkSession} from './common/redux/user/user.actions';
+import { checkSession } from './common/redux/user/user.actions';
+import { usePosition } from 'use-position';
 
-function App({ user,checkSession }) {
-    useEffect(() => {
-    checkSession();
-  }, [checkSession]);
+function App({ user, checkSession }) {
+  const watch = false;
+  const {
+    latitude,
+    longitude,
+    timestamp,
+    accuracy,
+    error,
+  } = usePosition(watch, { enableHighAccuracy: true });
+  useEffect(() => {
+    if(latitude)
+    checkSession({latitude, longitude, accuracy, error});
+  }, [checkSession, latitude, longitude, accuracy, error]);
   if (user) {
     return (
       <div className="App">
@@ -29,7 +39,7 @@ function App({ user,checkSession }) {
             </ErrorBoundary>
           </Switch>
         </div>
-        
+
       </div>
     );
   }
@@ -51,7 +61,7 @@ const mapStateToProps = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     dispatch,
-    checkSession: () => dispatch(checkSession()),
+    checkSession: (payload) => dispatch(checkSession(payload))
   };
 };
-export default connect(mapStateToProps,mapDispatch)(App);
+export default connect(mapStateToProps, mapDispatch)(App);

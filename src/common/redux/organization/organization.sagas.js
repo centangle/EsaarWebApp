@@ -1,10 +1,10 @@
 import { takeLatest, all, call, put, select, takeEvery, takeLeading } from 'redux-saga/effects';
 import { organizationTypes } from './organization.types';
-import { selectCurrentUser } from "../user/user.selectors";
+import { selectCurrentUser, selectUser } from "../user/user.selectors";
 import { params } from '../../utility/request';
 import {
     addOrganizationSuccess, addOrganizationFailure,
-    updateOrganizationFailure,updateOrganizationSuccess,
+    updateOrganizationFailure, updateOrganizationSuccess,
     addCampaignSuccess, addCampaignFailure,
     addPackageFailure, addPackageSuccess,
     addOfficeFailure,
@@ -39,7 +39,7 @@ import {
 import { apiLink } from '../api.links';
 const url = apiLink;
 export function* fetchOrganizationAsync(action) {
-    const currentUser = yield select(selectCurrentUser);
+    const user = yield select(selectUser);
     let q = "recordsPerPage=" + action.params.itemsCountPerPage
         + "&currentPage=" + action.params.activePage
         + "&orderDir=Asc"
@@ -48,11 +48,47 @@ export function* fetchOrganizationAsync(action) {
     if (action.params.name) {
         q += "&name=" + action.params.name
     }
+
+    if (action.params.latitude) {
+        q += "&latitude=" + action.params.latitude;
+    } else {
+        q += "&latitude=" + user.latitude;
+    }
+    if (action.params.longitude) {
+        q += "&longitude=" + action.params.longitude;
+    } else {
+        q += "&longitude=" + user.longitude;
+    }
+    if (action.params && action.params.filters) {
+        action.params.filters.forEach(filter => {
+            console.log(filter);
+            if (filter.OrganizationByRegion) {
+                filter.OrganizationByRegion.forEach(f => {
+                    q += "&regionLevel=" + f.RegionLevel;
+                    q += "&regionId=" + f.Id;
+                })
+            }
+            if (filter.OrganizationInRadius) {
+                filter.OrganizationInRadius.forEach(f => {
+                    console.log(f);
+                    q += "&radiusType=" + f.radiusType;
+                    q += "&radius=" + f.radius;
+                })
+            }
+        })
+    } else {
+        if (action.params.searchType) {
+            q += "&searchType=" + action.params.searchType;
+        } else {
+            q += "&searchType=OrganizationInMyRegion";
+        }
+    }
+
     const response = yield fetch(url + "/api/Organization/GetPaginated?" + q, {
         method: "GET",
         //withCredentials: true,
         credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + user.currentUser.access_token },
         //credentials: "include"
     }).then(async (response) => {
         const result = await response.json();
@@ -701,6 +737,9 @@ export function* addItemAsync(action) {
         yield put(addOrgItemFailure({ error, request: action.payload }));
     }
 }
+export function* toggleFilterAsync(action) {
+
+}
 export function* removeItemAsync(action) {
     try {
         const currentUser = yield select(selectCurrentUser);
@@ -806,6 +845,9 @@ export function* addOrgRegion() {
 export function* fetchOrgRegions() {
     yield takeEvery(organizationTypes.FETCH_ORG_REGIONS_START, fetchOrgRegionsAsync)
 }
+export function* toggleFilter() {
+    yield takeEvery(organizationTypes.TOGGLE_FILTER, toggleFilterAsync)
+}
 export function* organizationSagas() {
     yield all([
         call(orgRequest),
@@ -832,7 +874,7 @@ export function* organizationSagas() {
         call(fetchOrgAttachments),
         call(fetchOrgRegions),
         call(removeItem),
-        call(logoUpload)
-
+        call(logoUpload),
+        call(toggleFilter)
     ]);
 }

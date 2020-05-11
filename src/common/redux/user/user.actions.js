@@ -18,9 +18,13 @@ export const emailSignInStart = emailAndPassword => ({
   type: userTypes.EMAIL_SIGN_IN_START,
   payload: emailAndPassword
 });
-
-export const checkSession = () => ({
-  type: userTypes.CHECK_USER_SESSION
+export const userPosition = (payload) =>({
+  type: userTypes.SET_USER_POSITIION,
+  payload
+})
+export const checkSession = (payload) => ({
+  type: userTypes.CHECK_USER_SESSION,
+  payload
 });
 export const refreshLogin = (user) =>({
   type:userTypes.REFRESH_LOGIN,

@@ -3,7 +3,7 @@ import { formEncode } from '../../utility/request';
 import { connect, subscribe } from '../live/actions';
 
 import { userTypes } from './user.types';
-import { putInitialData,refreshLogin,loginError, signInSuccess, signUpSuccess, signUpFailure, searchGlobalComplete, signInFailure } from './user.actions';
+import { putInitialData, refreshLogin, loginError, signInSuccess, signUpSuccess, signUpFailure, searchGlobalComplete, signInFailure } from './user.actions';
 import { selectCurrentUser, selectSocket } from "./user.selectors";
 import { apiLink } from '../api.links';
 const url = apiLink;
@@ -29,23 +29,25 @@ export function* signInAsync(action) {
   }
 }
 export function* refreshTokenAsync(action) {
-  const response = yield fetch(url + "/refresh", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json" },
-    ////withCredentials: true,
-    body: formEncode({token:action.payload.access_token,refreshToken:action.payload.refresh_token})
-    //credentials: "include"
-  }).then(async (response) => {
+  if (action.payload) {
+    const response = yield fetch(url + "/refresh", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json" },
+      ////withCredentials: true,
+      body: formEncode({ token: action.payload.access_token, refreshToken: action.payload.refresh_token })
+      //credentials: "include"
+    }).then(async (response) => {
       if (response.status >= 205) {
         const result = await response.json();
         return { result, error: true };
       }
       return response.json();
     });
-  if (response.error) {
-    yield put(signInFailure(response));
-  } else {
-    yield put(signInSuccess(response));
+    if (response.error) {
+      yield put(signInFailure(response));
+    } else {
+      yield put(signInSuccess(response));
+    }
   }
 }
 export function* enterWithEmailStart() {
@@ -68,20 +70,20 @@ export function* connectSocketAsync(action) {
   }
   //socket.on("changes",onChanges);
 }
-export function* checkSessionAsync(action){
+export function* checkSessionAsync(action) {
   const user = yield select(selectCurrentUser);
-  const now = new Date();
-  const utc = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
-  const userTime = new Date(user.expires_in);
-
-  try{
-  if(userTime<=utc || user.expires_in===undefined){
-      yield put(refreshLogin(user))
+  if (user) {
+    const now = new Date();
+    const utc = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
+    const userTime = user ? new Date(user.expires_in) : null;
+    try {
+      if (user.access_token && (userTime <= utc || user.expires_in === undefined)) {
+        yield put(refreshLogin(user))
+      }
+    } catch (error) {
+      yield put(loginError(error));
     }
-  }catch(error){
-    yield put(loginError(error));
   }
-  
 }
 export function* applyUpdatesAsync(action) {
   const type = action.payload.type;
@@ -154,11 +156,11 @@ export function* signOutAsync() {
 export function* onSignOut() {
   yield takeLatest(userTypes.SIGN_OUT, signOutAsync);
 }
-export function* checkSession(){
-   yield takeLatest(userTypes.CHECK_USER_SESSION, checkSessionAsync);
+export function* checkSession() {
+  yield takeLatest(userTypes.CHECK_USER_SESSION, checkSessionAsync);
 }
-export function* refreshToken(){
-  yield takeEvery(userTypes.REFRESH_LOGIN,refreshTokenAsync)
+export function* refreshToken() {
+  yield takeEvery(userTypes.REFRESH_LOGIN, refreshTokenAsync)
 }
 export function* userSagas() {
   yield all([

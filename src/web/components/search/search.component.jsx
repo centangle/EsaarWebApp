@@ -1,72 +1,73 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./search.styles.scss";
 import Modal from "../modal/modal.component";
 import filterIcon from "./../../../assets/filter.png";
+import { connect } from "react-redux";
+import OrganizationSearch from './organization.search';
+const Filters = ({ type, selectedFilters, handleCheck }) => {
+  const filters = {
+    location: [{ Id: "Lahore", Name: "Lahore" }, { Id: "Islamabad", Name: "Islamabad" }],
+    categories: [{ Id: "Education", Name: "Education" }, { Id: "Health", Name: "Health" }],
+    OrganizationInRadius: [],
+    OrganizationByRegion: []
+  };
+  if (type === 'organization') {
+    return (
+      <OrganizationSearch handleCheck={handleCheck} />
+    )
+  }
+  return Object.keys(filters).map((f) => {
+    return (
+      <span key={f} className="filter-item">
+        <div className="filter-name">{f.toUpperCase()}</div>
+        <div className="filter-items">
+          {filters[f].map((item) => {
+            const checked =
+              selectedFilters[f] &&
+                selectedFilters[f].includes(item)
+                ? 1
+                : 0;
+            return (
+              <span className="i" key={item.Id}>
+                <label>
+                  <input
+                    checked={checked}
+                    onChange={() => handleCheck(item, f, checked)}
+                    type="checkbox"
+                  />
+                  {item.Name}
+                </label>
+              </span>
+            );
+          })}
+        </div>
+      </span>
+    );
 
-const Search = ({filters, handleSearch}) => {
+  })
+};
+const Search = ({ handleSearch, type, dispatch, filter, selectedFilters }) => {
   const [state, setState] = useState({
     term: "",
     filter: false,
     advance: false,
     selectedFilters: {},
   });
+  const handleCheck = (item, from, checked, clearOld = false) => {
+    dispatch({ type: 'SET_FILTERS', payload: { item, from, checked, clearOld } });
+  };
   const toggleAdvance = () => {
-    setState({...state, advance: !state.advance});
+    setState({ ...state, advance: !state.advance });
   };
   const toggleFilter = () => {
-    setState({...state, filter: !state.filter});
+    dispatch({ type: 'TOGGLE_FILTER', payload: { type } });
+    //setState({ ...state, filter: !state.filter });
   };
-  const handleCheck = (item, from, checked) => {
-    let current = state.selectedFilters[from]
-      ? state.selectedFilters[from]
-      : [];
-    if (!checked) {
-      current.push(item);
-    } else {
-      current.splice(current.indexOf(item), 1);
-    }
-    setState({
-      ...state,
-      selectedFilters: {
-        ...state.selectedFilters,
-        [from]: [...current],
-      },
-    });
-  };
+
   const handleChange = (event) => {
     setState({
       ...state,
       [event.target.name]: event.target.value,
-    });
-  };
-  const Filters = () => {
-    return Object.keys(filters).map((f) => {
-      return (
-        <span key={f} className="filter-item">
-          <div className="filter-name">{f.toUpperCase()}</div>
-          <div className="filter-items">
-            {filters[f].map((item) => {
-              const checked =
-                state.selectedFilters[f] &&
-                state.selectedFilters[f].includes(item)
-                  ? 1
-                  : 0;
-              return (
-                <span className="i" key={item}>
-                  <label>
-                    <input
-                      checked={checked}
-                      onChange={() => handleCheck(item, f, checked)}
-                      type="checkbox"
-                    />
-                    {item}
-                  </label>
-                </span>
-              );
-            })}
-          </div>
-        </span>
-      );
     });
   };
   return (
@@ -82,7 +83,7 @@ const Search = ({filters, handleSearch}) => {
             />
             <button
               className="btn btn-primary"
-              onClick={() => handleSearch(state.term, state.selectedFilters)}
+              onClick={() => handleSearch(state.term, selectedFilters)}
             >
               Search
             </button>
@@ -94,22 +95,22 @@ const Search = ({filters, handleSearch}) => {
           </span>
         </div>
       </div>
-      <div className="adv">
+      {/* <div className="adv">
         {state.advance ? (
           <Modal closeModal={toggleAdvance}>
             <h1>Advanced Search</h1>
           </Modal>
         ) : null}
         <span onClick={toggleAdvance}>Advanced Search</span>
-      </div>
+      </div> */}
       <div className="selected-filters">
-        {Object.keys(state.selectedFilters).map((sf) => {
+        {Object.keys(selectedFilters).map((sf) => {
           return (
             <span key={sf} className="selected-item">
-              {state.selectedFilters[sf].map((s) => {
+              {selectedFilters[sf].map((s) => {
                 return (
-                  <span className="item" key={s}>
-                    <b className="capitalize">{sf}</b>:{s}
+                  <span className="item" key={s.Id}>
+                    <b className="capitalize">{sf}</b>:{s.Name}
                     <span
                       className="action"
                       onClick={() => handleCheck(s, sf, 1)}
@@ -124,8 +125,15 @@ const Search = ({filters, handleSearch}) => {
         })}
         &nbsp;
       </div>
-      <div className="filters">{state.filter ? <Filters /> : null}</div>
+      <div className="filters">{filter ? <Filters key="filter" selectedFilters={selectedFilters} handleCheck={handleCheck} type={type} /> : null}</div>
     </div>
   );
 };
-export default Search;
+const mapState = (state) => {
+  const { setting } = state;
+  return {
+    filter: setting.filter,
+    selectedFilters: setting.selectedFilters
+  }
+};
+export default connect(mapState)(Search);
