@@ -67,8 +67,8 @@ export function* fetchOrganizationAsync(action) {
                 let count = 0;
                 filter.OrganizationByRegion.forEach(f => {
                     
-                    q += "&regions["+count+"][regionLevel]=" + f.RegionLevel;
-                    q += "&regions["+count+"][regionId]=" + f.Id;
+                    q += "&regions["+count+"].regionLevel=" + f.RegionLevel;
+                    q += "&regions["+count+"].regionId=" + f.Id;
                     q +="&searchType=OrganizationByRegion";
                     count++;
                 })

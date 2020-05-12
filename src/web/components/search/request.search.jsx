@@ -11,7 +11,7 @@ const RequestSearch = ({ handleCheck, regions }) => {
         if (event.target.value === 'OrganizationByRegion') {
             modal = true;
         }
-        if (event.target.name === 'searchType') {
+        if (event.target.name === 'searchType' || event.target.name==='status') {
             handleCheck({
                 Id: event.target.value,
                 Name:event.target.value,
@@ -41,6 +41,7 @@ const RequestSearch = ({ handleCheck, regions }) => {
     return (
         <div>
             <div className='filters-input'>
+                <input value={state.memberName} name='memberName' onChange={handleChange} type="text" placeholder="Member Name" />
                 <select value={state.searchType} onChange={handleChange} name="searchType">
                     <option value="Owner">Owner</option>
                     <option value="Member">Member</option>
@@ -63,7 +64,6 @@ const RequestSearch = ({ handleCheck, regions }) => {
                     <option value="Month">Month</option>
                     <option value="Custom">Custom</option>
                 </select>
-                <input value={state.memberName} name='memberName' onChange={handleChange} type="text" placeholder="Member Name" />
                 <input value={state.startDate} name='startDate' onChange={handleChange} type="text" placeholder="Start Date" />
                 <input value={state.endDate} name='endDate' onChange={handleChange} type="text" placeholder="End Date" />
             </div>
