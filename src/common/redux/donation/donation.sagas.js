@@ -75,6 +75,34 @@ export function* fetchRequestAsync(action) {
         + "&orderDir=Asc"
         + "&calculateTotal=true"
         + "&disablePagination=false";
+    if (action.params && action.params.filters) {
+        action.params.filters.forEach(filter => {
+            if (filter.searchType) {
+                let count = 0;
+                filter.searchType.forEach(f => {
+                    q += "&types[" + count + "]=" + f.Name;
+                    count++;
+                })
+            }
+            if (filter.status) {
+                let count = 0;
+                filter.status.forEach(f => {
+                    q += "&statuses[" + count + "]=" + f.Name;
+                    count++;
+                })
+            }
+            if (filter.timePeriod) {
+                filter.timePeriod.forEach(f => {
+                    if (f.startDate || f.endDate) {
+                        q += "&startDate=" + f.startDate;
+                        q += "&endDate=" + f.endDate;
+                    } else {
+                        q += "&timePeriod=" + f.Name;
+                    }
+                })
+            }
+        })
+    }
     //const q = "recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/DonationRequest/GetPaginated?" + q, {
         method: "GET",

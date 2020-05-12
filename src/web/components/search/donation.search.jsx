@@ -3,7 +3,7 @@ import './search.styles.scss';
 import RegionSelector from '../region/region.selector';
 import Modal from '../modal/modal.component';
 import { connect } from 'react-redux';
-const RequestSearch = ({ handleCheck, regions }) => {
+const DonationSearch = ({ handleCheck, regions }) => {
     const initState = { searchType: 'OrganizationInMyRegion', searchStatus: '', timePeriod: '', startDate: '', endDate: '', memberName: '', modal: false };
     const [state, setState] = useState(initState)
     const handleChange = (event) => {
@@ -100,4 +100,4 @@ const mapState = (state) => {
         regions: region.regions
     }
 };
-export default connect(mapState)(RequestSearch);
+export default connect(mapState)(DonationSearch);

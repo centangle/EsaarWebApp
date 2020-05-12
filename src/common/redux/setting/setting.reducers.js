@@ -24,29 +24,6 @@ const setting = (state = INITIAL_STATE, action) => {
         ...state,
         isLoading: true
       }
-    case 'SET_FILTERS':
-      let current = state.selectedFilters[action.payload.from]
-        ? state.selectedFilters[action.payload.from]
-        : [];
-      if (action.payload.clearOld) {
-        current = [];
-      }
-      if (!action.payload.checked) {
-        if (!current.find(i => action.payload.item.Id === i.Id))
-          current.push(action.payload.item);
-      } else {
-        current.splice(current.indexOf(action.payload.item), 1);
-      }
-      if(action.payload.clearAllExceptCat){
-        state.selectedFilters={};
-      }
-      return {
-        ...state,
-        selectedFilters: {
-          ...state.selectedFilters,
-          [action.payload.from]: [...current],
-        },
-      }
     case 'TOGGLE_FILTER':
       return {
         ...state,

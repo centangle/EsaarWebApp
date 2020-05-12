@@ -74,8 +74,30 @@ export function* checkSessionAsync(action) {
   const user = yield select(selectCurrentUser);
   if (user) {
     const now = new Date();
-    const utc = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
-    const userTime = user ? new Date(user.expires_in) : null;
+    const utc = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      now.getHours(),
+      now.getMinutes(),
+      now.getSeconds(),
+      now.getMilliseconds(),
+      now.getTimezoneOffset() * 60000
+      );
+    let userTime = user ? new Date(user.expires_in) : null;
+    if(userTime){
+      userTime = new Date(
+        userTime.getFullYear(),
+        userTime.getMonth(),
+        userTime.getDate(),
+        userTime.getHours(),
+        userTime.getMinutes(),
+        userTime.getSeconds(),
+        userTime.getMilliseconds(),
+        userTime.getTimezoneOffset() * 60000
+      );
+    }
+    console.log(userTime,'-',utc,userTime<=utc);
     try {
       if (user.access_token && (userTime <= utc || user.expires_in === undefined)) {
         yield put(refreshLogin(user))

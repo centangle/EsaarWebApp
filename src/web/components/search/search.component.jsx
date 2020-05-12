@@ -5,12 +5,11 @@ import filterIcon from "./../../../assets/filter.png";
 import { connect } from "react-redux";
 import OrganizationSearch from './organization.search';
 import RequestSearch from './request.search';
+import DonationSearch from './request.search';
 const Filters = ({ type, selectedFilters, handleCheck }) => {
   const filters = {
     location: [{ Id: "Lahore", Name: "Lahore" }, { Id: "Islamabad", Name: "Islamabad" }],
-    categories: [{ Id: "Education", Name: "Education" }, { Id: "Health", Name: "Health" }],
-    OrganizationInRadius: [],
-    OrganizationByRegion: []
+    categories: [{ Id: "Education", Name: "Education" }, { Id: "Health", Name: "Health" }]
   };
   if (type === 'organization') {
     return (
@@ -20,6 +19,11 @@ const Filters = ({ type, selectedFilters, handleCheck }) => {
   if(type==='request'){
     return(
       <RequestSearch handleCheck={handleCheck} />
+    )
+  }
+  if(type==='donation'){
+    return(
+      <DonationSearch handleCheck={handleCheck} />
     )
   }
   return Object.keys(filters).map((f) => {
@@ -60,7 +64,15 @@ const Search = ({ handleSearch, type, dispatch, filter, selectedFilters }) => {
     selectedFilters: {},
   });
   const handleCheck = (item, from, checked, clearOld = false,clearAllExceptCat=false) => {
-    dispatch({ type: 'SET_FILTERS', payload: { item, from, checked, clearOld,clearAllExceptCat } });
+    if(type==='organization'){
+      dispatch({ type: 'SET_ORGANIZATION_FILTERS', payload: { item, from, checked, clearOld,clearAllExceptCat } });
+    }
+    if(type==='donation'){
+      dispatch({ type: 'SET_DONATION_FILTERS', payload: { item, from, checked, clearOld,clearAllExceptCat } });
+    }
+    if(type==='request'){
+      dispatch({ type: 'SET_REQUEST_FILTERS', payload: { item, from, checked, clearOld,clearAllExceptCat } });
+    }
   };
   const toggleAdvance = () => {
     setState({ ...state, advance: !state.advance });
@@ -135,11 +147,19 @@ const Search = ({ handleSearch, type, dispatch, filter, selectedFilters }) => {
     </div>
   );
 };
-const mapState = (state) => {
-  const { setting } = state;
+const mapState = (state,ownProps) => {
+  const {type} = ownProps;
+  const { setting,organization,donation,request } = state;
+  let selectedFilters = organization.selectedFilters;
+  if(type==='doantion'){
+    selectedFilters = donation.selectedFilters;
+  }
+  if(type==='request'){
+    selectedFilters = request.selectedFilters;
+  }
   return {
     filter: setting.filter,
-    selectedFilters: setting.selectedFilters
+    selectedFilters
   }
 };
 export default connect(mapState)(Search);

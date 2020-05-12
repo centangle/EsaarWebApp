@@ -5,10 +5,12 @@ const INITIAL_STATE = {
   sider: false,
   items: [],
   periferalItems: [],
+  rootItems: [],
   modal: false,
-  logo:null,
-  itemSaving:false,
-  current:{}
+  logo: null,
+  itemSaving: false,
+  current: {},
+  fetching:false,
 };
 let newItems = [];
 const item = (state = INITIAL_STATE, action) => {
@@ -17,7 +19,7 @@ const item = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         modal: true,
-        current:action.payload.type==='ITEM'?action.payload.item:''
+        current: action.payload.type === 'ITEM' ? action.payload.item : ''
       }
     case 'CLOSE_MODAL':
       return {
@@ -25,15 +27,15 @@ const item = (state = INITIAL_STATE, action) => {
         modal: false
       }
     case 'ADD_ITEM_START':
-      return{
+      return {
         ...state,
-        itemSaving:true
+        itemSaving: true
       }
     case 'ADD_ITEM_SUCCESS':
-      return{
+      return {
         ...state,
-        modal:false,
-        itemSaving:false
+        modal: false,
+        itemSaving: false
       }
     case 'UPLOAD_SUCCESS':
       return {
@@ -43,7 +45,7 @@ const item = (state = INITIAL_STATE, action) => {
     case 'ADD_ITEM_FAILURE':
       if (action.payload.result && action.payload.result.ExceptionMessage)
         toaster.error("Notification Message", action.payload.result.ExceptionMessage, { timeOut: 100000 })
-      return{
+      return {
         ...state
       }
     case 'ADD_DONATION_APPROVAL_SUCCESS':
@@ -55,7 +57,7 @@ const item = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         items: [...action.payload.result],
-        modal:false
+        modal: false
       }
     case 'FETCH_DONATION_ITEMS_SUCCESS':
       return {
@@ -86,10 +88,23 @@ const item = (state = INITIAL_STATE, action) => {
         ...state,
         items: [...newItems]
       }
+      case 'FETCH_PERIFERAL_ITEMS_START':
+      case 'FETCH_ROOT_ITEMS_START':
+        return{
+          ...state,
+          fetching:true,
+        }
     case 'FETCH_PERIFERAL_ITEMS_SUCCESS':
       return {
         ...state,
-        periferalItems: [...action.payload.result]
+        periferalItems: [...action.payload.result],
+        fetching:false
+      }
+    case 'FETCH_ROOT_ITEMS_SUCCESS':
+      return {
+        ...state,
+        rootItems: [...action.payload.result],
+        fetching:false
       }
     case itemTypes.ADD_ITEM_START:
       return {

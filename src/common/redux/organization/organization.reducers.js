@@ -26,11 +26,35 @@ const INITIAL_STATE = {
   memberJoining: false,
   regionsLoading: false,
   logo: null,
-  form: {}
+  form: {},
+  selectedFilters:{}
 };
 
 const organization = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+        case 'SET_ORGANIZATION_FILTERS':
+      let current = state.selectedFilters[action.payload.from]
+        ? state.selectedFilters[action.payload.from]
+        : [];
+      if (action.payload.clearOld) {
+        current = [];
+      }
+      if (!action.payload.checked) {
+        if (!current.find(i => action.payload.item.Id === i.Id))
+          current.push(action.payload.item);
+      } else {
+        current.splice(current.indexOf(action.payload.item), 1);
+      }
+      if(action.payload.clearAllExceptCat){
+        state.selectedFilters={};
+      }
+      return {
+        ...state,
+        selectedFilters: {
+          ...state.selectedFilters,
+          [action.payload.from]: [...current],
+        },
+      }
     case 'FETCH_ORG_CAMPAIGNS_START':
       return {
         ...state,

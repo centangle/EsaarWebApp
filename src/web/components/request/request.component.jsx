@@ -27,7 +27,7 @@ const Request = ({ data, dispatch, organizations,activePage,totalItemsCount,page
     }
   })
   const handleSearch = (term,filters) =>{
-    dispatch({ type: 'FETCH_REQUEST_START',params:{...params,name:term} });
+    dispatch({ type: 'FETCH_REQUEST_START',params:{...params,name:term,filters:[filters]} });
   }
   const handlePageChange = (page) =>{
     dispatch({
