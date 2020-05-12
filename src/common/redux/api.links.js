@@ -1,8 +1,8 @@
 require('dotenv').config();
-let baseurl ='http://210.56.11.237:9090';
+let baseurl ='https://api.esaar.app';
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     // dev code
-    baseurl = 'http://210.56.11.237:9090';
+    baseurl = 'https://api.esaar.app';
 }
 export const links = {
     UPLOAD:baseurl+'/api/Attachment/Upload'
