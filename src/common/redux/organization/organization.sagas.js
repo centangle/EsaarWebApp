@@ -63,12 +63,14 @@ export function* fetchOrganizationAsync(action) {
     }
     if (action.params && action.params.filters) {
         action.params.filters.forEach(filter => {
-            console.log(filter);
             if (filter.OrganizationByRegion) {
+                let count = 0;
                 filter.OrganizationByRegion.forEach(f => {
-                    q += "&regionLevel=" + f.RegionLevel;
-                    q += "&regionId=" + f.Id;
+                    
+                    q += "&regions["+count+"][regionLevel]=" + f.RegionLevel;
+                    q += "&regions["+count+"][regionId]=" + f.Id;
                     q +="&searchType=OrganizationByRegion";
+                    count++;
                 })
             }
             if (filter.OrganizationInRadius) {

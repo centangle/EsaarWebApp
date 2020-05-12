@@ -67,6 +67,7 @@
         padding: 0 10px;
         .selected-item {
             display: inline-flex;
+            flex-wrap: wrap;
             .item {
                 padding: 5px 10px;
                 border: 1px solid #ccc;
