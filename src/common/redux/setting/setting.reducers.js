@@ -37,7 +37,9 @@ const setting = (state = INITIAL_STATE, action) => {
       } else {
         current.splice(current.indexOf(action.payload.item), 1);
       }
-
+      if(action.payload.clearAllExceptCat){
+        state.selectedFilters={};
+      }
       return {
         ...state,
         selectedFilters: {

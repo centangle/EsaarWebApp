@@ -4,6 +4,7 @@ import Modal from "../modal/modal.component";
 import filterIcon from "./../../../assets/filter.png";
 import { connect } from "react-redux";
 import OrganizationSearch from './organization.search';
+import RequestSearch from './request.search';
 const Filters = ({ type, selectedFilters, handleCheck }) => {
   const filters = {
     location: [{ Id: "Lahore", Name: "Lahore" }, { Id: "Islamabad", Name: "Islamabad" }],
@@ -14,6 +15,11 @@ const Filters = ({ type, selectedFilters, handleCheck }) => {
   if (type === 'organization') {
     return (
       <OrganizationSearch handleCheck={handleCheck} />
+    )
+  }
+  if(type==='request'){
+    return(
+      <RequestSearch handleCheck={handleCheck} />
     )
   }
   return Object.keys(filters).map((f) => {
@@ -53,8 +59,8 @@ const Search = ({ handleSearch, type, dispatch, filter, selectedFilters }) => {
     advance: false,
     selectedFilters: {},
   });
-  const handleCheck = (item, from, checked, clearOld = false) => {
-    dispatch({ type: 'SET_FILTERS', payload: { item, from, checked, clearOld } });
+  const handleCheck = (item, from, checked, clearOld = false,clearAllExceptCat=false) => {
+    dispatch({ type: 'SET_FILTERS', payload: { item, from, checked, clearOld,clearAllExceptCat } });
   };
   const toggleAdvance = () => {
     setState({ ...state, advance: !state.advance });

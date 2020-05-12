@@ -52,11 +52,13 @@ export function* fetchOrganizationAsync(action) {
     if (action.params.latitude) {
         q += "&latitude=" + action.params.latitude;
     } else {
+        if(user.latitude)
         q += "&latitude=" + user.latitude;
     }
     if (action.params.longitude) {
         q += "&longitude=" + action.params.longitude;
     } else {
+        if(user.longitude)
         q += "&longitude=" + user.longitude;
     }
     if (action.params && action.params.filters) {
@@ -66,6 +68,7 @@ export function* fetchOrganizationAsync(action) {
                 filter.OrganizationByRegion.forEach(f => {
                     q += "&regionLevel=" + f.RegionLevel;
                     q += "&regionId=" + f.Id;
+                    q +="&searchType=OrganizationByRegion";
                 })
             }
             if (filter.OrganizationInRadius) {
@@ -73,6 +76,7 @@ export function* fetchOrganizationAsync(action) {
                     console.log(f);
                     q += "&radiusType=" + f.radiusType;
                     q += "&radius=" + f.radius;
+                    q +="&searchType=OrganizationInRadius";
                 })
             }
         })

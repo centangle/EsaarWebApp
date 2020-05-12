@@ -18,7 +18,7 @@ const OrganizationSearch = ({ handleCheck, regions }) => {
     }
     const handleFilter = () => {
         Object.keys(regions).forEach(key => {
-            handleCheck({ Id: regions[key][regions[key].RegionLevel].Id, Name: regions[key][regions[key].RegionLevel].Name, ...regions[key] }, 'OrganizationByRegion', 0, false);
+            handleCheck({ Id: regions[key][regions[key].RegionLevel].Id, Name: regions[key][regions[key].RegionLevel].Name, ...regions[key] }, 'OrganizationByRegion', 0, false,true);
         });
         setState({ ...state, modal: false, ...initState });
     }
@@ -28,8 +28,7 @@ const OrganizationSearch = ({ handleCheck, regions }) => {
             Name: state.Radius + ' ' + state.OrganizationInRadius,
             radius:parseFloat(state.Radius),
             radiusType:state.OrganizationInRadius
-        }, from, 0, true);
-        setState({ ...state, ...initState })
+        }, from, 0, true,true);
     }
     return (
         <div>
