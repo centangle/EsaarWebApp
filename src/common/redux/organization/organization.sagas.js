@@ -73,6 +73,13 @@ export function* fetchOrganizationAsync(action) {
                     count++;
                 })
             }
+            if (filter.Item) {
+                let count = 0;
+                filter.Item.forEach(f => {
+                    q += "&rootCategories["+count+"]=" + f.Id;
+                    count++;
+                })
+            }
             if (filter.OrganizationInRadius) {
                 filter.OrganizationInRadius.forEach(f => {
                     console.log(f);

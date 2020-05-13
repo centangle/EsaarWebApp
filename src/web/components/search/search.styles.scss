@@ -63,6 +63,12 @@
     .adv {
         padding: 0px 10px;
     }
+    .search-input-holder{
+        display: flex;
+        .dropdown{
+            min-width: 150px;
+        }
+    }
     .selected-filters {
         padding: 0 10px;
         .selected-item {
