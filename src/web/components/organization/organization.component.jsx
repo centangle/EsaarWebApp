@@ -80,7 +80,7 @@ const Organzation = ({
   const openVolunteer = (item) => {
     setState({ ...state, id: item.Id, volunteer: true });
   };
-  const buttonsWithActions = [{ label: "volunteer", action: openVolunteer }];
+  const buttonsWithActions = [{ label: "volunteer", action: openVolunteer },{label:'details',action:handleClick}];
   return (
     <div className="page-right">
       {state.volunteer ? (

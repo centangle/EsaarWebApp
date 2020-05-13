@@ -5,7 +5,9 @@ import {connect} from "react-redux";
 import {Link} from "react-router-dom";
 import noImage from "../../../assets/no-image.png";
 const baseUrl = require("../../../common/utility/request").baseUrl;
-
+const isFunction = (functionToCheck) => {
+ return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+}
 const GridToList = ({
   data,
   dispatch,
@@ -19,20 +21,24 @@ const GridToList = ({
     <GridHolder>
       {Object.keys(data).map((key) => {
         return (
-          <ItemHolder height={height} className="grid" key={data[key].Id}>
+          <ItemHolder height={height} className={`grid ${data[key].added}`} key={data[key].Id}>
             {
               buttonsWithActions || links ? <div className='overlay'></div>:null
             }
             <div className="grid-links">
               {buttonsWithActions &&
                 buttonsWithActions.map((item) => {
+                  let label = item.label;
+                  if(isFunction(item.label)){
+                    label = item.label(data[key]);
+                  }
                   return (
                     <span
                       className="link testl"
-                      key={item.label}
+                      key={item.Id+''+data[key].Id}
                       onClick={() => item.action(data[key])}
                     >
-                      {item.label}
+                      {label}
                     </span>
                   );
                 })}
@@ -48,11 +54,6 @@ const GridToList = ({
                     </Link>
                   );
                 })}
-              {links && (
-                <span className="link" onClick={() => handleClick(data[key])}>
-                  Details
-                </span>
-              )}
             </div>
             <div className="left">
               {data[key].ImageUrl ? (
