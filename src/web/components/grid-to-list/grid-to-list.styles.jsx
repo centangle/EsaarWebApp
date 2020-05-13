@@ -44,7 +44,7 @@ export const ItemHolder = styled.div`
   h2 {
     font-size: 18px;
     line-height: 24px;
-    font-weight: 700;
+    font-weight: 400;
     margin: 0;
     margin-bottom: 5px;
     padding: 5px;
@@ -73,8 +73,8 @@ export const ItemHolder = styled.div`
   }
   &.grid {
     border-radius: 10px;
-    width: 19%;
-    margin: 5px;
+    width: 16%;
+    margin: 5px 10px;
     display: block;
     background: #f6faff;
     min-height: 120px;
@@ -92,7 +92,7 @@ export const ItemHolder = styled.div`
         border-radius: 10px;
         /* width: 100%;
         max-height: 220px; */
-        height: 180px;
+        height: 165px;
         width: auto;
       }
     }
@@ -113,8 +113,7 @@ export const ItemHolder = styled.div`
       }
     }
     display: inline-block;
-    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14),
-      0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 1px 4px 8px 1px rgba(0, 0, 0, 0.1);
   }
   &.aside {
   }

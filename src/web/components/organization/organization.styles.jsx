@@ -189,7 +189,7 @@ export const OrgSideHolder = styled.div`
         }
         a {
           color: #222222;
-          padding: 10px 0;
+          padding: 15px 0;
           text-decoration: none;
           font-size: large;
           line-height: 18px;
