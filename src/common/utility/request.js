@@ -1,3 +1,4 @@
+import {apiLink} from '../redux/api.links';
 export const formEncode = (obj) => {
     let i = 0;
     var data = '';
@@ -14,5 +15,5 @@ export const formEncode = (obj) => {
 export const remapChildren = () =>{
     
 }
-export const baseUrl = 'https://api.esaar.app';
+export const baseUrl = apiLink;
 export const params = {activePage:1,itemsCountPerPage:10,pageRangeDisplayed:5};
