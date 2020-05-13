@@ -46,18 +46,19 @@ export const TitleWithAction = styled.div`
   }
   button {
     margin-left: auto;
-    border-radius: 5px;
-    background: #f9f9f9;
-    border: solid 1px #ccc;
-    box-shadow: 3px 3px 5px 1px rgba(204, 204, 204, 0.2);
-    padding: 10px;
-    color: #21315e;
-    cursor: pointer;
-    transition: 0.3s all;
     outline: none;
+    background: #f6faff;
+    border: 1px solid #e8eff9;
+    color: #63799b;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 0px;
+    transition: 0.5s all;
   }
   button:hover {
-    background: #f5f5f5;
+    background: #113c5e;
+    color: #f6faff;
   }
 `;
 export const FormHolder = styled.div`

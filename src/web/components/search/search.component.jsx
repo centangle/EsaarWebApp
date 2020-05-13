@@ -1,30 +1,30 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import "./search.styles.scss";
 import Modal from "../modal/modal.component";
 import filterIcon from "./../../../assets/filter.png";
-import { connect } from "react-redux";
-import OrganizationSearch from './organization.search';
-import RequestSearch from './request.search';
-import DonationSearch from './request.search';
-const Filters = ({ type, selectedFilters, handleCheck }) => {
+import {connect} from "react-redux";
+import OrganizationSearch from "./organization.search";
+import RequestSearch from "./request.search";
+import DonationSearch from "./request.search";
+const Filters = ({type, selectedFilters, handleCheck}) => {
   const filters = {
-    location: [{ Id: "Lahore", Name: "Lahore" }, { Id: "Islamabad", Name: "Islamabad" }],
-    categories: [{ Id: "Education", Name: "Education" }, { Id: "Health", Name: "Health" }]
+    location: [
+      {Id: "Lahore", Name: "Lahore"},
+      {Id: "Islamabad", Name: "Islamabad"},
+    ],
+    categories: [
+      {Id: "Education", Name: "Education"},
+      {Id: "Health", Name: "Health"},
+    ],
   };
-  if (type === 'organization') {
-    return (
-      <OrganizationSearch handleCheck={handleCheck} />
-    )
+  if (type === "organization") {
+    return <OrganizationSearch handleCheck={handleCheck} />;
   }
-  if(type==='request'){
-    return(
-      <RequestSearch handleCheck={handleCheck} />
-    )
+  if (type === "request") {
+    return <RequestSearch handleCheck={handleCheck} />;
   }
-  if(type==='donation'){
-    return(
-      <DonationSearch handleCheck={handleCheck} />
-    )
+  if (type === "donation") {
+    return <DonationSearch handleCheck={handleCheck} />;
   }
   return Object.keys(filters).map((f) => {
     return (
@@ -33,10 +33,7 @@ const Filters = ({ type, selectedFilters, handleCheck }) => {
         <div className="filter-items">
           {filters[f].map((item) => {
             const checked =
-              selectedFilters[f] &&
-                selectedFilters[f].includes(item)
-                ? 1
-                : 0;
+              selectedFilters[f] && selectedFilters[f].includes(item) ? 1 : 0;
             return (
               <span className="i" key={item.Id}>
                 <label>
@@ -53,32 +50,46 @@ const Filters = ({ type, selectedFilters, handleCheck }) => {
         </div>
       </span>
     );
-
-  })
+  });
 };
-const Search = ({ handleSearch, type, dispatch, filter, selectedFilters }) => {
+const Search = ({handleSearch, type, dispatch, filter, selectedFilters}) => {
   const [state, setState] = useState({
     term: "",
     filter: false,
     advance: false,
     selectedFilters: {},
   });
-  const handleCheck = (item, from, checked, clearOld = false,clearAllExceptCat=false) => {
-    if(type==='organization'){
-      dispatch({ type: 'SET_ORGANIZATION_FILTERS', payload: { item, from, checked, clearOld,clearAllExceptCat } });
+  const handleCheck = (
+    item,
+    from,
+    checked,
+    clearOld = false,
+    clearAllExceptCat = false
+  ) => {
+    if (type === "organization") {
+      dispatch({
+        type: "SET_ORGANIZATION_FILTERS",
+        payload: {item, from, checked, clearOld, clearAllExceptCat},
+      });
     }
-    if(type==='donation'){
-      dispatch({ type: 'SET_DONATION_FILTERS', payload: { item, from, checked, clearOld,clearAllExceptCat } });
+    if (type === "donation") {
+      dispatch({
+        type: "SET_DONATION_FILTERS",
+        payload: {item, from, checked, clearOld, clearAllExceptCat},
+      });
     }
-    if(type==='request'){
-      dispatch({ type: 'SET_REQUEST_FILTERS', payload: { item, from, checked, clearOld,clearAllExceptCat } });
+    if (type === "request") {
+      dispatch({
+        type: "SET_REQUEST_FILTERS",
+        payload: {item, from, checked, clearOld, clearAllExceptCat},
+      });
     }
   };
   const toggleAdvance = () => {
-    setState({ ...state, advance: !state.advance });
+    setState({...state, advance: !state.advance});
   };
   const toggleFilter = () => {
-    dispatch({ type: 'TOGGLE_FILTER', payload: { type } });
+    dispatch({type: "TOGGLE_FILTER", payload: {type}});
     //setState({ ...state, filter: !state.filter });
   };
 
@@ -95,7 +106,7 @@ const Search = ({ handleSearch, type, dispatch, filter, selectedFilters }) => {
           <div className="search-input">
             <input
               type="text"
-              placeholder="search"
+              placeholder="Search"
               name="term"
               onChange={handleChange}
             />
@@ -103,7 +114,7 @@ const Search = ({ handleSearch, type, dispatch, filter, selectedFilters }) => {
               className="btn btn-primary"
               onClick={() => handleSearch(state.term, selectedFilters)}
             >
-              Search
+              <i className="fa fa-search"></i>
             </button>
           </div>
         </div>
@@ -143,23 +154,32 @@ const Search = ({ handleSearch, type, dispatch, filter, selectedFilters }) => {
         })}
         &nbsp;
       </div>
-      <div className="filters">{filter ? <Filters key="filter" selectedFilters={selectedFilters} handleCheck={handleCheck} type={type} /> : null}</div>
+      <div className="filters">
+        {filter ? (
+          <Filters
+            key="filter"
+            selectedFilters={selectedFilters}
+            handleCheck={handleCheck}
+            type={type}
+          />
+        ) : null}
+      </div>
     </div>
   );
 };
-const mapState = (state,ownProps) => {
+const mapState = (state, ownProps) => {
   const {type} = ownProps;
-  const { setting,organization,donation,request } = state;
+  const {setting, organization, donation, request} = state;
   let selectedFilters = organization.selectedFilters;
-  if(type==='doantion'){
+  if (type === "doantion") {
     selectedFilters = donation.selectedFilters;
   }
-  if(type==='request'){
+  if (type === "request") {
     selectedFilters = request.selectedFilters;
   }
   return {
     filter: setting.filter,
-    selectedFilters
-  }
+    selectedFilters,
+  };
 };
 export default connect(mapState)(Search);

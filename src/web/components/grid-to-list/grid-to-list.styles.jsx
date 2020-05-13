@@ -90,8 +90,10 @@ export const ItemHolder = styled.div`
       min-height: 85px;
       img {
         border-radius: 10px;
-        width: 100%;
-        max-height: 220px;
+        /* width: 100%;
+        max-height: 220px; */
+        height: 180px;
+        width: auto;
       }
     }
     & .right {
