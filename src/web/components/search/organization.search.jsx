@@ -3,7 +3,8 @@ import "./search.styles.scss";
 import RegionSelector from "../region/region.selector";
 import Modal from "../modal/modal.component";
 import {connect} from "react-redux";
-const OrganizationSearch = ({handleCheck, regions}) => {
+import Select from "react-select";
+const OrganizationSearch = ({handleCheck, regions, rootItems}) => {
   const initState = {
     searchType: "OrganizationInMyRegion",
     OrganizationByRegion: "",
@@ -52,8 +53,31 @@ const OrganizationSearch = ({handleCheck, regions}) => {
       true
     );
   };
+  const handleDrop = (item) => {
+    handleCheck(
+      {
+        Id: parseInt(item.value),
+        Name: item.label,
+      },
+      "Item",
+      0,
+      false,
+      false
+    );
+  };
+  const mappedOptions = rootItems.length
+    ? rootItems.map((i) => {
+        return {value: i.Id, label: i.Name};
+      })
+    : [];
   return (
-    <div>
+    <div className="search-input-holder">
+      <Select
+        onChange={handleDrop}
+        name="Item"
+        className="dropdown"
+        options={mappedOptions}
+      />
       <div className="filters-input">
         <select
           value={state.searchType}
@@ -102,8 +126,10 @@ const OrganizationSearch = ({handleCheck, regions}) => {
 };
 const mapState = (state) => {
   const {region} = state;
+  const {item} = state;
   return {
     regions: region.regions,
+    rootItems: item.rootItems,
   };
 };
 export default connect(mapState)(OrganizationSearch);

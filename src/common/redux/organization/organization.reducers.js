@@ -27,7 +27,7 @@ const INITIAL_STATE = {
   regionsLoading: false,
   logo: null,
   form: {},
-  selectedFilters:{}
+  selectedFilters:{Item:[]}
 };
 
 const organization = (state = INITIAL_STATE, action) => {
@@ -46,7 +46,7 @@ const organization = (state = INITIAL_STATE, action) => {
         current.splice(current.indexOf(action.payload.item), 1);
       }
       if(action.payload.clearAllExceptCat){
-        state.selectedFilters={};
+        state.selectedFilters={Item:[...state.selectedFilters.Item]};
       }
       return {
         ...state,
