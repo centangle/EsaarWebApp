@@ -1,74 +1,77 @@
 @import "../../variables.scss";
 .table {
-    margin-top: .5em;
-    padding-right: 10px;
+  margin-top: 0.5em;
+  padding-right: 10px;
 }
 
 .rdt_TableCol,
 .rdt_TableBody * {
-    font-size: 14px !important;
-    color: $theme-color !important;
+  font-size: 14px !important;
+  color: $theme-color !important;
 }
 
 .rdt_Table {
-    background: #f8f9fa;
-    border-radius: 10px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border: 1px solid #d3ddea;
 }
 
 .rdt_TableCol_Sortable {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .rdt_TableHeader {
-    padding-left: 5px !important;
-    color: $theme-color !important;
+  padding-left: 5px !important;
+  color: $theme-color !important;
 }
 
 .center-icons {
-    display: flex;
-    height: auto;
-    /* flex-wrap: wrap;
+  display: flex;
+  height: auto;
+  /* flex-wrap: wrap;
     margin: 0px auto; */
-    max-width: 767px;
-    .box-50 {
-        /*  width: 47%;
+  // max-width: 767px;
+  max-width: 100%;
+  justify-content: center;
+  .box-50 {
+    /*  width: 47%;
         margin: 1%; */
-        background: $light-blue;
-        border: solid 1px;
-        border: solid 1px $light-blue-border;
-        margin: 0 20px 15px 0;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: $default-transition;
-        opacity: .8;
-        h2 {
-            margin: 10px;
-            text-align: center;
-            font-size: large;
-        }
-        img {
-            max-width: 300px;
-        }
+    background: $light-blue;
+    border: solid 1px;
+    border: solid 1px $light-blue-border;
+    margin: 0 20px 15px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: $default-transition;
+    opacity: 0.8;
+    h2 {
+      margin: 10px;
+      text-align: center;
+      font-size: large;
     }
-     :hover {
-        opacity: 1;
-        background: #e7eef7;
+    img {
+      max-width: 300px;
     }
-    .box-100 {
-        /* width: 100%; */
-        /* margin: 1% 2% 1% 1%; */
-        display: flex;
-        background: $light-blue;
-        border: solid 1px $light-blue-border;
-        justify-content: center;
-        align-items: center;
-        h2 {
-            margin: 0 10px;
-        }
-        img {
-            /* display: flex;
+  }
+  :hover {
+    opacity: 1;
+    background: #e7eef7;
+  }
+  .box-100 {
+    /* width: 100%; */
+    /* margin: 1% 2% 1% 1%; */
+    display: flex;
+    background: $light-blue;
+    border: solid 1px $light-blue-border;
+    justify-content: center;
+    align-items: center;
+    h2 {
+      margin: 0 10px;
+    }
+    img {
+      /* display: flex;
             width: auto;
             max-height: 150px; */
-        }
     }
+  }
 }

@@ -42,19 +42,19 @@ const Header = () => {
   return (
     <header>
       <Nav position={state.position} top={state.top}>
-        <img className="drawer" src={drawerIcon} alt="Drawer" />
+        {/* <img className="drawer" src={drawerIcon} alt="Drawer" /> */}
         <Link to="/">
           <img className="logo" src={logoIcon} alt="Esaar Logo" />
         </Link>
-        <div className="center">
+        {/* <div className="center">
           <div className="search">
             <img className="search" src={searchIcon} alt="Esaar Search" />
             <input type="text" placeholder="Search" />
           </div>
-        </div>
+        </div> */}
         <div className="right">
           <img className="notification" src={notificationIcon} alt="Drawer" />
-          <span className="count">21</span>
+          <span className="count">0</span>
         </div>
       </Nav>
     </header>
