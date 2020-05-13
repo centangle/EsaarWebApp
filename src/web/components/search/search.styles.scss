@@ -25,33 +25,95 @@
         }
       }
     }
-    .adv {
-      padding: 0px 10px;
-    }
-    .search-input-holder {
+    .left {
       display: flex;
-      .dropdown {
-        min-width: 150px;
+      align-items: center;
+      width: 100%;
+      .search-input {
+        width: 100%;
+      }
+      input {
+        width: 78%;
+        border: 1px solid #eee;
+        border-right: none;
+        border-radius: 0;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+        outline: none;
+        padding: 12px;
+      }
+      button {
+        padding: 11px 20px 13px;
+        border-radius: 0;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        cursor: pointer;
+        transition: 0.5s all;
+        border-left: 0;
+        width: 14%;
+        i {
+          font-size: 1.2em;
+        }
       }
     }
-    .selected-filters {
-      padding: 0 10px;
-      .selected-item {
-        display: inline-flex;
-        flex-wrap: wrap;
-        .item {
-          padding: 5px 10px;
-          border: 1px solid #ccc;
-          background: #999;
-          margin: 10px 10px 10px 0;
-          border-radius: 8px;
-          color: #fff;
+  }
+  .adv {
+    padding: 0px 10px;
+  }
+  .selected-filters {
+    padding: 0 10px;
+    .selected-item {
+      display: inline-flex;
+      flex-wrap: wrap;
+      .item {
+        padding: 5px 10px;
+        background: #8bc34a;
+        margin: 10px 10px 10px 0;
+        border-radius: 16px;
+        color: #fff;
+        font-size: 15px;
+        transition: 0.4s all;
+        .action {
+          padding: 0 0 0 10px;
+          cursor: pointer;
+          font-size: 12px;
+          color: #eee;
+        }
+        &:hover {
+          background: #72ad2e;
+        }
+      }
+    }
+  }
+  .filters {
+    .filters-input {
+      input,
+      button,
+      select {
+        padding: 8px 5px;
+        margin: 0px 5px;
+        border-radius: 4px;
+        background: #fff;
+        border: solid 1px #eee;
+      }
+    }
+    .filter-name {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    padding: 10px;
+    display: flex;
+    .filter-item {
+      margin-right: 25px;
+    }
+    .filter-items {
+      .i {
+        display: block;
+        margin-bottom: 10px;
+        label {
           font-size: 15px;
-          .action {
-            padding: 0 0 0 10px;
-            cursor: pointer;
-            font-size: 12px;
-            color: #eee;
+          input {
+            margin-right: 5px;
           }
         }
       }
