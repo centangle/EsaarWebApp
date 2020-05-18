@@ -31,48 +31,48 @@ const CampaignDetail = ({ campaign,match, dispatch, fetchCampaignItemsStart,fetc
     useEffect(() => {
         switch (match.params.slug) {
             case 'requests':
-                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_REQUESTS_START',id,params});
+                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_REQUESTS_START',payload:{id},params});
             case 'packages':
-                fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ITEMS_START',id,params});
-                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_PACKAGES_START',id,params});
+                fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ITEMS_START',payload:{id},params});
+                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_PACKAGES_START',payload:{id},params});
             case 'volunteers':
-                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_MEMBERS_START',id,userType:'Volunteer',params});
+                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_MEMBERS_START',payload:{id},userType:'Volunteer',params});
             case 'modarators':
-                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_MEMBERS_START',id,userType:'Moderator',params});
+                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_MEMBERS_START',payload:{id},userType:'Moderator',params});
             case 'members':
-                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_MEMBERS_START',id,userType:'Member',params});
+                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_MEMBERS_START',payload:{id},userType:'Member',params});
             case 'owners':
-                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_MEMBERS_START',id,userType:'Owner',params});
+                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_MEMBERS_START',payload:{id},userType:'Owner',params});
             case 'campaigns':
-                fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ITEMS_START',id,params});
-                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_CAMPAIGNS_START',id,params});
+                fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ITEMS_START',payload:{id},params});
+                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_CAMPAIGNS_START',payload:{id},params});
             case 'donate':
-                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ITEMS_START',id,params});
+                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ITEMS_START',payload:{id},params});
             case 'get-donation':
-                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ITEMS_START',id,params});
+                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ITEMS_START',payload:{id},params});
             case 'offices':
-                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_OFFICES_START',id,userType:'Offices',params});
+                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_OFFICES_START',payload:{id},userType:'Offices',params});
             case 'accounts':
-                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ACCOUNTS_START',id,userType:'Accounts',params});
+                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ACCOUNTS_START',payload:{id},userType:'Accounts',params});
                 //return fetchCampaignCampaignsStart(campaign.Id);
             case 'items':
-                //fetchCampaignRequestsStart({type:'FETCH_PERIFERAL_ITEMS_START',id,params});
-                fetchCampaignRequestsStart({type:'FETCH_ORG_ITEMS_START',id,params});
+                //fetchCampaignRequestsStart({type:'FETCH_PERIFERAL_ITEMS_START',payload:{id},params});
+                dispatch({type:'FETCH_ORG_ITEMS_START',payload:id,params});
                 fetchCampaignRequestsStart({type:'FETCH_UOM_START',id:true,params});
-                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ITEMS_START',id,params});
+                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ITEMS_START',payload:{id},params});
             case 'attachments':
-                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ATTACHMENTS_START',id,params});
+                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ATTACHMENTS_START',payload:{id},params});
             case 'regions':
-                fetchCampaignRequestsStart({type:'FETCH_COUNTRIES_START',id,params});
-                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_REGIONS_START',id,params});
+                fetchCampaignRequestsStart({type:'FETCH_COUNTRIES_START',payload:{id},params});
+                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_REGIONS_START',payload:{id},params});
             case undefined:
-                fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_CAMPAIGNS_START',id,params});
-                fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ATTACHMENTS_START',id,userType:'Attachments',params});
-                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_CATEGORIES_START',id,params});
+                fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_CAMPAIGNS_START',payload:{id},params});
+                fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ATTACHMENTS_START',payload:{id},userType:'Attachments',params});
+                return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_CATEGORIES_START',payload:{id},params});
             default:
                 return;
         }
-    }, [fetchCampaignItemsStart,fetchCampaignRequestsStart,fetchCampaignCampaignsStart,match.params.slug,id]);
+    }, [fetchCampaignItemsStart,fetchCampaignRequestsStart,fetchCampaignCampaignsStart,match.params.slug,id,dispatch]);
     return (
         <div className='page-right'>
             <FlexFull>

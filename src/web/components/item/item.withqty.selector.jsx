@@ -79,7 +79,7 @@ const ItemWithQtySelector = ({
               {addedItems[key].Item.Name}
               <span
                 className="remove"
-                onClick={() => handleRemove(addedItems[key].Item)}
+                onClick={() => handleRemove(addedItems[key])}
               >
                 x
               </span>

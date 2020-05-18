@@ -10,8 +10,12 @@ export function* fetchEventAsync(action) {
   let q = "recordsPerPage=" + action.params.itemsCountPerPage
     + "&currentPage=" + action.params.activePage
     + "&orderDir=Asc"
-    + "&calculateTotal=true"
-    + "&disablePagination=false";
+    + "&calculateTotal=true";
+  if(action.params.disablePagination){
+    q += "&disablePagination="+action.params.disablePagination;
+  }else{
+    q += "&disablePagination=false";
+  } 
   if (action.params.name) {
     q += "&name=" + action.params.name
   }

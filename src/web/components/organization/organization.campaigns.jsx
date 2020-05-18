@@ -6,11 +6,10 @@ import { TitleWithAction, FormHolder } from './organization.styles';
 import Modal from '../modal/modal.component';
 import UploaderComponent from '../uploader/uploader.component';
 import UploadedComponent from '../uploader/uploaded.component';
-import UomInput from '../uom/uom.overview';
 import {Link} from 'react-router-dom';
 import { fetchUomStart } from '../../../common/redux/uom/uom.actions';
-import ItemWithQtySelector from '../item/item.withqty.selector';
 import Pagination from "react-js-pagination";
+import Select from 'react-select'
 
 const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organization, fetchUomStart,form,activePage,totalItemsCount,pageRangeDisplayed,itemsCountPerPage }) => {
   useEffect(() => {
@@ -122,12 +121,8 @@ const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organizatio
                 <input placeholder='Name' type='text' onChange={handleChange} name="Name" value={Name} />
                 <input placeholder='Native Name' type='text' onChange={handleChange} name="NativeName" value={NativeName} />
                 <input placeholder='Total Worth' type='text' onChange={handleChange} name="Worth" value={Worth} />
-                <UomInput name="DefaultUOM" onSelect={handleUom} />
+                <Select className='dropdown' placeholder="Event..." />
                 <textarea placeholder='Description' type='text' onChange={handleChange} name="Description" value={Description}></textarea>
-                <ItemWithQtySelector
-                  handleAdd={handleAdd} handleRemove={handleRemove}
-                  addedItems={state.addedItems}
-                />
                 <button onClick={handleSubmit}>Add Campaign</button>
               </div>
             </div>
@@ -153,11 +148,13 @@ const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organizatio
 }
 const mapState = (state) => {
   const { organization } = state;
+  const {event} = state;
   return {
     campaigns: organization.campaigns,
     organizations: organization.organizations,
     organization: organization.current,
     items: organization.items,
+    events:event.events,
     form:organization.form,
     activePage:organization && organization.activePage ?organization.activePage:0,
     totalItemsCount:organization && organization.totalItemsCount ?organization.totalItemsCount:0,

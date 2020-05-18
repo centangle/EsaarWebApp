@@ -264,7 +264,8 @@ const campaign = (state = INITIAL_STATE, action) => {
           ...state.form,
           modal: action.payload!=='ORG'?true:false,
           orgModal:action.payload==='ORG'?true:false,
-          regionModal:action.payload==='CAMPAIGN_REGION'?true:false
+          regionModal:action.payload==='CAMPAIGN_REGION'?true:false,
+          campaignItemModal:action.payload==='CAMPAIGN_ITEMS_MODAL'?true:false
         }
       }
     case 'CLOSE_MODAL':
@@ -274,7 +275,8 @@ const campaign = (state = INITIAL_STATE, action) => {
           ...state.form,
           modal: false,
           orgModal:false,
-          regionModal:false
+          regionModal:false,
+          campaignItemModal:false
         }
       }
     case 'FETCH_CAMPAIGN_CATEGORIES_SUCCESS':
@@ -312,7 +314,8 @@ const campaign = (state = INITIAL_STATE, action) => {
     case 'ADD_CAMPAIGN_ITEMS_SUCCESS':
       return {
         ...state,
-        items: [...state.items, { ...action.payload.request, Id: action.payload.campaign }]
+        items: [...state.items, { ...action.payload.request, Id: action.payload.campaign }],
+        form:{}
       }
     case 'REMOVE_CAMPAIGN_ITEMS_START':
       return {

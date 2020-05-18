@@ -82,9 +82,9 @@ export const fetchCampaignRegionsSuccess = collections =>({
   type:campaignTypes.FETCH_CAMPAIGN_REGIONS_SUCCESS,
   payload:collections
 });
-export const fetchCampaignRequestsStart = ({type,id,userType,params}) =>({
+export const fetchCampaignRequestsStart = ({type,payload,userType,params}) =>({
   type,
-  payload:id,
+  payload,
   userType,
   params
 });

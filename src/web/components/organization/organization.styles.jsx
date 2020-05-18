@@ -93,6 +93,10 @@ export const FormHolder = styled.div`
     margin: 10px;
     height: 100px;
   }
+  .dropdown{
+      display: inline-block;
+      min-width: 200px;
+  }
   button {
     display: block;
     padding: 10px;

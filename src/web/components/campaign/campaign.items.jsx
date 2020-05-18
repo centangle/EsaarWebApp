@@ -8,16 +8,19 @@ import Search from "../search/search.component";
 import Pagination from "react-js-pagination";
 import { params } from "../../../common/utility/request";
 import ItemWithQtySelector from '../item/item.withqty.selector';
-const CampaignItems = ({ dispatch, campaign, items, selectedItems, activePage, totalItemsCount, pageRangeDisplayed, itemsCountPerPage }) => {
-    const [state, setState] = useState({ modal: false,addedItems:selectedItems.reduce((obj, item) => {
-          obj[item.Id] = item
-          return obj
-        }, {}) });
+import DataTable from "../table/DataTable/DataTable";
+const CampaignItems = ({ modal,dispatch, campaign, items, selectedItems, activePage, totalItemsCount, pageRangeDisplayed, itemsCountPerPage }) => {
+    const [state, setState] = useState({
+        modal: false, addedItems: selectedItems.reduce((obj, item) => {
+            obj[item.Id] = item
+            return obj
+        }, {})
+    });
     const openModal = () => {
-        setState({ ...state, modal: true });
+        dispatch({type:'OPEN_MODAL',payload:'CAMPAIGN_ITEMS_MODAL'})
     }
     const closeModal = () => {
-        setState({ ...state, modal: false });
+        dispatch({type:'CLOSE_MODAL'})
     }
     const onSelect = (item) => {
         const find = selectedItems.findIndex(i => i.Item.Id === item.Id) > -1;
@@ -35,15 +38,13 @@ const CampaignItems = ({ dispatch, campaign, items, selectedItems, activePage, t
 
     }
     const checkIfAdded = (item) => {
-        const find = selectedItems.findIndex(i => i.Item.Id === item.Id) > -1;
-        if (find) {
-            return "Remove";
-        } else {
-            return "Add";
-        }
+        // const find = selectedItems.findIndex(i => i.Item.Id === item.Id) > -1;
+        // if (find) {
+        //     return "Remove";
+        // } else {
+        //     return "Add";
+        // }
     }
-    const mappedItems = items.map(item => { return { ...item, added: checkIfAdded(item) } });
-
     const handlePageChange = (page) => {
         dispatch({
             type: 'FETCH_PERIFERAL_ITEMS_START', payload: campaign.Id,
@@ -59,16 +60,23 @@ const CampaignItems = ({ dispatch, campaign, items, selectedItems, activePage, t
     };
     const buttonsWithActions = [{ label: checkIfAdded, action: onSelect }];
     const handleAdd = (input) => {
+        let mappedItem = input;
+        mappedItem.CampaignItemUOM = input.ItemUOM;
+        mappedItem.CampaignItemTarget = input.ItemQuantity;
+
+        //const findvalue = Object.keys(state.addedItems).map(i=>{return {ItemUOM:state.addedItems[i].CampaignItemUOM,ItemQuantity:state.addedItems[i].CampaignItemTarget,Item:state.addedItems[i].Item}})
         setState({
             ...state,
             addedItems: {
                 ...state.addedItems,
-                [input.Item.Id]: { Item: input.Item, ItemQuantity: input.ItemQuantity, ItemUOM: input.ItemUOM }
+                [input.Item.Id]: { ...mappedItem }
             }
         });
     }
     const handleRemove = (item) => {
         //console.log(item,state.addedItems);
+        console.log(item);
+        console.log(state.addedItems);
         const filteredKeys = state.addedItems;
         delete filteredKeys[item.Id];
         setState({
@@ -76,21 +84,45 @@ const CampaignItems = ({ dispatch, campaign, items, selectedItems, activePage, t
             addedItems: { ...filteredKeys }
         });
     }
-    const handleSave = () =>{
-        console.log(state.addedItems);
-        const items = Object.keys(state.addedItems).map(key=>{
-            return{
-                Id:state.addedItems[key].Item.Id ,
-                Target: state.addedItems[key].ItemQuantity,
-                UOMId: state.addedItems[key].ItemUOM.Id
+    const handleSave = () => {
+
+        const items = Object.keys(state.addedItems).map(key => {
+            return {
+                "Id":key,
+                "Item": {
+                    "Id": state.addedItems[key].Item.Id
+                },
+                "CampaignItemTarget": state.addedItems[key].CampaignItemTarget,
+                "CampaignItemUOM": {
+                    "Id": state.addedItems[key].CampaignItemUOM.Id
+                }
             }
         })
         const payload = {
-            CampaignId:campaign.Id,
-            Items:items
+            CampaignId: campaign.Id,
+            Items: items
         }
-        dispatch({type:'ADD_CAMPAIGN_ITEMS_START',payload})
+        dispatch({ type: 'ADD_CAMPAIGN_ITEMS_START', payload })
     }
+    const mappedItems = Object.keys(state.addedItems).map(key => { return { ...state.addedItems[key] }});
+    const columns = [
+        {
+            name: "Name",
+            selector: "Item.Name",
+            sortable: true,
+        },
+        {
+            name: "Target Quantity",
+            selector: "CampaignItemTarget",
+            sortable: true,
+        },
+        {
+            name: "Unit",
+            selector: "CampaignItemUOM.Name",
+            sortable: true,
+        },
+    ];
+    console.log(mappedItems);
     return (
         <>
             <TitleWithAction>
@@ -98,10 +130,17 @@ const CampaignItems = ({ dispatch, campaign, items, selectedItems, activePage, t
                 <button onClick={openModal}>Add New</button>
             </TitleWithAction>
             <div className='modal-holder'>
-                {state.modal ? <Modal closeModal={closeModal}>
+                {modal ? <Modal closeModal={closeModal}>
                     <ItemWithQtySelector
                         handleAdd={handleAdd} handleRemove={handleRemove}
-                        addedItems={state.addedItems}
+                        addedItems={Object.keys(state.addedItems).map(i => {
+                            return {
+                                ItemUOM: state.addedItems[i].CampaignItemUOM,
+                                ItemQuantity: state.addedItems[i].CampaignItemTarget,
+                                Item: state.addedItems[i].Item,
+                                ...state.addedItems[i]
+                            }
+                        })}
                     />
                     <button onClick={handleSave}>Save</button>
                 </Modal> : null}
@@ -113,7 +152,7 @@ const CampaignItems = ({ dispatch, campaign, items, selectedItems, activePage, t
                 }}
                 handleSearch={handleSearch}
             />
-            <GridToList handleClick={handleClick} buttonsWithActions={buttonsWithActions} type='CAMPAIGN' data={selectedItems} />
+            <DataTable noHeader columns={columns} data={mappedItems} />
             <Pagination
                 activePage={activePage}
                 itemsCountPerPage={itemsCountPerPage}
@@ -129,6 +168,7 @@ const mapState = (state) => {
     const { item } = state;
     return {
         selectedItems: campaign.items,
+        modal:campaign.form.campaignItemModal,
         items: item.periferalItems,
         activePage: item && item.activePage ? item.activePage : 0,
         totalItemsCount: item && item.totalItemsCount ? item.totalItemsCount : 0,

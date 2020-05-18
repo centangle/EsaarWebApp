@@ -44,6 +44,7 @@ const OrganizationDetail = ({ organization,match, dispatch, fetchOrgItemsStart,f
             case 'owners':
                 return fetchOrgRequestsStart({type:'FETCH_ORG_MEMBERS_START',id,userType:'Owner',params});
             case 'campaigns':
+                fetchOrgRequestsStart({type:'FETCH_EVENT_START',id,params:{...params,disablePagination:true}});
                 fetchOrgRequestsStart({type:'FETCH_ORG_ITEMS_START',id,params});
                 return fetchOrgRequestsStart({type:'FETCH_ORG_CAMPAIGNS_START',id,params});
             case 'donate':
