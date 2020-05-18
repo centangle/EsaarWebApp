@@ -1,11 +1,10 @@
 import { takeLatest, all, call, put, select, takeEvery, takeLeading } from 'redux-saga/effects';
-import { organizationTypes } from './organization.types';
+import { campaignTypes } from './campaign.types';
 import { selectCurrentUser, selectUser } from "../user/user.selectors";
 import { params } from '../../utility/request';
 import {
-    addOrganizationSuccess, addOrganizationFailure,
-    updateOrganizationFailure, updateOrganizationSuccess,
     addCampaignSuccess, addCampaignFailure,
+    updateCampaignFailure, updateCampaignSuccess,
     addPackageFailure, addPackageSuccess,
     addOfficeFailure,
     addOfficeSuccess,
@@ -14,31 +13,32 @@ import {
     addAttachmentFailure,
     addAttachmentSuccess,
     fetchAttachmentsStart,
-    addOrgRegionFailure,
-    addOrgRegionSuccess,
-    fetchOrganizationDetail,
-    fetchOrganizationStart,
-    fetchOrganizationSuccess,
-    fetchOrgDetailSuccess, fetchOrgItemsSuccess,
-    fetchOrgRequestsSuccess,
-    fetchOrgPackagesSuccess,
-    fetchOrgPackagesStart,
-    fetchOrgCampaignsSuccess,
-    fetchOrgCategoriesSuccess,
-    fetchOrgMembersSuccess,
-    fetchOrgAccountsSuccess,
-    fetchOrgAccountsStart,
-    fetchOrgOfficesSuccess,
-    fetchOrgOfficesStart,
-    fetchOrgAttachmentsSuccess,
-    fetchOrgRegionsSuccess,
+    addCampaignRegionFailure,
+    addCampaignRegionSuccess,
+    fetchCampaignDetailStart,
+    fetchCampaignStart,
+    fetchCampaignSuccess,
+    fetchCampaignDetailSuccess, fetchCampaignItemsSuccess,
+    fetchCampaignRequestsSuccess,
+    fetchCampaignPackagesSuccess,
+    fetchCampaignPackagesStart,
+    fetchCampaignCampaignsSuccess,
+    fetchCampaignCategoriesSuccess,
+    fetchCampaignCategoriesFailure,
+    fetchCampaignMembersSuccess,
+    fetchCampaignAccountsSuccess,
+    fetchCampaignAccountsStart,
+    fetchCampaignOfficesSuccess,
+    fetchCampaignOfficesStart,
+    fetchCampaignAttachmentsSuccess,
+    fetchCampaignRegionsSuccess,
     requestSuccess, requestFailure,
-    addOrgItemSuccess, addOrgItemFailure,
-    removeOrgItemSuccess, removeOrgItemFailure
-} from './organization.actions';
+    addCampaignItemSuccess, addCampaignItemFailure,
+    removeCampaignItemSuccess, removeCampaignItemFailure
+} from './campaign.actions';
 import { apiLink } from '../api.links';
 const url = apiLink;
-export function* fetchOrganizationAsync(action) {
+export function* fetchCampaignAsync(action) {
     const user = yield select(selectUser);
     let q = "recordsPerPage=" + action.params.itemsCountPerPage
         + "&currentPage=" + action.params.activePage
@@ -52,40 +52,40 @@ export function* fetchOrganizationAsync(action) {
     if (action.params.latitude) {
         q += "&latitude=" + action.params.latitude;
     } else {
-        if(user.latitude)
-        q += "&latitude=" + user.latitude;
+        if (user.latitude)
+            q += "&latitude=" + user.latitude;
     }
     if (action.params.longitude) {
         q += "&longitude=" + action.params.longitude;
     } else {
-        if(user.longitude)
-        q += "&longitude=" + user.longitude;
+        if (user.longitude)
+            q += "&longitude=" + user.longitude;
     }
     if (action.params && action.params.filters) {
         action.params.filters.forEach(filter => {
-            if (filter.ByRegion) {
+            if (filter.CampaignByRegion) {
                 let count = 0;
-                filter.ByRegion.forEach(f => {
-                    
-                    q += "&regions["+count+"].regionLevel=" + f.RegionLevel;
-                    q += "&regions["+count+"].regionId=" + f.Id;
-                    q +="&searchType=ByRegion";
+                filter.CampaignByRegion.forEach(f => {
+
+                    q += "&regions[" + count + "].regionLevel=" + f.RegionLevel;
+                    q += "&regions[" + count + "].regionId=" + f.Id;
+                    q += "&searchType=CampaignByRegion";
                     count++;
                 })
             }
             if (filter.Item) {
                 let count = 0;
                 filter.Item.forEach(f => {
-                    q += "&rootCategories["+count+"]=" + f.Id;
+                    q += "&rootCategories[" + count + "]=" + f.Id;
                     count++;
                 })
             }
-            if (filter.InRadius) {
-                filter.InRadius.forEach(f => {
+            if (filter.CampaignInRadius) {
+                filter.CampaignInRadius.forEach(f => {
                     console.log(f);
                     q += "&radiusType=" + f.radiusType;
                     q += "&radius=" + f.radius;
-                    q +="&searchType=InRadius";
+                    q += "&searchType=CampaignInRadius";
                 })
             }
         })
@@ -93,11 +93,11 @@ export function* fetchOrganizationAsync(action) {
         if (action.params.searchType) {
             q += "&searchType=" + action.params.searchType;
         } else {
-            q += "&searchType=InMyRegion";
+            q += "&searchType=CampaignInMyRegion";
         }
     }
 
-    const response = yield fetch(url + "/api/Organization/GetPaginated?" + q, {
+    const response = yield fetch(url + "/api/Campaign/GetPaginated?" + q, {
         method: "GET",
         //withCredentials: true,
         credentials: 'include',
@@ -116,13 +116,13 @@ export function* fetchOrganizationAsync(action) {
         };
     });
     if (response.ok) {
-        yield put(fetchOrganizationSuccess(response));
+        yield put(fetchCampaignSuccess(response));
     }
 }
-export function* fetchOrgAccountsAsync(action) {
+export function* fetchCampaignAccountsAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     let q = "recordsPerPage=" + action.params.itemsCountPerPage
-        + "&organizationId=" + action.payload
+        + "&campaignId=" + action.payload
         + "&currentPage=" + action.params.activePage
         + "&orderDir=Asc"
         + "&calculateTotal=true"
@@ -130,8 +130,8 @@ export function* fetchOrgAccountsAsync(action) {
     // if (action.params.name) {
     //     q += "&name=" + action.params.name
     // }
-    //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/OrganizationAccount/GetPaginated?" + q, {
+    //const q = "campaignId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    const response = yield fetch(url + "/api/CampaignAccount/GetPaginated?" + q, {
         method: "GET",
         //withCredentials: true,
         credentials: 'include',
@@ -150,19 +150,19 @@ export function* fetchOrgAccountsAsync(action) {
         };
     });
     if (response.ok) {
-        yield put(fetchOrgAccountsSuccess(response));
+        yield put(fetchCampaignAccountsSuccess(response));
     }
 }
-export function* fetchOrgOfficesAsync(action) {
+export function* fetchCampaignOfficesAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const q = "organizationId=" + action.payload
+    const q = "campaignId=" + action.payload
         + "&recordsPerPage=" + action.params.itemsCountPerPage
         + "&currentPage=" + action.params.activePage
         + "&orderDir=Asc"
         + "&itemType=Package"
         + "&disablePagination=false";
-    //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/OrganizationOffice/GetPaginated?" + q, {
+    //const q = "campaignId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    const response = yield fetch(url + "/api/CampaignOffice/GetPaginated?" + q, {
         method: "GET",
         //withCredentials: true,
         credentials: 'include',
@@ -181,19 +181,19 @@ export function* fetchOrgOfficesAsync(action) {
         };
     });
     if (response.ok) {
-        yield put(fetchOrgOfficesSuccess(response));
+        yield put(fetchCampaignOfficesSuccess(response));
     }
 }
-export function* fetchOrgAttachmentsAsync(action) {
+export function* fetchCampaignAttachmentsAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const q = "organizationId=" + action.payload
+    const q = "campaignId=" + action.payload
         + "&recordsPerPage=" + action.params.itemsCountPerPage
         + "&currentPage=" + action.params.activePage
         + "&orderDir=Asc"
         + "&itemType=Package"
         + "&disablePagination=false";
-    //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/OrganizationAttachment/GetPaginated?" + q, {
+    //const q = "campaignId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    const response = yield fetch(url + "/api/CampaignAttachment/GetPaginated?" + q, {
         method: "GET",
         //withCredentials: true,
         credentials: 'include',
@@ -212,19 +212,19 @@ export function* fetchOrgAttachmentsAsync(action) {
         };
     });
     if (response.ok) {
-        yield put(fetchOrgAttachmentsSuccess(response));
+        yield put(fetchCampaignAttachmentsSuccess(response));
     }
 }
-export function* fetchOrgRegionsAsync(action) {
+export function* fetchCampaignRegionsAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const q = "organizationId=" + action.payload
+    const q = "campaignId=" + action.payload
         + "&recordsPerPage=" + action.params.itemsCountPerPage
         + "&currentPage=" + action.params.activePage
         + "&orderDir=Asc"
         + "&itemType=Package"
         + "&disablePagination=false";
-    //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/OrganizationRegion/GetPaginated?" + q, {
+    //const q = "campaignId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    const response = yield fetch(url + "/api/CampaignRegion/GetPaginated?" + q, {
         method: "GET",
         //withCredentials: true,
         credentials: 'include',
@@ -243,13 +243,13 @@ export function* fetchOrgRegionsAsync(action) {
         };
     });
     if (response.ok) {
-        yield put(fetchOrgRegionsSuccess(response));
+        yield put(fetchCampaignRegionsSuccess(response));
     }
 }
-export function* addOrganizationAsync(action) {
+export function* addCampaignAsync(action) {
     try {
         const currentUser = yield select(selectCurrentUser);
-        const organization = yield fetch(url + "/api/Organization/Create", {
+        const campaign = yield fetch(url + "/api/Campaign/Create", {
             method: 'POST',
             ////withCredentials: true,
             headers: {
@@ -264,47 +264,21 @@ export function* addOrganizationAsync(action) {
             }
             return response.json();
         });
-        if (organization.error) {
-            yield put(addOrganizationFailure(organization));
+        if (campaign.error) {
+            yield put(addCampaignFailure(campaign));
         } else {
-            yield put(addOrganizationSuccess({ organization }));
-            yield put(fetchOrganizationStart(params));
-        }
-    } catch (error) {
-        yield put(addOrganizationFailure(error));
-    }
-}
-export function* addCampaignAsync(action) {
-    try {
-        const currentUser = yield select(selectCurrentUser);
-        const organization = yield fetch(url + "/api/Campaign/Create", {
-            method: 'POST',
-            //withCredentials: true,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'bearer ' + currentUser.access_token
-            },
-            body: JSON.stringify(action.payload)
-        }).then(async (response) => {
-            if (response.status >= 205) {
-                const result = await response.json();
-                return { result, error: true };
-            }
-            return response.json();
-        });
-        if (organization.error) {
-            yield put(addCampaignFailure(organization));
-        } else {
-            yield put(addCampaignSuccess({ organization }));
+            yield put(addCampaignSuccess({ campaign }));
+            yield put(fetchCampaignStart(params));
         }
     } catch (error) {
         yield put(addCampaignFailure(error));
     }
 }
+
 export function* addPackageAsync(action) {
     try {
         const currentUser = yield select(selectCurrentUser);
-        const organization = yield fetch(url + "/api/OrganizationPackage/Create", {
+        const campaign = yield fetch(url + "/api/CampaignPackage/Create", {
             method: 'POST',
             //withCredentials: true,
             headers: {
@@ -319,11 +293,11 @@ export function* addPackageAsync(action) {
             }
             return response.json();
         });
-        if (organization.error) {
-            yield put(addPackageFailure(organization));
+        if (campaign.error) {
+            yield put(addPackageFailure(campaign));
         } else {
-            yield put(fetchOrgPackagesStart({ params, payload: action.payload.Organization.Id }));
-            yield put(addPackageSuccess({ organization }));
+            yield put(fetchCampaignPackagesStart({ params, payload: action.payload.Campaign.Id }));
+            yield put(addPackageSuccess({ campaign }));
         }
     } catch (error) {
         yield put(addPackageFailure(error));
@@ -332,7 +306,7 @@ export function* addPackageAsync(action) {
 export function* addOfficeAsync(action) {
     try {
         const currentUser = yield select(selectCurrentUser);
-        const organization = yield fetch(url + "/api/OrganizationOffice/Create", {
+        const campaign = yield fetch(url + "/api/CampaignOffice/Create", {
             method: 'POST',
             //withCredentials: true,
             headers: {
@@ -347,11 +321,11 @@ export function* addOfficeAsync(action) {
             }
             return response.json();
         });
-        if (organization.error) {
-            yield put(addOfficeFailure(organization));
+        if (campaign.error) {
+            yield put(addOfficeFailure(campaign));
         } else {
-            yield put(fetchOrgOfficesStart({ params, payload: action.payload.Organization.Id }));
-            yield put(addOfficeSuccess({ organization }));
+            yield put(fetchCampaignOfficesStart({ params, payload: action.payload.Campaign.Id }));
+            yield put(addOfficeSuccess({ campaign }));
         }
     } catch (error) {
         yield put(addOfficeFailure(error));
@@ -360,8 +334,8 @@ export function* addOfficeAsync(action) {
 export function* addAttachmentsAsync(action) {
     try {
         const currentUser = yield select(selectCurrentUser);
-        const q = 'organizationId=' + action.payload.organizationId;//+'&attachments='+action.payload.attachments;
-        const organization = yield fetch(url + "/api/OrganizationAttachment/Create?" + q, {
+        const q = 'campaignId=' + action.payload.campaignId;//+'&attachments='+action.payload.attachments;
+        const campaign = yield fetch(url + "/api/CampaignAttachment/Create?" + q, {
             method: 'PUT',
             //withCredentials: true,
             headers: {
@@ -376,28 +350,28 @@ export function* addAttachmentsAsync(action) {
             }
             return response.json();
         });
-        if (organization.error) {
-            yield put(addAttachmentFailure(organization));
+        if (campaign.error) {
+            yield put(addAttachmentFailure(campaign));
         } else {
-            yield put(fetchAttachmentsStart({ params, payload: action.payload.organizationId }))
-            yield put(addAttachmentSuccess({ organization }));
+            yield put(fetchAttachmentsStart({ params, payload: action.payload.campaignId }))
+            yield put(addAttachmentSuccess({ campaign }));
         }
     } catch (error) {
         yield put(addAttachmentFailure(error));
     }
 }
-export function* addOrgRegionAsyn(action) {
+export function* addCampaignRegionAsyn(action) {
     try {
         const currentUser = yield select(selectCurrentUser);
-        const q = 'organizationId=' + action.payload.organizationId;//+'&attachments='+action.payload.attachments;
-        const organization = yield fetch(url + "/api/OrganizationRegion/Modify?" + q, {
+        const q = parseInt(action.payload.campaignId);//+'&attachments='+action.payload.attachments;
+        const campaign = yield fetch(url + "/api/CampaignRegion/Modify", {
             method: 'POST',
             //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
             },
-            body: JSON.stringify(action.payload.regions)
+            body: JSON.stringify({Regions:action.payload.regions,CampaignId:q})
         }).then(async (response) => {
             if (response.status >= 205) {
                 const result = await response.json();
@@ -405,19 +379,19 @@ export function* addOrgRegionAsyn(action) {
             }
             return response.json();
         });
-        if (organization.error) {
-            yield put(addOrgRegionFailure(organization));
+        if (campaign.error) {
+            yield put(addCampaignRegionFailure(campaign));
         } else {
-            yield put(addOrgRegionSuccess({ organization }));
+            yield put(addCampaignRegionSuccess({ campaign }));
         }
     } catch (error) {
-        yield put(addOrgRegionFailure(error));
+        yield put(addCampaignRegionFailure(error));
     }
 }
 export function* addAccountAsync(action) {
     try {
         const currentUser = yield select(selectCurrentUser);
-        const organization = yield fetch(url + "/api/OrganizationAccount/Create", {
+        const campaign = yield fetch(url + "/api/CampaignAccount/Create", {
             method: 'POST',
             //withCredentials: true,
             headers: {
@@ -432,20 +406,20 @@ export function* addAccountAsync(action) {
             }
             return response.json();
         });
-        if (organization.error) {
-            yield put(addAccountFailure(organization));
+        if (campaign.error) {
+            yield put(addAccountFailure(campaign));
         } else {
-            yield put(fetchOrgAccountsStart({ params, payload: action.payload.Organization.Id }))
-            yield put(addAccountSuccess({ organization }));
+            yield put(fetchCampaignAccountsStart({ params, payload: action.payload.Campaign.Id }))
+            yield put(addAccountSuccess({ campaign }));
         }
     } catch (error) {
         yield put(addAccountFailure(error));
     }
 }
-export function* updateSingleOrganizationAsync(action) {
+export function* updateSingleCampaignAsync(action) {
     try {
         const currentUser = yield select(selectCurrentUser);
-        const organization = yield fetch(url + "/api/Organization/Update", {
+        const campaign = yield fetch(url + "/api/Campaign/Update", {
             method: 'PUT',
             //withCredentials: true,
             headers: {
@@ -460,19 +434,19 @@ export function* updateSingleOrganizationAsync(action) {
             }
             return response.json();
         });
-        if (organization.error) {
-            yield put(addOrganizationFailure(organization));
+        if (campaign.error) {
+            yield put(addCampaignFailure(campaign));
         } else {
-            yield put(addOrganizationSuccess({ organization }));
+            yield put(addCampaignSuccess({ campaign }));
         }
     } catch (error) {
-        yield put(addOrganizationFailure(error));
+        yield put(addCampaignFailure(error));
     }
 }
-export function* updateOrganizationAsync(action) {
+export function* updateCampaignAsync(action) {
     try {
         const currentUser = yield select(selectCurrentUser);
-        const organization = yield fetch(url + "/api/Organization/Update", {
+        const campaign = yield fetch(url + "/api/Campaign/Update", {
             method: 'PUT',
             //withCredentials: true,
             headers: {
@@ -487,39 +461,43 @@ export function* updateOrganizationAsync(action) {
             }
             return response.json();
         });
-        if (organization.error) {
-            yield put(updateOrganizationFailure(organization));
+        if (campaign.error) {
+            yield put(updateCampaignFailure(campaign));
         } else {
-            yield put(updateOrganizationSuccess({ organization }));
-            yield put(fetchOrganizationDetail(action.payload.Id))
+            yield put(updateCampaignSuccess({ campaign }));
+            yield put(fetchCampaignDetailStart(action.payload.Id))
         }
     } catch (error) {
-        yield put(updateOrganizationFailure(error));
+        yield put(updateCampaignFailure(error));
     }
 }
-export function* fetchOrgDetailAsync(action) {
+export function* fetchCampaignDetailAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const response = yield fetch(url + "/api/Organization/Get/" + action.payload, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/Campaign/Get/" + action.payload, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return { ok: true, result };
+        });
+        if (response.ok) {
+            yield put(fetchCampaignDetailSuccess(response));
         }
-        return { ok: true, result };
-    });
-    if (response.ok) {
-        yield put(fetchOrgDetailSuccess(response));
+    } catch (error) {
+
     }
 }
-export function* orgRequestAsync(action) {
+export function* campaignRequestAsync(action) {
     try {
         const currentUser = yield select(selectCurrentUser);
-        const organization = yield fetch(url + "/api/OrganizationMember/RequestMembership", {
+        const campaign = yield fetch(url + "/api/CampaignMember/RequestMembership", {
             method: 'POST',
             //withCredentials: true,
             headers: {
@@ -534,27 +512,28 @@ export function* orgRequestAsync(action) {
             }
             return response.json();
         });
-        if (organization.error) {
-            yield put(requestFailure(organization));
+        if (campaign.error) {
+            yield put(requestFailure(campaign));
         } else {
-            yield put(requestSuccess({ organization }));
+            yield put(requestSuccess({ campaign }));
         }
     } catch (error) {
         yield put(requestFailure(error));
     }
 }
-export function* fetchOrgItemsAsync(action) {
-    //GET /api/OrganizationItem/GetPaginated
+export function* fetchCampaignItemsAsync(action) {
+    //GET /api/CampaignItem/GetPaginated
     const currentUser = yield select(selectCurrentUser);
-    const q = "organizationId=" + action.payload
+    const q = "campaignId=" + action.payload
+        //+ "&organizationId="+action.payload.organization
         + "&recordsPerPage=" + action.params.itemsCountPerPage
         + "&currentPage=" + action.params.activePage
         + "&orderDir=Asc"
-        + "&itemType=General"
+        //+ "&itemType=General"
         + "&calculateTotal=true"
         + "&disablePagination=false";
-    //const q = "organizationId=" + action.payload + "&itemType=General&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/OrganizationItem/GetPaginated?" + q, {
+    //const q = "campaignId=" + action.payload + "&itemType=General&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    const response = yield fetch(url + "/api/CampaignItem/GetPaginated?" + q, {
         method: "GET",
         //withCredentials: true,
         credentials: 'include',
@@ -573,19 +552,19 @@ export function* fetchOrgItemsAsync(action) {
         };
     });
     if (response.ok) {
-        yield put(fetchOrgItemsSuccess(response));
+        yield put(fetchCampaignItemsSuccess(response));
     }
 }
-export function* fetchOrgRequestsAsync(action) {
+export function* fetchCampaignRequestsAsync(action) {
 
     const currentUser = yield select(selectCurrentUser);
-    const q = "organizationId=" + action.payload
+    const q = "campaignId=" + action.payload
         + "&recordsPerPage=" + action.params.itemsCountPerPage
         + "&currentPage=" + action.params.activePage
         + "&orderDir=Asc"
         + "&calculateTotal=true"
         + "&disablePagination=false";
-    const response = yield fetch(url + "/api/OrganizationRequest/GetPaginated?" + q, {
+    const response = yield fetch(url + "/api/CampaignRequest/GetPaginated?" + q, {
         method: "GET",
         //withCredentials: true,
         credentials: 'include',
@@ -607,19 +586,19 @@ export function* fetchOrgRequestsAsync(action) {
         };
     });
     if (response.ok) {
-        yield put(fetchOrgRequestsSuccess(response));
+        yield put(fetchCampaignRequestsSuccess(response));
     }
 }
-export function* fetchOrgPackagesAsync(action) {
+export function* fetchCampaignPackagesAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const q = "organizationId=" + action.payload
+    const q = "campaignId=" + action.payload
         + "&recordsPerPage=" + action.params.itemsCountPerPage
         + "&currentPage=" + action.params.activePage
         + "&orderDir=Asc"
         + "&itemType=Package"
         + "&disablePagination=false";
-    //const q = "organizationId=" + action.payload + "&itemType=Package&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/OrganizationItem/GetPaginated?" + q, {
+    //const q = "campaignId=" + action.payload + "&itemType=Package&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    const response = yield fetch(url + "/api/CampaignItem/GetPaginated?" + q, {
         method: "GET",
         //withCredentials: true,
         credentials: 'include',
@@ -638,19 +617,19 @@ export function* fetchOrgPackagesAsync(action) {
         };
     });
     if (response.ok) {
-        yield put(fetchOrgPackagesSuccess(response));
+        yield put(fetchCampaignPackagesSuccess(response));
     }
 }
-export function* fetchOrgMembersAsync(action) {
+export function* fetchCampaignMembersAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    let q = "organizationId=" + action.payload
+    let q = "campaignId=" + action.payload
         + "&recordsPerPage=" + action.params.itemsCountPerPage
         + "&currentPage=" + action.params.activePage
         + "&orderDir=Asc"
         + "&type=" + action.userType
         + "&disablePagination=false";
-    //const q = "organizationId=" + action.payload + "&type=" + action.userType + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/OrganizationMember/GetPaginated?" + q, {
+    //const q = "campaignId=" + action.payload + "&type=" + action.userType + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    const response = yield fetch(url + "/api/CampaignMember/GetPaginated?" + q, {
         method: "GET",
         //withCredentials: true,
         credentials: 'include',
@@ -669,38 +648,43 @@ export function* fetchOrgMembersAsync(action) {
         };
     });
     if (response.ok) {
-        yield put(fetchOrgMembersSuccess(response));
+        yield put(fetchCampaignMembersSuccess(response));
     }
 }
-export function* fetchOrgCategoriesAsync(action) {
+export function* fetchCampaignCategoriesAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const q = action.payload;//"organizationId="+action.payload+"&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/Organization/GetCategories/" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    const q = action.payload;//"campaignId="+action.payload+"&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    try {
+        const response = yield fetch(url + "/api/Campaign/GetCategories/" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return { ok: true, result };
+        });
+        if (response.ok) {
+            yield put(fetchCampaignCategoriesSuccess(response.result));
         }
-        return { ok: true, result };
-    });
-    if (response.ok) {
-        yield put(fetchOrgCategoriesSuccess(response.result));
+    } catch (error) {
+        yield put(fetchCampaignCategoriesFailure(error))
     }
+
 }
-export function* fetchOrgCampaignAsync(action) {
+export function* fetchCampaignCampaignAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const q = "organizationId=" + action.payload
+    const q = "campaignId=" + action.payload
         + "&recordsPerPage=" + action.params.itemsCountPerPage
         + "&currentPage=" + action.params.activePage
         + "&orderDir=Asc"
         + "&calculateTotal=true"
         + "&disablePagination=false";
-    //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    //const q = "campaignId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/Campaign/GetPaginated?" + q, {
         method: "GET",
         //withCredentials: true,
@@ -720,13 +704,13 @@ export function* fetchOrgCampaignAsync(action) {
         };
     });
     if (response.ok) {
-        yield put(fetchOrgCampaignsSuccess(response));
+        yield put(fetchCampaignCampaignsSuccess(response));
     }
 }
 export function* addItemAsync(action) {
     try {
         const currentUser = yield select(selectCurrentUser);
-        const organization = yield fetch(url + "/api/OrganizationItem/Create", {
+        const campaign = yield fetch(url + "/api/CampaignItem/Modify", {
             method: 'POST',
             //withCredentials: true,
             headers: {
@@ -741,13 +725,13 @@ export function* addItemAsync(action) {
             }
             return response.json();
         });
-        if (organization.error) {
-            yield put(addOrgItemFailure({ organization, request: action.payload }));
+        if (campaign.error) {
+            yield put(addCampaignItemFailure({ campaign, request: action.payload }));
         } else {
-            yield put(addOrgItemSuccess({ organization, request: action.payload }));
+            yield put(addCampaignItemSuccess({ campaign, request: action.payload }));
         }
     } catch (error) {
-        yield put(addOrgItemFailure({ error, request: action.payload }));
+        yield put(addCampaignItemFailure({ error, request: action.payload }));
     }
 }
 export function* toggleFilterAsync(action) {
@@ -756,8 +740,8 @@ export function* toggleFilterAsync(action) {
 export function* removeItemAsync(action) {
     try {
         const currentUser = yield select(selectCurrentUser);
-        const q = "organizationId=" + action.payload.organizationId + "&itemId=" + action.payload.itemId;
-        const organization = yield fetch(url + "/api/OrganizationItem/DeleteOrganizationItem?" + q, {
+        const q = "campaignId=" + action.payload.campaignId + "&itemId=" + action.payload.itemId;
+        const campaign = yield fetch(url + "/api/CampaignItem/DeleteCampaignItem?" + q, {
             method: 'DELETE',
             //withCredentials: true,
             headers: {
@@ -772,120 +756,117 @@ export function* removeItemAsync(action) {
             }
             return response.json();
         });
-        if (organization.error) {
-            yield put(removeOrgItemFailure({ organization, request: action.payload }));
+        if (campaign.error) {
+            yield put(removeCampaignItemFailure({ campaign, request: action.payload }));
         } else {
-            yield put(removeOrgItemSuccess({ organization, request: action.payload }));
+            yield put(removeCampaignItemSuccess({ campaign, request: action.payload }));
         }
     } catch (error) {
-        yield put(removeOrgItemFailure({ error, request: action.payload }));
+        yield put(removeCampaignItemFailure({ error, request: action.payload }));
     }
 }
-export function* addOrganizationStart() {
-    yield takeEvery(organizationTypes.ADD_ORGANIZATION_START, addOrganizationAsync)
+export function* addCampaignStart() {
+    yield takeLatest(campaignTypes.ADD_CAMPAIGN_START, addCampaignAsync)
 }
-export function* updateOrganization() {
-    yield takeEvery(organizationTypes.UPDATE_ORGANIZATION_START, updateOrganizationAsync)
+export function* updateCampaign() {
+    yield takeLatest(campaignTypes.UPDATE_CAMPAIGN_START, updateCampaignAsync)
 }
 export function* changeOrder() {
-    yield takeEvery(organizationTypes.ORGANIZATION_ORDER_CHANGED, updateOrganizationAsync)
+    yield takeEvery(campaignTypes.CAMPAIGN_ORDER_CHANGED, updateCampaignAsync)
 }
-export function* fetchOrganization() {
-    yield takeEvery(organizationTypes.FETCH_ORGANIZATION_START, fetchOrganizationAsync);
+export function* fetchCampaign() {
+    yield takeLatest(campaignTypes.FETCH_CAMPAIGN_START, fetchCampaignAsync);
 }
-export function* orgRequest() {
-    yield takeEvery(organizationTypes.REQUEST_START, orgRequestAsync)
+export function* campaignRequest() {
+    yield takeLatest(campaignTypes.REQUEST_START, campaignRequestAsync)
 }
-export function* fetchOrgDetail() {
-    yield takeEvery(organizationTypes.FETCH_ORG_DETAIL, fetchOrgDetailAsync)
+
+export function* fetchCampaignItems() {
+    yield takeLeading(campaignTypes.FETCH_CAMPAIGN_ITEMS_START, fetchCampaignItemsAsync);
 }
-export function* fetchOrgItems() {
-    yield takeEvery(organizationTypes.FETCH_ORG_ITEMS_START, fetchOrgItemsAsync);
+export function* fetchCampaignRequests() {
+    yield takeLatest(campaignTypes.FETCH_CAMPAIGN_REQUESTS_START, fetchCampaignRequestsAsync)
 }
-export function* fetchOrgRequests() {
-    yield takeEvery(organizationTypes.FETCH_ORG_REQUESTS_START, fetchOrgRequestsAsync)
+export function* fetchCampaignPackages() {
+    yield takeLatest(campaignTypes.FETCH_CAMPAIGN_PACKAGES_START, fetchCampaignPackagesAsync)
 }
-export function* fetchOrgPackages() {
-    yield takeEvery(organizationTypes.FETCH_ORG_PACKAGES_START, fetchOrgPackagesAsync)
-}
-export function* fetchOrgMembers() {
-    yield takeEvery(organizationTypes.FETCH_ORG_MEMBERS_START, fetchOrgMembersAsync)
+export function* fetchCampaignMembers() {
+    yield takeLatest(campaignTypes.FETCH_CAMPAIGN_MEMBERS_START, fetchCampaignMembersAsync)
 }
 export function* addItem() {
-    yield takeEvery(organizationTypes.ADD_ORG_ITEMS_START, addItemAsync)
+    yield takeEvery(campaignTypes.ADD_CAMPAIGN_ITEMS_START, addItemAsync)
 }
 export function* removeItem() {
-    yield takeEvery(organizationTypes.REMOVE_ORG_ITEMS_START, removeItemAsync)
+    yield takeEvery(campaignTypes.REMOVE_CAMPAIGN_ITEMS_START, removeItemAsync)
 }
 
 export function* logoUpload() {
-    yield takeEvery(organizationTypes.UPDATE_ORGANIZATION, updateSingleOrganizationAsync)
+    yield takeEvery(campaignTypes.UPDATE_CAMPAIGN, updateSingleCampaignAsync)
 }
-export function* fetchOrgCategories() {
+export function* fetchCampaignCategories() {
     //GET /api/Item/GetRootItems
-    yield takeEvery(organizationTypes.FETCH_ORG_CATEGORIES_START, fetchOrgCategoriesAsync)
-}
-export function* fetchOrgCampaign() {
-    yield takeEvery(organizationTypes.FETCH_ORG_CAMPAIGNS_START, fetchOrgCampaignAsync);
+    yield takeEvery(campaignTypes.FETCH_CAMPAIGN_CATEGORIES_START, fetchCampaignCategoriesAsync)
 }
 export function* addCampaign() {
-    yield takeEvery(organizationTypes.ADD_ORG_CAMPAIGN_START, addCampaignAsync)
+    yield takeEvery(campaignTypes.ADD_CAMPAIGN_CAMPAIGN_START, addCampaignAsync)
 }
 export function* addPackage() {
-    yield takeEvery(organizationTypes.ADD_ORG_PACKAGE_START, addPackageAsync)
+    yield takeEvery(campaignTypes.ADD_CAMPAIGN_PACKAGE_START, addPackageAsync)
 }
 export function* addAccount() {
-    yield takeEvery(organizationTypes.ADD_ORG_ACCOUNT_START, addAccountAsync)
+    yield takeEvery(campaignTypes.ADD_CAMPAIGN_ACCOUNT_START, addAccountAsync)
 }
 export function* addOffice() {
-    yield takeEvery(organizationTypes.ADD_ORG_OFFICE_START, addOfficeAsync);
+    yield takeEvery(campaignTypes.ADD_CAMPAIGN_OFFICE_START, addOfficeAsync);
 }
-export function* fetchOrgAccounts() {
-    yield takeEvery(organizationTypes.FETCH_ORG_ACCOUNTS_START, fetchOrgAccountsAsync);
+export function* fetchCampaignAccounts() {
+    yield takeEvery(campaignTypes.FETCH_CAMPAIGN_ACCOUNTS_START, fetchCampaignAccountsAsync);
 }
-export function* fetchOrgOffices() {
-    yield takeEvery(organizationTypes.FETCH_ORG_OFFICES_START, fetchOrgOfficesAsync);
+export function* fetchCampaignOffices() {
+    yield takeEvery(campaignTypes.FETCH_CAMPAIGN_OFFICES_START, fetchCampaignOfficesAsync);
 }
-export function* fetchOrgAttachments() {
-    yield takeEvery(organizationTypes.FETCH_ORG_ATTACHMENTS_START, fetchOrgAttachmentsAsync);
+export function* fetchCampaignAttachments() {
+    yield takeEvery(campaignTypes.FETCH_CAMPAIGN_ATTACHMENTS_START, fetchCampaignAttachmentsAsync);
 }
 export function* addAttachments() {
-    yield takeEvery(organizationTypes.ADD_ORG_ATTACHMENT_START, addAttachmentsAsync)
+    yield takeEvery(campaignTypes.ADD_CAMPAIGN_ATTACHMENT_START, addAttachmentsAsync)
 }
-export function* addOrgRegion() {
-    yield takeEvery(organizationTypes.ADD_ORG_REGION_START, addOrgRegionAsyn)
+export function* addCampaignRegion() {
+    yield takeEvery(campaignTypes.ADD_CAMPAIGN_REGION_START, addCampaignRegionAsyn)
 }
-export function* fetchOrgRegions() {
-    yield takeEvery(organizationTypes.FETCH_ORG_REGIONS_START, fetchOrgRegionsAsync)
+export function* fetchCampaignRegions() {
+    yield takeEvery(campaignTypes.FETCH_CAMPAIGN_REGIONS_START, fetchCampaignRegionsAsync)
 }
 export function* toggleFilter() {
-    yield takeEvery(organizationTypes.TOGGLE_FILTER, toggleFilterAsync)
+    yield takeEvery(campaignTypes.TOGGLE_FILTER, toggleFilterAsync)
 }
-export function* organizationSagas() {
+export function* fetchCampaignDetail() {
+    yield takeEvery(campaignTypes.FETCH_CAMPAIGN_DETAIL, fetchCampaignDetailAsync)
+}
+export function* campaignSagas() {
     yield all([
-        call(orgRequest),
-        call(addOrganizationStart),
-        call(updateOrganization),
+        call(campaignRequest),
+        call(addCampaignStart),
+        call(updateCampaign),
         call(addItem),
         call(addCampaign),
         call(addPackage),
         call(addOffice),
         call(addAttachments),
         call(addAccount),
-        call(addOrgRegion),
+        call(addCampaignRegion),
         call(changeOrder),
-        call(fetchOrganization),
-        call(fetchOrgDetail),
-        call(fetchOrgItems),
-        call(fetchOrgRequests),
-        call(fetchOrgPackages),
-        call(fetchOrgMembers),
-        call(fetchOrgCategories),
-        call(fetchOrgCampaign),
-        call(fetchOrgAccounts),
-        call(fetchOrgOffices),
-        call(fetchOrgAttachments),
-        call(fetchOrgRegions),
+        call(fetchCampaign),
+        call(fetchCampaignDetail),
+        call(fetchCampaignItems),
+        call(fetchCampaignRequests),
+        call(fetchCampaignPackages),
+        call(fetchCampaignMembers),
+        call(fetchCampaignCategories),
+        call(fetchCampaignAccounts),
+        call(fetchCampaignOffices),
+        call(fetchCampaignAttachments),
+        call(fetchCampaignRegions),
         call(removeItem),
         call(logoUpload),
         call(toggleFilter)

@@ -32,7 +32,6 @@ const ItemWithQtySelector = ({
   const handleChange = (e) => {
     setState({...state, ItemQuantity: e.target.value});
   };
-
   return (
     <>
       <ItemWithQtyHolder>
@@ -72,7 +71,7 @@ const ItemWithQtySelector = ({
         </div>
       </ItemWithQtyHolder>
       <div className="added-items">
-        {Object.keys(addedItems).map((key) => {
+        {addedItems && Object.keys(addedItems).map((key) => {
           return (
             <div className="item" key={key}>
               {addedItems[key].ItemQuantity + " "}

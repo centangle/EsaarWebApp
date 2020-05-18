@@ -7,6 +7,7 @@ import { PageHolder } from './page.styles';
 
 import Home from '../components/home/home.component';
 import OrganizationPage from './organization.page';
+import CampaignsPage from './campaign.page';
 import ItemPage from './item.page';
 import UomPage from './uom.page';
 import RequestPage from './request.page';
@@ -52,6 +53,21 @@ const HomePage = ({ match }) => {
                         exact
                         path="/organizations/:id/:slug"
                         component={OrganizationPage}
+                    />
+                    <Route
+                        exact
+                        path="/campaigns"
+                        component={CampaignsPage}
+                    />
+                    <Route
+                        exact
+                        path="/campaigns/:id"
+                        component={CampaignsPage}
+                    />
+                    <Route
+                        exact
+                        path="/campaigns/:id/:slug"
+                        component={CampaignsPage}
                     />
                     <Route
                         exact

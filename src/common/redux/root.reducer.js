@@ -13,6 +13,7 @@ import donation from './donation/donation.reducers';
 import region from './region/region.reducers';
 import uom from './uom/uom.reducers';
 import event from './event/event.reducers';
+import campaign from './campaign/campaign.reducers';
 const persistConfig = {
   key: 'root',
   storage,
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   donation,
   region,
   uom,
-  event
+  event,
+  campaign
 });
 export default persistReducer(persistConfig, rootReducer);

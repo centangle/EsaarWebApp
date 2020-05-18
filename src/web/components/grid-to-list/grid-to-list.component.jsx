@@ -35,7 +35,7 @@ const GridToList = ({
                   return (
                     <span
                       className="link testl"
-                      key={item.Id+''+data[key].Id}
+                      key={item.Id+'-'+data[key].Id}
                       onClick={() => item.action(data[key])}
                     >
                       {label}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import DataTable from '../table/DataTable/DataTable';
-import { TitleWithAction, FormHolder } from './organization.styles';
+import { TitleWithAction, FormHolder } from './campaign.styles';
 import Modal from '../modal/modal.component';
 import UploaderComponent from '../uploader/uploader.component';
 import UploadedComponent from '../uploader/uploaded.component';
@@ -12,7 +12,7 @@ import { fetchUomStart } from '../../../common/redux/uom/uom.actions';
 import ItemWithQtySelector from '../item/item.withqty.selector';
 import Pagination from "react-js-pagination";
 
-const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organization, fetchUomStart,form,activePage,totalItemsCount,pageRangeDisplayed,itemsCountPerPage }) => {
+const CampaignCampaigns = ({ campaigns, dispatch, campaign, fetchUomStart,form,activePage,totalItemsCount,pageRangeDisplayed,itemsCountPerPage }) => {
   useEffect(() => {
     fetchUomStart();
   }, [fetchUomStart]);
@@ -63,8 +63,8 @@ const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organizatio
     delete form['addedItems'];
 
     dispatch({
-      type: 'ADD_ORG_CAMPAIGN_START', payload: {
-        ...form, Organization: organization,
+      type: 'ADD_CAMPAIGN_CAMPAIGN_START', payload: {
+        ...form, Campaign: campaign,
         Items:Object.keys(state.addedItems).map(key=>{
           return {
             Item:{Id:key},
@@ -99,19 +99,19 @@ const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organizatio
   }
     const handlePageChange = (page) =>{
     dispatch({
-      type:'FETCH_ORG_CAMPAIGNS_START',payload:organization.Id,
+      type:'FETCH_CAMPAIGN_CAMPAIGNS_START',payload:campaign.Id,
       params:{activePage:page,totalItemsCount,pageRangeDisplayed,itemsCountPerPage}
       })
   }
   return (
     <>
       <TitleWithAction>
-        <h2>{organization ? organization.Name : null} Campaigns</h2>
+        <h2>{campaign ? campaign.Name : null} Campaigns</h2>
         <button onClick={openModal}>Add a campaign</button>
       </TitleWithAction>
       <div className='modal-holder'>
         {form.modal ? <Modal closeModal={closeModal}>
-          <h2>Add Organization Campaign</h2>
+          <h2>Add Campaign Campaign</h2>
           <FormHolder>
             <div className='two-panel'>
               <div className='uploader'>
@@ -152,20 +152,20 @@ const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organizatio
   )
 }
 const mapState = (state) => {
-  const { organization } = state;
+  const { campaign } = state;
   return {
-    campaigns: organization.campaigns,
-    organizations: organization.organizations,
-    organization: organization.current,
-    items: organization.items,
-    form:organization.form,
-    activePage:organization && organization.activePage ?organization.activePage:0,
-    totalItemsCount:organization && organization.totalItemsCount ?organization.totalItemsCount:0,
-    itemsCountPerPage:organization && organization.itemsCountPerPage ?organization.itemsCountPerPage:0,
-    pageRangeDisplayed:organization && organization.pageRangeDisplayed ?organization.pageRangeDisplayed:0
+    campaigns: campaign.campaigns,
+    campaigns: campaign.campaigns,
+    campaign: campaign.current,
+    items: campaign.items,
+    form:campaign.form,
+    activePage:campaign && campaign.activePage ?campaign.activePage:0,
+    totalItemsCount:campaign && campaign.totalItemsCount ?campaign.totalItemsCount:0,
+    itemsCountPerPage:campaign && campaign.itemsCountPerPage ?campaign.itemsCountPerPage:0,
+    pageRangeDisplayed:campaign && campaign.pageRangeDisplayed ?campaign.pageRangeDisplayed:0
   }
 }
 const mapDispatch = dispatch => ({
   fetchUomStart: () => dispatch(fetchUomStart()),
 })
-export default connect(mapState, mapDispatch)(OrganizationCampaigns);
+export default connect(mapState, mapDispatch)(CampaignCampaigns);

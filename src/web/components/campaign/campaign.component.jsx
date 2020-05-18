@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import OrganizationAdder from "./organization.adder";
+import CampaignAdder from "./campaign.adder";
 import GridToList from "../grid-to-list/grid-to-list.component";
 import { useHistory } from "react-router-dom";
 import Modal from "../modal/modal.component";
-import { TitleWithAction, FormHolder } from "./organization.styles";
+import { TitleWithAction, FormHolder } from "./campaign.styles";
 import Search from "../search/search.component";
 import Pagination from "react-js-pagination";
 import { params } from "../../../common/utility/request";
 import RegionSelector from "../region/region.selector";
-const Organzation = ({
+const CAMPAIGNanzation = ({
   regions,
   data,
   dispatch,
@@ -22,24 +22,24 @@ const Organzation = ({
   let history = useHistory();
   const [state, setState] = useState({ treeData: data, volunteer: false, id: 0 });
   const closeModal = () => {
-    dispatch({ type: "CLOSE_MODAL", payload: "ORG" });
+    dispatch({ type: "CLOSE_MODAL", payload: "CAMPAIGN" });
   };
-  const handleAddOrg = () => {
-    dispatch({ type: "OPEN_MODAL", payload: "ORG" });
+  const handleAddCampaign = () => {
+    dispatch({ type: "OPEN_MODAL", payload: "CAMPAIGN" });
   };
   const handleClick = (obj) => {
-    dispatch({ type: "ORGANIZATION_SELECTED", payload: obj });
+    dispatch({ type: "CAMPAIGN_SELECTED", payload: obj });
     history.push(history.location.pathname + "/" + obj.Id);
   };
   const handleSearch = (term, filters) => {
     dispatch({
-      type: "FETCH_ORGANIZATION_START",
-      params: { ...params, name: term, filters: [filters] },
+      type: "FETCH_CAMPAIGN_START",
+      params: { ...params, name: term,filters:[filters] },
     });
   };
   const handlePageChange = (page) => {
     dispatch({
-      type: "FETCH_ORGANIZATION_START",
+      type: "FETCH_CAMPAIGN_START",
       payload: "",
       params: {
         activePage: page,
@@ -54,7 +54,7 @@ const Organzation = ({
   };
   const handleJoin = (type, regions = []) => {
     const data = {
-      Organization: {
+      Campaign: {
         Id: state.id,
       },
       Regions: regions,
@@ -80,10 +80,7 @@ const Organzation = ({
   const openVolunteer = (item) => {
     setState({ ...state, id: item.Id, volunteer: true });
   };
-  const buttonsWithActions = [
-    { Id: '1', label: "volunteer", action: openVolunteer },
-    { Id: '2', label: 'details', action: handleClick }
-  ];
+  const buttonsWithActions = [{ label: "volunteer", action: openVolunteer },{label:'details',action:handleClick}];
   return (
     <div className="page-right">
       {state.volunteer ? (
@@ -92,8 +89,8 @@ const Organzation = ({
             <div>
               <div className="input-holder">
                 <RegionSelector
-                  isOrganizationRegion
-                  organizationId={state.id}
+                  isCampaignRegion
+                  campaignId={state.id}
                 />
                 <button
                   className="btn btn-success"
@@ -107,24 +104,24 @@ const Organzation = ({
         </Modal>
       ) : null}
       <TitleWithAction>
-        {form.orgModal ? (
+        {form.campaignModal ? (
           <Modal closeModal={closeModal}>
-            <OrganizationAdder />
+            <CampaignAdder />
           </Modal>
         ) : null}
-        <h2>Organizations / Clusters</h2>
-        <button onClick={handleAddOrg}>
-          <i className="fa fa-plus"></i> Add Organization
+        <h2>Campaigns / Clusters</h2>
+        <button onClick={handleAddCampaign}>
+          <i className="fa fa-plus"></i> Add Campaign
         </button>
       </TitleWithAction>
 
       <Search
-        type="organization"
+        type="campaign"
         handleSearch={handleSearch}
       />
       <GridToList
         handleClick={handleClick}
-        type="ORGANIZATION"
+        type="CAMPAIGN"
         data={state.treeData}
         links={["donate"]}
         buttonsWithActions={buttonsWithActions}
@@ -140,27 +137,27 @@ const Organzation = ({
   );
 };
 const mapState = (state) => {
-  const { organization } = state;
+  const { campaign } = state;
   const { region } = state;
   return {
     regions: region.regions,
-    data: Object.keys(organization.organizations).map((key) => {
+    data: Object.keys(campaign.campaigns).map((key) => {
       return {
-        ...organization.organizations[key],
-        title: organization.organizations[key].Name,
+        ...campaign.campaigns[key],
+        title: campaign.campaigns[key].Name,
       };
     }),
-    form: organization.form,
-    activePage: organization.activePage ? organization.activePage : 0,
-    totalItemsCount: organization.totalItemsCount
-      ? organization.totalItemsCount
+    form: campaign.form,
+    activePage: campaign.activePage ? campaign.activePage : 0,
+    totalItemsCount: campaign.totalItemsCount
+      ? campaign.totalItemsCount
       : 0,
-    itemsCountPerPage: organization.itemsCountPerPage
-      ? organization.itemsCountPerPage
+    itemsCountPerPage: campaign.itemsCountPerPage
+      ? campaign.itemsCountPerPage
       : 0,
-    pageRangeDisplayed: organization.pageRangeDisplayed
-      ? organization.pageRangeDisplayed
+    pageRangeDisplayed: campaign.pageRangeDisplayed
+      ? campaign.pageRangeDisplayed
       : 0,
   };
 };
-export default connect(mapState)(Organzation);
+export default connect(mapState)(CAMPAIGNanzation);
