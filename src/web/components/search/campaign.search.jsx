@@ -7,15 +7,15 @@ import Select from "react-select";
 const CampaignSearch = ({handleCheck, regions, rootItems}) => {
   const initState = {
     searchType: "InMyRegion",
-    CampaignByRegion: "",
-    CampaignInRadius: "",
+    ByRegion: "",
+    InRadius: "",
     Radius: "",
     modal: false,
   };
   const [state, setState] = useState(initState);
   const handleChange = (event) => {
     let modal = false;
-    if (event.target.value === "CampaignByRegion") {
+    if (event.target.value === "ByRegion") {
       modal = true;
     }
     setState({...state, [event.target.name]: event.target.value, modal});
@@ -31,7 +31,7 @@ const CampaignSearch = ({handleCheck, regions, rootItems}) => {
           Name: regions[key][regions[key].RegionLevel].Name,
           ...regions[key],
         },
-        "CampaignByRegion",
+        "ByRegion",
         0,
         false,
         true
@@ -42,10 +42,10 @@ const CampaignSearch = ({handleCheck, regions, rootItems}) => {
   const handleSubmit = (from) => {
     handleCheck(
       {
-        Id: state.CampaignInRadius,
-        Name: state.Radius + " " + state.CampaignInRadius,
+        Id: state.InRadius,
+        Name: state.Radius + " " + state.InRadius,
         radius: parseFloat(state.Radius),
-        radiusType: state.CampaignInRadius,
+        radiusType: state.InRadius,
       },
       from,
       0,
@@ -84,16 +84,16 @@ const CampaignSearch = ({handleCheck, regions, rootItems}) => {
           onChange={handleChange}
           name="searchType"
         >
-          <option value="InMyRegion">CampaignInMyRegion</option>
-          <option value="CampaignInRadius">CampaignInRadius</option>
-          <option value="CampaignByRegion">CampaignByRegion</option>
+          <option value="InMyRegion">InMyRegion</option>
+          <option value="InRadius">InRadius</option>
+          <option value="ByRegion">ByRegion</option>
         </select>
-        {state.searchType === "CampaignInRadius" ? (
+        {state.searchType === "InRadius" ? (
           <span>
             <select
-              value={state.CampaignInRadius}
+              value={state.InRadius}
               onChange={handleChange}
-              name="CampaignInRadius"
+              name="InRadius"
             >
               <option value="">Select Radius Type</option>
               <option value="Meters">Meters</option>
@@ -108,14 +108,14 @@ const CampaignSearch = ({handleCheck, regions, rootItems}) => {
             />
             <button
               className="btn btn-light"
-              onClick={() => handleSubmit("CampaignInRadius")}
+              onClick={() => handleSubmit("InRadius")}
             >
               Apply Filters
             </button>
           </span>
         ) : null}
       </div>
-      {state.searchType === "CampaignByRegion" && state.modal ? (
+      {state.searchType === "ByRegion" && state.modal ? (
         <Modal closeModal={handleClose}>
           <RegionSelector />
           <button onClick={handleFilter}>Add Filter</button>

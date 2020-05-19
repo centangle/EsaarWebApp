@@ -70,6 +70,12 @@ const Search = ({handleSearch, type, dispatch, filter, selectedFilters}) => {
     clearOld = false,
     clearAllExceptCat = false
   ) => {
+    if (type === "campaign") {
+      dispatch({
+        type: "SET_CAMPAIGN_FILTERS",
+        payload: {item, from, checked, clearOld, clearAllExceptCat},
+      });
+    }
     if (type === "organization") {
       dispatch({
         type: "SET_ORGANIZATION_FILTERS",
@@ -173,13 +179,16 @@ const Search = ({handleSearch, type, dispatch, filter, selectedFilters}) => {
 };
 const mapState = (state, ownProps) => {
   const {type} = ownProps;
-  const {setting, organization, donation, request} = state;
+  const {setting, organization, donation, request,campaign} = state;
   let selectedFilters = organization.selectedFilters;
   if (type === "doantion") {
     selectedFilters = donation.selectedFilters;
   }
   if (type === "request") {
     selectedFilters = request.selectedFilters;
+  }
+  if (type === "campaign") {
+    selectedFilters = campaign.selectedFilters;
   }
   return {
     filter: setting.filter,

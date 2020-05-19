@@ -27,12 +27,12 @@ const INITIAL_STATE = {
   regionsLoading: false,
   logo: null,
   form: {},
-  selectedFilters:{Item:[]}
+  selectedFilters: { Item: [] }
 };
 
 const organization = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-        case 'SET_ORGANIZATION_FILTERS':
+    case 'SET_ORGANIZATION_FILTERS':
       let current = state.selectedFilters[action.payload.from]
         ? state.selectedFilters[action.payload.from]
         : [];
@@ -45,8 +45,8 @@ const organization = (state = INITIAL_STATE, action) => {
       } else {
         current.splice(current.indexOf(action.payload.item), 1);
       }
-      if(action.payload.clearAllExceptCat){
-        state.selectedFilters={Item:[...state.selectedFilters.Item]};
+      if (action.payload.clearAllExceptCat) {
+        state.selectedFilters = { Item: [...state.selectedFilters.Item] };
       }
       return {
         ...state,
@@ -263,8 +263,8 @@ const organization = (state = INITIAL_STATE, action) => {
         ...state,
         form: {
           ...state.form,
-          modal: action.payload!=='ORG'?true:false,
-          orgModal:action.payload==='ORG'?true:false,
+          modal: action.payload !== 'ORG' ? true : false,
+          orgModal: action.payload === 'ORG' ? true : false,
         }
       }
     case 'CLOSE_MODAL':
@@ -273,7 +273,7 @@ const organization = (state = INITIAL_STATE, action) => {
         form: {
           ...state.form,
           modal: false,
-          orgModal:false
+          orgModal: false
         }
       }
     case 'FETCH_ORG_CATEGORIES_SUCCESS':

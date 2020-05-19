@@ -64,13 +64,13 @@ export function* fetchCampaignAsync(action) {
     }
     if (action.params && action.params.filters) {
         action.params.filters.forEach(filter => {
-            if (filter.CampaignByRegion) {
+            if (filter.ByRegion) {
                 let count = 0;
-                filter.CampaignByRegion.forEach(f => {
+                filter.ByRegion.forEach(f => {
 
                     q += "&regions[" + count + "].regionLevel=" + f.RegionLevel;
                     q += "&regions[" + count + "].regionId=" + f.Id;
-                    q += "&searchType=CampaignByRegion";
+                    q += "&searchType=ByRegion";
                     count++;
                 })
             }
@@ -81,12 +81,12 @@ export function* fetchCampaignAsync(action) {
                     count++;
                 })
             }
-            if (filter.CampaignInRadius) {
-                filter.CampaignInRadius.forEach(f => {
+            if (filter.InRadius) {
+                filter.InRadius.forEach(f => {
                     console.log(f);
                     q += "&radiusType=" + f.radiusType;
                     q += "&radius=" + f.radius;
-                    q += "&searchType=CampaignInRadius";
+                    q += "&searchType=InRadius";
                 })
             }
         })
