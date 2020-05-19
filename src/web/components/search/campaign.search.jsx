@@ -4,18 +4,18 @@ import RegionSelector from "../region/region.selector";
 import Modal from "../modal/modal.component";
 import {connect} from "react-redux";
 import Select from "react-select";
-const OrganizationSearch = ({handleCheck, regions, rootItems}) => {
+const CampaignSearch = ({handleCheck, regions, rootItems}) => {
   const initState = {
     searchType: "InMyRegion",
-    ByRegion: "",
-    InRadius: "",
+    CampaignByRegion: "",
+    CampaignInRadius: "",
     Radius: "",
     modal: false,
   };
   const [state, setState] = useState(initState);
   const handleChange = (event) => {
     let modal = false;
-    if (event.target.value === "ByRegion") {
+    if (event.target.value === "CampaignByRegion") {
       modal = true;
     }
     setState({...state, [event.target.name]: event.target.value, modal});
@@ -31,7 +31,7 @@ const OrganizationSearch = ({handleCheck, regions, rootItems}) => {
           Name: regions[key][regions[key].RegionLevel].Name,
           ...regions[key],
         },
-        "ByRegion",
+        "CampaignByRegion",
         0,
         false,
         true
@@ -42,10 +42,10 @@ const OrganizationSearch = ({handleCheck, regions, rootItems}) => {
   const handleSubmit = (from) => {
     handleCheck(
       {
-        Id: state.InRadius,
-        Name: state.Radius + " " + state.InRadius,
+        Id: state.CampaignInRadius,
+        Name: state.Radius + " " + state.CampaignInRadius,
         radius: parseFloat(state.Radius),
-        radiusType: state.InRadius,
+        radiusType: state.CampaignInRadius,
       },
       from,
       0,
@@ -84,16 +84,16 @@ const OrganizationSearch = ({handleCheck, regions, rootItems}) => {
           onChange={handleChange}
           name="searchType"
         >
-          <option value="InMyRegion">OrganizationInMyRegion</option>
-          <option value="InRadius">InRadius</option>
-          <option value="ByRegion">ByRegion</option>
+          <option value="InMyRegion">CampaignInMyRegion</option>
+          <option value="CampaignInRadius">CampaignInRadius</option>
+          <option value="CampaignByRegion">CampaignByRegion</option>
         </select>
-        {state.searchType === "InRadius" ? (
+        {state.searchType === "CampaignInRadius" ? (
           <span>
             <select
-              value={state.InRadius}
+              value={state.CampaignInRadius}
               onChange={handleChange}
-              name="InRadius"
+              name="CampaignInRadius"
             >
               <option value="">Select Radius Type</option>
               <option value="Meters">Meters</option>
@@ -108,14 +108,14 @@ const OrganizationSearch = ({handleCheck, regions, rootItems}) => {
             />
             <button
               className="btn btn-light"
-              onClick={() => handleSubmit("InRadius")}
+              onClick={() => handleSubmit("CampaignInRadius")}
             >
               Apply Filters
             </button>
           </span>
         ) : null}
       </div>
-      {state.searchType === "ByRegion" && state.modal ? (
+      {state.searchType === "CampaignByRegion" && state.modal ? (
         <Modal closeModal={handleClose}>
           <RegionSelector />
           <button onClick={handleFilter}>Add Filter</button>
@@ -132,4 +132,4 @@ const mapState = (state) => {
     rootItems: item.rootItems,
   };
 };
-export default connect(mapState)(OrganizationSearch);
+export default connect(mapState)(CampaignSearch);

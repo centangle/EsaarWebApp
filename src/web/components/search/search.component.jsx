@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import OrganizationSearch from "./organization.search";
 import RequestSearch from "./request.search";
 import DonationSearch from "./request.search";
+import CampaignSearch from "./campaign.search";
 const Filters = ({type, selectedFilters, handleCheck}) => {
   const filters = {
     location: [
@@ -25,6 +26,9 @@ const Filters = ({type, selectedFilters, handleCheck}) => {
   }
   if (type === "donation") {
     return <DonationSearch handleCheck={handleCheck} />;
+  }
+  if (type === "campaign") {
+    return <CampaignSearch handleCheck={handleCheck} />;
   }
   return Object.keys(filters).map((f) => {
     return (

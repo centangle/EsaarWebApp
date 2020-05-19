@@ -8,7 +8,7 @@ const DonationSearch = ({ handleCheck, regions }) => {
     const [state, setState] = useState(initState)
     const handleChange = (event) => {
         let modal = false;
-        if (event.target.value === 'OrganizationByRegion') {
+        if (event.target.value === 'ByRegion') {
             modal = true;
         }
         if (event.target.name === 'searchType' || event.target.name === 'status' || event.target.name === 'timePeriod') {
@@ -46,16 +46,16 @@ const DonationSearch = ({ handleCheck, regions }) => {
     }
     const handleFilter = () => {
         Object.keys(regions).forEach(key => {
-            handleCheck({ Id: regions[key][regions[key].RegionLevel].Id, Name: regions[key][regions[key].RegionLevel].Name, ...regions[key] }, 'OrganizationByRegion', 0, false);
+            handleCheck({ Id: regions[key][regions[key].RegionLevel].Id, Name: regions[key][regions[key].RegionLevel].Name, ...regions[key] }, 'ByRegion', 0, false);
         });
         setState({ ...state, modal: false, ...initState });
     }
     const handleSubmit = (from) => {
         handleCheck({
-            Id: state.OrganizationInRadius,
-            Name: state.Radius + ' ' + state.OrganizationInRadius,
+            Id: state.InRadius,
+            Name: state.Radius + ' ' + state.InRadius,
             radius: parseFloat(state.Radius),
-            radiusType: state.OrganizationInRadius
+            radiusType: state.InRadius
         }, from, 0, true);
         setState({ ...state, ...initState })
     }
