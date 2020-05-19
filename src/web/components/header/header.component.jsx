@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import "./header.styles.scss";
 import drawerIcon from "../../../assets/drawer.png";
 import logoIcon from "../../../assets/logo.png";
+import logoutIcon from "../../../assets/logout.png";
 import notificationIcon from "../../../assets/notification.png";
 import searchIcon from "../../../assets/search.png";
 const Nav = styled.nav`
@@ -20,7 +21,7 @@ const Nav = styled.nav`
     text-decoration: none;
   }
 `;
-const Header = () => {
+const Header = ({dispatch}) => {
   const [state, setState] = useState({
     sider: false,
     position: "absolute",
@@ -39,6 +40,9 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  const handleClick = () =>{
+    dispatch({type:'SIGN_OUT'})
+  }
   return (
     <header>
       <Nav position={state.position} top={state.top}>
@@ -53,8 +57,11 @@ const Header = () => {
           </div>
         </div> */}
         <div className="right">
-          <img className="notification" src={notificationIcon} alt="Drawer" />
-          <span className="count">0</span>
+          <div className="notification">
+            <img src={notificationIcon} alt="Drawer" />
+            <span className="count">0</span>
+          </div>
+          <div className='log-out' onClick={handleClick}><img src={logoutIcon} alt='sign-out' /></div>
         </div>
       </Nav>
     </header>

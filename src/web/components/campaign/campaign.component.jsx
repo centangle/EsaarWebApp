@@ -111,9 +111,7 @@ const CAMPAIGNanzation = ({
           </Modal>
         ) : null}
         <h2>Campaigns / Clusters</h2>
-        <button onClick={handleAddCampaign}>
-          <i className="fa fa-plus"></i> Add Campaign
-        </button>
+
       </TitleWithAction>
 
       <Search

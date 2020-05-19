@@ -107,9 +107,6 @@ const CampaignHeader = ({ campaign, dispatch, regions, form }) => {
       <div className="CAMPAIGN-actions">
         <h1>{campaign.Name}</h1>
         <div className="CAMPAIGN-buttons">
-          <CustomButton handleClick={() => handleJoin("Member")}>
-            Member
-          </CustomButton>
           <CustomButton handleClick={() => hangleGo("donate")}>
             Donate
           </CustomButton>
@@ -119,7 +116,6 @@ const CampaignHeader = ({ campaign, dispatch, regions, form }) => {
           <Dropdown
             className="icon-drop-round"
             options={[
-              { value: "Volunteer", content: "Join as Volunteer" },
               { value: "Moderator", content: "Request Moderation" },
               { value: "Edit", content: "Edit Campaign" },
             ]}

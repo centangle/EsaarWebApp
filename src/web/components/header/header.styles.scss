@@ -47,9 +47,20 @@ header {
   .right {
     padding: 0px 30px;
     margin-left: auto;
+    display: flex;
     .notification {
-      background: $dark-blue;
-      width: 32px;
+          padding: 15px;
+      img{
+        background: $dark-blue;
+        width: 32px;
+      }
+    }
+    .log-out{
+      padding:10px;
+      cursor: pointer;
+      img{
+        width:32px;
+      }
     }
     .count {
       background: $dark-blue;

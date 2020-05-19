@@ -678,37 +678,7 @@ export function* fetchCampaignCategoriesAsync(action) {
     }
 
 }
-export function* fetchCampaignCampaignAsync(action) {
-    const currentUser = yield select(selectCurrentUser);
-    const q = "campaignId=" + action.payload.id
-        + "&recordsPerPage=" + action.params.itemsCountPerPage
-        + "&currentPage=" + action.params.activePage
-        + "&orderDir=Asc"
-        + "&calculateTotal=true"
-        + "&disablePagination=false";
-    //const q = "campaignId=" + action.payload.id + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/Campaign/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
-        }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount,
-        };
-    });
-    if (response.ok) {
-        yield put(fetchCampaignCampaignsSuccess(response));
-    }
-}
+
 export function* addItemAsync(action) {
     try {
         const currentUser = yield select(selectCurrentUser);

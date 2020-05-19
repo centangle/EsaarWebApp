@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {connect} from "react-redux";
 import {CartHolder} from "./donate.styles";
-const DonateCart = ({items, dispatch, organization, match}) => {
+const DonateCart = ({items, dispatch, campaign, match}) => {
   const [state, setState] = useState({note: "", uom: ""});
   const handleChange = (item, quantity) => {
     dispatch({
@@ -29,7 +29,7 @@ const DonateCart = ({items, dispatch, organization, match}) => {
       payload: {
         Items: mappedItems,
         Note: state.note,
-        OrganizationId: organization.Id,
+        CampaignId: campaign.Id,
         Type: type,
       },
     });
