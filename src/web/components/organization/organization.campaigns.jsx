@@ -131,7 +131,6 @@ const OrganizationCampaigns = ({ events, campaigns, organizations, dispatch, org
               <div className='input-holder'>
                 <input placeholder='Name' type='text' onChange={handleChange} name="Name" value={Name} />
                 <input placeholder='Native Name' type='text' onChange={handleChange} name="NativeName" value={NativeName} />
-                <input placeholder='Total Worth' type='text' onChange={handleChange} name="Worth" value={Worth} />
                 <Select value={Event} onChange={(item) => handleDrop(item)} options={mappedEvents} className='dropdown' placeholder="Event..." />
                 <textarea placeholder='Description' type='text' onChange={handleChange} name="Description" value={Description}></textarea>
                 <input placeholder='Start Date' type='text' onChange={handleChange} name="StartDate" value={StartDate} />

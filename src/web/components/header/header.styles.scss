@@ -48,6 +48,9 @@ header {
     padding: 0px 30px;
     margin-left: auto;
     display: flex;
+    .user{
+      line-height: 60px;
+    }
     .notification {
           padding: 15px;
       img{

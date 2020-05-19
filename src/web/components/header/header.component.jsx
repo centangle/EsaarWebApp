@@ -21,7 +21,7 @@ const Nav = styled.nav`
     text-decoration: none;
   }
 `;
-const Header = ({dispatch}) => {
+const Header = ({dispatch,user}) => {
   const [state, setState] = useState({
     sider: false,
     position: "absolute",
@@ -57,6 +57,7 @@ const Header = ({dispatch}) => {
           </div>
         </div> */}
         <div className="right">
+          <span className="user">{user.user_name}</span>
           <div className="notification">
             <img src={notificationIcon} alt="Drawer" />
             <span className="count">0</span>
@@ -67,5 +68,10 @@ const Header = ({dispatch}) => {
     </header>
   );
 };
-
-export default connect()(Header);
+const mapState = state =>{
+  const {user} = state;
+  return{
+    user:user.currentUser
+  }
+}
+export default connect(mapState)(Header);
