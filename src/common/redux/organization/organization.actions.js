@@ -1,4 +1,7 @@
 import {organizationTypes} from './organization.types';
+export const redirect = redirectUrl => {
+  window.location = redirectUrl;
+};
 export const putInitialData = collections =>({
   type:organizationTypes.PUT_INITIAL_DATA,
   payload:collections
@@ -18,7 +21,7 @@ export const updateOrganizationFailure = error => ({
 export const fetchOrganizationDetail = Id => ({
   type: organizationTypes.FETCH_ORG_DETAIL,
   payload: Id
-})
+});
 export const addCampaignSuccess = campaign => ({
   type: organizationTypes.ADD_ORG_CAMPAIGN_SUCCESS,
   payload: campaign

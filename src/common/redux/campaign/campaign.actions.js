@@ -15,7 +15,11 @@ export const updateCampaignFailure = error => ({
   type: campaignTypes.UPDATE_CAMPAIGN_FAILURE,
   payload: error
 });
-
+export const fetchCampaignRegionsStart = ({id,params}) =>({
+  type:campaignTypes.FETCH_CAMPAIGN_REGIONS_START,
+  payload:{id},
+  params
+})
 
 export const addAttachmentSuccess = collection => ({
   type: campaignTypes.ADD_CAMPAIGN_ATTACHMENT_SUCCESS,

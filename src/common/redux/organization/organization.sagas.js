@@ -2,6 +2,8 @@ import { takeLatest, all, call, put, select, takeEvery, takeLeading } from 'redu
 import { organizationTypes } from './organization.types';
 import { selectCurrentUser, selectUser } from "../user/user.selectors";
 import { params } from '../../utility/request';
+import { createBrowserHistory } from 'history';
+
 import {
     addOrganizationSuccess, addOrganizationFailure,
     updateOrganizationFailure, updateOrganizationSuccess,
@@ -34,7 +36,8 @@ import {
     fetchOrgRegionsSuccess,
     requestSuccess, requestFailure,
     addOrgItemSuccess, addOrgItemFailure,
-    removeOrgItemSuccess, removeOrgItemFailure
+    removeOrgItemSuccess, removeOrgItemFailure,
+    redirect
 } from './organization.actions';
 import { apiLink } from '../api.links';
 const url = apiLink;
@@ -296,6 +299,7 @@ export function* addCampaignAsync(action) {
             yield put(addCampaignFailure(organization));
         } else {
             yield put(addCampaignSuccess({ organization }));
+            yield redirect('/campaigns/'+organization);
         }
     } catch (error) {
         yield put(addCampaignFailure(error));

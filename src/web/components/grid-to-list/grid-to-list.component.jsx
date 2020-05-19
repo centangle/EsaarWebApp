@@ -48,7 +48,7 @@ const GridToList = ({
                     <Link
                       key={link}
                       className="link"
-                      to={`/organizations/${data[key].Id}/${link}`}
+                      to={`/${type.toLowerCase()}s/${data[key].Id}/${link}`}
                     >
                       {link}
                     </Link>

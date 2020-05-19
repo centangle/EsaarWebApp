@@ -43,18 +43,7 @@ const CampaignHome = ({
             })}
         </Row>
       </div>
-      <div>
-        <h2>Campaigns</h2>
-        <Row className="flex-wrap">
-          {campaigns && campaigns.map((campaign) => {
-            return (
-              <div key={campaign.Id} className="CAMPAIGN-logo">
-                {campaign.Name}
-              </div>
-            );
-          })}
-        </Row>
-      </div>
+
       {/* <div>
         <h2>Site Offices</h2>
         <Row className="flex-wrap">

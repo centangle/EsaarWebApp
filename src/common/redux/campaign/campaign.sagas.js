@@ -31,6 +31,7 @@ import {
     fetchCampaignOfficesSuccess,
     fetchCampaignOfficesStart,
     fetchCampaignAttachmentsSuccess,
+    fetchCampaignRegionsStart,
     fetchCampaignRegionsSuccess,
     requestSuccess, requestFailure,
     addCampaignItemSuccess, addCampaignItemFailure,
@@ -382,6 +383,7 @@ export function* addCampaignRegionAsyn(action) {
         if (campaign.error) {
             yield put(addCampaignRegionFailure(campaign));
         } else {
+            yield put(fetchCampaignRegionsStart({id:action.payload.campaignId,params}));
             yield put(addCampaignRegionSuccess({ campaign }));
         }
     } catch (error) {
@@ -447,7 +449,7 @@ export function* updateCampaignAsync(action) {
     try {
         const currentUser = yield select(selectCurrentUser);
         const campaign = yield fetch(url + "/api/Campaign/Update", {
-            method: 'PUT',
+            method: 'POST',
             //withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',

@@ -99,6 +99,10 @@ export const FormHolder = styled.div`
     margin: 20px;
     margin-left: auto;
   }
+  .dropdown{
+    display:inline-block;
+    min-width:200px;
+  }
 `;
 export const White30 = styled.div`
   position: absolute;

@@ -6,27 +6,30 @@ import { TitleWithAction, FormHolder } from './organization.styles';
 import Modal from '../modal/modal.component';
 import UploaderComponent from '../uploader/uploader.component';
 import UploadedComponent from '../uploader/uploaded.component';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { fetchUomStart } from '../../../common/redux/uom/uom.actions';
 import Pagination from "react-js-pagination";
-import Select from 'react-select'
+import Select from 'react-select';
 
-const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organization, fetchUomStart,form,activePage,totalItemsCount,pageRangeDisplayed,itemsCountPerPage }) => {
+const OrganizationCampaigns = ({ events, campaigns, organizations, dispatch, organization, fetchUomStart, form, activePage, totalItemsCount, pageRangeDisplayed, itemsCountPerPage }) => {
   useEffect(() => {
     fetchUomStart();
   }, [fetchUomStart]);
   const [state, setState] = useState({
     addedItems: {},
-    modal: false, Name: '', NativeName: '', Description: '', Worth: '', DefaultUOM: ''
+    modal: false, Name: '', Event: '', NativeName: '', StartDate: '', EndDate: '', Description: '', Worth: '', DefaultUOM: ''
   });
   let history = useHistory();
 
   const mappedData = campaigns.map(request => {
     return {
       Name: request.Name,
-      NativeName:request.NativeName,
-      Description:request.Description,
-      Details:<Link to={`/campaigns/${request.Id}`} className='tbl-btn'>Details</Link>
+      NativeName: request.NativeName,
+      Event: '',
+      Description: request.Description,
+      StartDate: request.StartDate,
+      EndDate: request.EndDate,
+      Details: <Link to={`/campaigns/${request.Id}`} className='tbl-btn'>Details</Link>
     }
   });
 
@@ -42,9 +45,9 @@ const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organizatio
       sortable: true,
     },
     {
-      name:'Details',
-      selector:'Details',
-      sortable:false
+      name: 'Details',
+      selector: 'Details',
+      sortable: false
     }
   ];
   const closeModal = () => {
@@ -64,11 +67,14 @@ const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organizatio
     dispatch({
       type: 'ADD_ORG_CAMPAIGN_START', payload: {
         ...form, Organization: organization,
-        Items:Object.keys(state.addedItems).map(key=>{
+        Event: {
+          Id: Event.value
+        },
+        Items: Object.keys(state.addedItems).map(key => {
           return {
-            Item:{Id:key},
-            ItemQuantity:state.addedItems[key].ItemQuantity,
-            ItemUOM:state.addedItems[key].ItemUOM,
+            Item: { Id: key },
+            ItemQuantity: state.addedItems[key].ItemQuantity,
+            ItemUOM: state.addedItems[key].ItemUOM,
           }
         })
       }
@@ -77,7 +83,7 @@ const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organizatio
   const handleUom = (item) => {
     setState({ ...state, DefaultUOM: item });
   }
-  const { Name, NativeName, Worth, Description, DefaultUOM, ImageUrl, ImageInBase64 } = state;
+  const { Name, NativeName,Event, StartDate, EndDate, Worth, Description, DefaultUOM, ImageUrl, ImageInBase64 } = state;
   const handleAdd = (input) => {
     setState({
       ...state,
@@ -96,12 +102,17 @@ const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organizatio
       addedItems: { ...filteredKeys }
     });
   }
-    const handlePageChange = (page) =>{
+  const handlePageChange = (page) => {
     dispatch({
-      type:'FETCH_ORG_CAMPAIGNS_START',payload:organization.Id,
-      params:{activePage:page,totalItemsCount,pageRangeDisplayed,itemsCountPerPage}
-      })
+      type: 'FETCH_ORG_CAMPAIGNS_START', payload: organization.Id,
+      params: { activePage: page, totalItemsCount, pageRangeDisplayed, itemsCountPerPage }
+    })
   }
+  const handleDrop = (item) => {
+    console.log(Event);
+    setState({ ...state, Event: item });
+  }
+  const mappedEvents = Object.keys(events).map(key => { return { value: events[key].Id, label: events[key].Name } });
   return (
     <>
       <TitleWithAction>
@@ -121,8 +132,10 @@ const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organizatio
                 <input placeholder='Name' type='text' onChange={handleChange} name="Name" value={Name} />
                 <input placeholder='Native Name' type='text' onChange={handleChange} name="NativeName" value={NativeName} />
                 <input placeholder='Total Worth' type='text' onChange={handleChange} name="Worth" value={Worth} />
-                <Select className='dropdown' placeholder="Event..." />
+                <Select value={Event} onChange={(item) => handleDrop(item)} options={mappedEvents} className='dropdown' placeholder="Event..." />
                 <textarea placeholder='Description' type='text' onChange={handleChange} name="Description" value={Description}></textarea>
+                <input placeholder='Start Date' type='text' onChange={handleChange} name="StartDate" value={StartDate} />
+                <input placeholder='End Date' type='text' onChange={handleChange} name="EndDate" value={EndDate} />
                 <button onClick={handleSubmit}>Add Campaign</button>
               </div>
             </div>
@@ -148,18 +161,18 @@ const OrganizationCampaigns = ({ campaigns, organizations, dispatch, organizatio
 }
 const mapState = (state) => {
   const { organization } = state;
-  const {event} = state;
+  const { event } = state;
   return {
     campaigns: organization.campaigns,
     organizations: organization.organizations,
     organization: organization.current,
     items: organization.items,
-    events:event.events,
-    form:organization.form,
-    activePage:organization && organization.activePage ?organization.activePage:0,
-    totalItemsCount:organization && organization.totalItemsCount ?organization.totalItemsCount:0,
-    itemsCountPerPage:organization && organization.itemsCountPerPage ?organization.itemsCountPerPage:0,
-    pageRangeDisplayed:organization && organization.pageRangeDisplayed ?organization.pageRangeDisplayed:0
+    events: event.events,
+    form: organization.form,
+    activePage: organization && organization.activePage ? organization.activePage : 0,
+    totalItemsCount: organization && organization.totalItemsCount ? organization.totalItemsCount : 0,
+    itemsCountPerPage: organization && organization.itemsCountPerPage ? organization.itemsCountPerPage : 0,
+    pageRangeDisplayed: organization && organization.pageRangeDisplayed ? organization.pageRangeDisplayed : 0
   }
 }
 const mapDispatch = dispatch => ({

@@ -262,7 +262,7 @@ const campaign = (state = INITIAL_STATE, action) => {
         ...state,
         form: {
           ...state.form,
-          modal: action.payload!=='ORG'?true:false,
+          campaignModal: action.payload==='CAMPAIGN'?true:false,
           orgModal:action.payload==='ORG'?true:false,
           regionModal:action.payload==='CAMPAIGN_REGION'?true:false,
           campaignItemModal:action.payload==='CAMPAIGN_ITEMS_MODAL'?true:false
@@ -276,7 +276,8 @@ const campaign = (state = INITIAL_STATE, action) => {
           modal: false,
           orgModal:false,
           regionModal:false,
-          campaignItemModal:false
+          campaignItemModal:false,
+          campaignModal:false
         }
       }
     case 'FETCH_CAMPAIGN_CATEGORIES_SUCCESS':

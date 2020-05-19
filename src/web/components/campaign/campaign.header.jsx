@@ -76,12 +76,12 @@ const CampaignHeader = ({ campaign, dispatch, regions, form }) => {
   };
   return (
     <Row>
-      {form.CAMPAIGNModal ? (
+      {form.campaignModal ? (
         <Modal closeModal={closeEditModal}>
           <CampaignAdder current={campaign} />
         </Modal>
       ) : null}
-      <div className="CAMPAIGN-logo">
+      <div className="campaign-logo">
         {campaign.ImageUrl ? <img src={baseUrl + campaign.ImageUrl} alt="logo" /> : <img src={noImage} alt="logo" />}
       </div>
       {state.modal ? (

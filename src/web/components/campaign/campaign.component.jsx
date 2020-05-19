@@ -14,6 +14,7 @@ const CAMPAIGNanzation = ({
   data,
   dispatch,
   form,
+  campaignModal,
   activePage,
   totalItemsCount,
   pageRangeDisplayed,
@@ -80,7 +81,7 @@ const CAMPAIGNanzation = ({
   const openVolunteer = (item) => {
     setState({ ...state, id: item.Id, volunteer: true });
   };
-  const buttonsWithActions = [{ label: "volunteer", action: openVolunteer },{label:'details',action:handleClick}];
+  const buttonsWithActions = [{label:'details',action:handleClick}];
   return (
     <div className="page-right">
       {state.volunteer ? (
@@ -104,7 +105,7 @@ const CAMPAIGNanzation = ({
         </Modal>
       ) : null}
       <TitleWithAction>
-        {form.campaignModal ? (
+        {campaignModal ? (
           <Modal closeModal={closeModal}>
             <CampaignAdder />
           </Modal>
@@ -122,8 +123,7 @@ const CAMPAIGNanzation = ({
       <GridToList
         handleClick={handleClick}
         type="CAMPAIGN"
-        data={state.treeData}
-        links={["donate"]}
+        data={data}
         buttonsWithActions={buttonsWithActions}
       />
       <Pagination
@@ -148,6 +148,7 @@ const mapState = (state) => {
       };
     }),
     form: campaign.form,
+    campaignModal:campaign.form.campaignModal,
     activePage: campaign.activePage ? campaign.activePage : 0,
     totalItemsCount: campaign.totalItemsCount
       ? campaign.totalItemsCount

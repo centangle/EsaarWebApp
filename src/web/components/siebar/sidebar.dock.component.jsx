@@ -29,6 +29,9 @@ const DockSider = () => {
                     <li className={history.location.pathname === '/organizations' ? 'active' : ''}>
                         <Link to='/organizations'><img src={organizationIcon} alt='Organization Icon' /></Link>
                     </li>
+                    <li className={history.location.pathname === '/campaigns' ? 'active' : ''}>
+                        <Link to='/campaigns'><img src={organizationIcon} alt='Camapaign Icon' /></Link>
+                    </li>
                     <li className={history.location.pathname === '/requests' ? 'active' : ''}>
                         <Link to='/requests'><img src={giveIcon} alt='Give Icon' /></Link>
                     </li>
