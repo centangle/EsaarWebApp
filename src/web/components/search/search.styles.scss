@@ -86,7 +86,12 @@
     }
   }
   .filters {
+    .dropdown{
+      display: inline-block;
+      min-width: 200px;
+    }
     .filters-input {
+      display: inline-block;
       input,
       button,
       select {
