@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 import Select from "react-select";
 const OrganizationSearch = ({handleCheck, regions, rootItems}) => {
   const initState = {
-    searchType: "OrganizationInMyRegion",
+    searchType: "InMyRegion",
     OrganizationByRegion: "",
     OrganizationInRadius: "",
     Radius: "",
@@ -84,7 +84,7 @@ const OrganizationSearch = ({handleCheck, regions, rootItems}) => {
           onChange={handleChange}
           name="searchType"
         >
-          <option value="OrganizationInMyRegion">OrganizationInMyRegion</option>
+          <option value="InMyRegion">OrganizationInMyRegion</option>
           <option value="OrganizationInRadius">OrganizationInRadius</option>
           <option value="OrganizationByRegion">OrganizationByRegion</option>
         </select>

@@ -94,7 +94,7 @@ export function* fetchCampaignAsync(action) {
         if (action.params.searchType) {
             q += "&searchType=" + action.params.searchType;
         } else {
-            q += "&searchType=CampaignInMyRegion";
+            q += "&searchType=InMyRegion";
         }
     }
 
