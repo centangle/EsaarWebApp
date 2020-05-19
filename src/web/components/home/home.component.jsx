@@ -70,13 +70,13 @@ const Home = () => {
           <h2>REGISTER AS VOLUNTEER</h2>
         </div>
       </div>
-      <div className="table">
+      {/* <div className="table">
         <DataTable
           title="Last Activity / History"
           columns={columns}
           data={data}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

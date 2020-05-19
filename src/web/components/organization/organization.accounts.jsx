@@ -81,7 +81,7 @@ const OrganizationAccounts = ({ accounts, organizations, dispatch, organization,
             </TitleWithAction>
             <div className='modal-holder'>
                 {form.modal ? <Modal closeModal={closeModal}>
-                    <h2>Add Organization Office</h2>
+                    <h2>Add Organization Account Number</h2>
                     <FormHolder>
                         <div className='two-panel'>
                             <div className='uploader'>
@@ -94,7 +94,7 @@ const OrganizationAccounts = ({ accounts, organizations, dispatch, organization,
                                 <input placeholder='Account No.' type='text' onChange={handleChange} name="AccountNo" value={AccountNo} />
 
                                 <textarea placeholder='Description' type='text' onChange={handleChange} name="Description" value={Description}></textarea>
-                                <button onClick={handleSubmit}>Add Office</button>
+                                <button onClick={handleSubmit}>Save Account</button>
                             </div>
                         </div>
                     </FormHolder>

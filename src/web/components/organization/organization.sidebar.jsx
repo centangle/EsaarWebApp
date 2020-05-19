@@ -12,6 +12,7 @@ import groupIcon from "../../../assets/group.png";
 import supportIcon from "../../../assets/support.png";
 import volunteerIcon from "../../../assets/volunteer-alt.png";
 import listIcon from "../../../assets/list.png";
+import campaignIcon from '../../../assets/campaigns.png';
 const OrganizationSidebar = ({organization}) => {
   return (
     <OrgSideHolder>
@@ -56,7 +57,7 @@ const OrganizationSidebar = ({organization}) => {
           <li>
             <Link to={`/organizations/${organization.Id}/campaigns`}>
               <span>
-                <img src={emailIcon} alt="" />
+                <img src={campaignIcon} alt="" />
               </span>
               <span>Campaigns</span>
               <span>مہمات</span>

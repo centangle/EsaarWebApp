@@ -94,6 +94,11 @@ export const fetchOrgRegionsSuccess = collections =>({
   type:organizationTypes.FETCH_ORG_REGIONS_SUCCESS,
   payload:collections
 });
+export const fetchOrgRegionsStart = ({payload,params})=>({
+    type:organizationTypes.FETCH_ORG_REGIONS_START,
+    payload,
+    params
+})
 export const fetchOrgRequestsStart = ({type,id,userType,params}) =>({
   type,
   payload:id,

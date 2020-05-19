@@ -21,7 +21,13 @@ export function* signInAsync(action) {
     ////withCredentials: true,
     body: formEncode(action.payload)
     //credentials: "include"
-  }).then(response => response.json());
+  }).then(async (response) => {
+      if (response.status >= 205) {
+        const result = await response.json();
+        return { result, error: true };
+      }
+      return response.json();
+    });
   if (response.error) {
     yield put(signInFailure(response));
   } else {

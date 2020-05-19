@@ -5,7 +5,7 @@ const INITIAL_STATE = {
   socket:false,
   currentUser:null,
   isSigningIn:false,
-  isSigningUp:false
+  isIsSigningUp:false
 };
 
 const user = (state = INITIAL_STATE, action) => {
@@ -74,7 +74,8 @@ const user = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         currentUser: {...state.currentUser,...action.payload},
-        error: null
+        error: null,
+        isSigningIn:false
       };
     case userTypes.SELECT_USER_PERMISSION:
       const { sourceSelectedKeys, targetSelectedKeys } = action.payload;
@@ -93,10 +94,25 @@ const user = (state = INITIAL_STATE, action) => {
         currentUser: null,
         error: null
       };
+    case userTypes.EMAIL_SIGN_IN_START:
+      return{
+        ...state,
+        isSigningIn:true
+      }
     case userTypes.SAVE_USER_PERMISSION_START:
       return {
         ...state,
         userPermissions: action.payload.next
+      }
+    case userTypes.SIGN_UP_SUCCESS:
+      return{
+        ...state,
+        isSigningUp:false
+      }
+    case userTypes.SIGN_UP_START:
+      return{
+        ...state,
+        isSigningUp:true
       }
     case userTypes.CHECK_USER_SESSION:
       return {
@@ -106,18 +122,31 @@ const user = (state = INITIAL_STATE, action) => {
       }
 
     case userTypes.SIGN_UP_FAILURE:
-      toaster.error("Notification Message", action.payload.result.Message, { timeOut: 5000 })
+      if (action.payload.result && action.payload.result.errors){
+        Object.keys(action.payload.result.errors).forEach(key=>{
+          toaster.error("Notification Message", action.payload.result.errors[key][0], { timeOut: 5000 })
+        })
+      }
+      if (action.payload.result && action.payload.result.Errors){
+        action.payload.result.Errors.forEach(e=>{
+          toaster.error("Notification Message", e.Code+':'+e.Description, { timeOut: 500000 })
+        })
+      }
       return{
-        ...state
+        ...state,
+        isSigningUp:false
       }
     case userTypes.SIGN_OUT_FAILURE:
     case userTypes.SIGN_IN_FAILURE:
-      toaster.success("Notification Message", action.payload.error_description, { timeOut: 5000 })
+      if(action.payload.result){
+        toaster.success("Notification Message", action.payload.result, { timeOut: 5000 })
+      }
       return {
         ...state,
         currentUser:null,
         error: action.payload,
-        toasterMessage: action.payload
+        toasterMessage: action.payload,
+        isSigningIn:false
       };
     default:
       return state;

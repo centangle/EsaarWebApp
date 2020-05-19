@@ -1,18 +1,19 @@
-import React, {useState} from "react";
-import {connect} from "react-redux";
+import React, { useState } from "react";
+import { connect } from "react-redux";
 import logo from "../../assets/logo.png";
 import volunteerImage from "../../assets/volunteer-image.png";
 import background1920 from "../../assets/images/bg-2.jpg";
 import background1366 from "../../assets/images/bg-2.jpg";
+import Spinner from '../components/spinner/spinner.component';
 import "./LoginPage.scss";
-import {userTypes} from "../../common/redux/user/user.types";
+import { userTypes } from "../../common/redux/user/user.types";
 import {
   emailSignInStart,
   signUpStart,
 } from "../../common/redux/user/user.actions";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const LoginPage = ({dispatch, emailSignInStart, signUpStart}) => {
+const LoginPage = ({ dispatch, emailSignInStart, signUpStart, isSigningIn, isSigningUp }) => {
   const INITIAL_STATE = {
     email: "",
     mobile: "",
@@ -24,11 +25,11 @@ const LoginPage = ({dispatch, emailSignInStart, signUpStart}) => {
   const [state, setState] = useState(INITIAL_STATE);
 
   const handleChange = (event) => {
-    setState({...state, [event.target.name]: event.target.value});
+    setState({ ...state, [event.target.name]: event.target.value });
   };
   const handleRegSubmit = (event) => {
     event.preventDefault();
-    const {email, password, mobile, name} = state;
+    const { email, password, mobile, name } = state;
     signUpStart({
       Email: email,
       Password: password,
@@ -39,7 +40,7 @@ const LoginPage = ({dispatch, emailSignInStart, signUpStart}) => {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    const {email, password} = state;
+    const { email, password } = state;
     emailSignInStart({
       username: email,
       password: password,
@@ -50,47 +51,51 @@ const LoginPage = ({dispatch, emailSignInStart, signUpStart}) => {
     <div className="landing-page">
       <div className="login-wrapper">
         <div className="lw-section">
-          <form
-            className={
-              "guest-button-wrapper " + (!state.isLogin ? "hidden" : "")
-            }
-            onSubmit={handleSubmit}
-          >
-            <img src={logo} alt="logo" className="landing-page-logo" />
-            <div className="form-field">
-              <label>Username / Email Address</label>
-              <input
-                onChange={(event) => handleChange(event)}
-                name="email"
-                type="email"
-                placeholder=""
-              />
-            </div>
-            <div className="form-field">
-              <label>Password</label>
-              <input
-                onChange={(event) => handleChange(event)}
-                name="password"
-                type="password"
-                placeholder=""
-              />
-            </div>
-            <button type="submit" className="signin-button guest-button">
-              &nbsp;Sign In
-            </button>
-            <p
-              className="change-mode"
-              onClick={() => setState({...state, isLogin: false})}
+          {
+            isSigningIn ? <Spinner /> : <form
+              className={
+                "guest-button-wrapper " + (!state.isLogin ? "hidden" : "")
+              }
+              onSubmit={handleSubmit}
             >
-              Don't have an account?
+              <img src={logo} alt="logo" className="landing-page-logo" />
+              <div className="form-field">
+                <label>Username / Email Address</label>
+                <input
+                  onChange={(event) => handleChange(event)}
+                  name="email"
+                  type="email"
+                  placeholder=""
+                />
+              </div>
+              <div className="form-field">
+                <label>Password</label>
+                <input
+                  onChange={(event) => handleChange(event)}
+                  name="password"
+                  type="password"
+                  placeholder=""
+                />
+              </div>
+              <button type="submit" className="signin-button guest-button">
+                &nbsp;Sign In
+            </button>
+              <p
+                className="change-mode"
+                onClick={() => setState({ ...state, isLogin: false })}
+              >
+                Don't have an account?
             </p>
-          </form>
-          <form
+            </form>
+          }
+          {
+            isSigningUp?<Spinner />:<form
             className={
               "guest-button-wrapper " + (state.isLogin ? "hidden" : "")
             }
             onSubmit={handleRegSubmit}
           >
+            {}
             <img src={logo} alt="logo" className="landing-page-logo" />
             <div className="form-field">
               <label>Full Name</label>
@@ -132,11 +137,12 @@ const LoginPage = ({dispatch, emailSignInStart, signUpStart}) => {
             </button>
             <p
               className="change-mode"
-              onClick={() => setState({...state, isLogin: true})}
+              onClick={() => setState({ ...state, isLogin: true })}
             >
               Already have an account?
             </p>
           </form>
+          }
 
           <div className="login-media">
             <div className="lm-image-wrapper">
@@ -153,9 +159,16 @@ const LoginPage = ({dispatch, emailSignInStart, signUpStart}) => {
     </div>
   );
 };
+const mapState = (state) => {
+  const { user } = state;
+  return {
+    isSigningIn: user.isSigningIn,
+    isSigningUp: user.isSigningUp
+  }
+}
 const mapDispatchToProps = (dispatch) => ({
   emailSignInStart: (emailAndPassword) =>
     dispatch(emailSignInStart(emailAndPassword)),
   signUpStart: (emailAndPassword) => dispatch(signUpStart(emailAndPassword)),
 });
-export default connect(null, mapDispatchToProps)(LoginPage);
+export default connect(mapState, mapDispatchToProps)(LoginPage);

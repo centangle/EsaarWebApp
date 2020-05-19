@@ -34,6 +34,7 @@ import {
     fetchOrgOfficesStart,
     fetchOrgAttachmentsSuccess,
     fetchOrgRegionsSuccess,
+    fetchOrgRegionsStart,
     requestSuccess, requestFailure,
     addOrgItemSuccess, addOrgItemFailure,
     removeOrgItemSuccess, removeOrgItemFailure,
@@ -271,7 +272,8 @@ export function* addOrganizationAsync(action) {
             yield put(addOrganizationFailure(organization));
         } else {
             yield put(addOrganizationSuccess({ organization }));
-            yield put(fetchOrganizationStart(params));
+            yield redirect('/organizations/'+organization);
+            //yield put(fetchOrganizationStart(params));
         }
     } catch (error) {
         yield put(addOrganizationFailure(error));
@@ -413,6 +415,7 @@ export function* addOrgRegionAsyn(action) {
             yield put(addOrgRegionFailure(organization));
         } else {
             yield put(addOrgRegionSuccess({ organization }));
+            yield put(fetchOrgRegionsStart({ payload:action.payload.organizationId,params }));
         }
     } catch (error) {
         yield put(addOrgRegionFailure(error));

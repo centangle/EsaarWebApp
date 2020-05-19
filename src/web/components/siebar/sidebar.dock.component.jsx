@@ -11,8 +11,10 @@ import settingsIcon from '../../../assets/settings.png';
 import graphIcon from '../../../assets/graph.png';
 import plugIcon from '../../../assets/plug.png';
 import activeBgIcon from '../../../assets/active-btn-bg.png';
+import campaignIcon from '../../../assets/campaigns-alt.png';
 import { useHistory } from "react-router-dom";
-const DockSider = () => {
+import { connect } from 'react-redux';
+const DockSider = ({roles}) => {
     let history = useHistory();
     return (
         <div className='page-left sidebar'>
@@ -30,7 +32,7 @@ const DockSider = () => {
                         <Link to='/organizations'><img src={organizationIcon} alt='Organization Icon' /></Link>
                     </li>
                     <li className={history.location.pathname === '/campaigns' ? 'active' : ''}>
-                        <Link to='/campaigns'><img src={organizationIcon} alt='Camapaign Icon' /></Link>
+                        <Link to='/campaigns'><img src={campaignIcon} alt='Camapaign Icon' /></Link>
                     </li>
                     <li className={history.location.pathname === '/requests' ? 'active' : ''}>
                         <Link to='/requests'><img src={giveIcon} alt='Give Icon' /></Link>
@@ -41,18 +43,24 @@ const DockSider = () => {
                     <li className={history.location.pathname === '/volunteer' ? 'active' : ''}>
                         <Link to='/volunteers'><img src={volunteerIcon} alt='Give Icon' /></Link>
                     </li>
-                    <li className={history.location.pathname === '/settings' ? 'active' : ''}>
+                    {
+                        roles==='Admin'?<li className={history.location.pathname === '/settings' ? 'active' : ''}>
                         <Link to='/settings'><img src={settingsIcon} alt='Give Icon' /></Link>
-                    </li>
+                    </li>:null
+                    }
+                    
                     <li className={history.location.pathname === '/graph' ? 'active' : ''}>
                         <Link to='/reports'><img src={graphIcon} alt='Give Icon' /></Link>
-                    </li>
-                    <li className={history.location.pathname === '/plugin' ? 'active' : ''}>
-                        <Link to='/plugin'><img src={plugIcon} alt='Give Icon' /></Link>
                     </li>
                 </ul>
             </nav>
         </div>
     )
 }
-export default DockSider;
+const mapState = state =>{
+    const {user} = state;
+    return{
+        roles:user.currentUser.roles
+    }
+}
+export default connect(mapState)(DockSider);

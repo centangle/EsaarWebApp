@@ -96,6 +96,8 @@ const organization = (state = INITIAL_STATE, action) => {
     case 'ADD_ORG_ITEMS_FAILURE':
     case 'ADD_ORG_PACKAGE_FAILURE':
     case 'ADD_ORGANIZATION_FAILURE':
+      if (action.payload.result && action.payload.result.ExceptionMessage)
+        toaster.error("Notification Message", action.payload.result.ExceptionMessage, { timeOut: 50000 })
       return {
         ...state,
         form: { ...state.form, error: action.payload, modal: true }
