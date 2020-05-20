@@ -122,10 +122,10 @@ const OrganizationDetail = ({ organization,match, dispatch, fetchOrgItemsStart,f
                             <AttachmentsOverview organization={organization} type='Volunteer' />
                         </Route>
                         <Route exact path='/organizations/:id/donate'>
-                            <DonateOverview organization={organization} type='Donate' />
+                            <DonateOverview organization={organization} type='organization' />
                         </Route>
                         <Route exact path='/organizations/:id/get-donation'>
-                            <DonateOverview organization={organization} type='Donate' />
+                            <DonateOverview organization={organization} type='organization' />
                         </Route>
                         <Route exact path='/organizations/:id/tasks'>
                             <TasksOverview organization={organization} type='Task' />
@@ -146,7 +146,7 @@ const OrganizationDetail = ({ organization,match, dispatch, fetchOrgItemsStart,f
                                 <OrganizationSidebar organization={organization} />
                             </Route>
                             <Route exact path={`/organizations/:id/${(slug==='donate' || slug==='get-donation')?slug:'none'}`}>
-                                <DonateSideBar organization={organization} match={match}  />
+                                <DonateSideBar organization={organization} type="organization" match={match}  />
                             </Route>
                         </Switch>
                     </ListItems>

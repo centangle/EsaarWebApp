@@ -65,16 +65,17 @@ export function* fetchOrganizationAsync(action) {
         if(user.longitude)
         q += "&longitude=" + user.longitude;
     }
+    let searching = [];
     if (action.params && action.params.filters) {
         action.params.filters.forEach(filter => {
             if (filter.ByRegion) {
                 let count = 0;
                 filter.ByRegion.forEach(f => {
-                    
                     q += "&regions["+count+"].regionLevel=" + f.RegionLevel;
                     q += "&regions["+count+"].regionId=" + f.Id;
                     q +="&searchType=ByRegion";
                     count++;
+                    searching.push(['ByRegion']);
                 })
             }
             if (filter.Item) {
@@ -90,9 +91,13 @@ export function* fetchOrganizationAsync(action) {
                     q += "&radiusType=" + f.radiusType;
                     q += "&radius=" + f.radius;
                     q +="&searchType=InRadius";
+                    searching.push(['InRadius']);
                 })
             }
-        })
+        });
+        if(searching.length<1){
+            q+="&searchType=InMyRegion";
+        }
     } else {
         if (action.params.searchType) {
             q += "&searchType=" + action.params.searchType;

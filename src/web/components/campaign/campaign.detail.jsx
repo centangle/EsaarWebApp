@@ -120,10 +120,10 @@ const CampaignDetail = ({ campaign,match, dispatch, fetchCampaignItemsStart,fetc
                             <AttachmentsOverview campaign={campaign} type='Volunteer' />
                         </Route>
                         <Route exact path='/campaigns/:id/donate'>
-                            <DonateOverview campaign={campaign} type='Donate' />
+                            <DonateOverview campaign={campaign} type='campaign' />
                         </Route>
                         <Route exact path='/campaigns/:id/get-donation'>
-                            <DonateOverview campaign={campaign} type='Donate' />
+                            <DonateOverview campaign={campaign} type='campaign' />
                         </Route>
                         </Suspense>
                     </Switch>
@@ -138,7 +138,7 @@ const CampaignDetail = ({ campaign,match, dispatch, fetchCampaignItemsStart,fetc
                                 <CampaignSidebar campaign={campaign} />
                             </Route>
                             <Route exact path={`/campaigns/:id/${(slug==='donate' || slug==='get-donation')?slug:'none'}`}>
-                                <DonateSideBar campaign={campaign} match={match}  />
+                                <DonateSideBar campaign={campaign} type="campaign" match={match}  />
                             </Route>
                         </Switch>
                     </ListItems>

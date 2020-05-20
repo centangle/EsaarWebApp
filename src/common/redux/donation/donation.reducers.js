@@ -1,5 +1,6 @@
 import { donationTypes } from './donation.types';
 import { addItemToCart } from './donation.actions';
+const toaster = require('../../../web/components/toaster/index');
 const INITIAL_STATE = {
   sider: false,
   cartItems: {},
@@ -49,6 +50,12 @@ const donation = (state = INITIAL_STATE, action) => {
           obj[item] = item
           return obj
         }, {})
+      }
+    case 'ADD_DONATION_SUCCESS':
+      toaster.success("Notification Message", "Your request has been successfully submited.", { timeOut: 500000 })
+      return{
+        ...state,
+        cartItems:{}
       }
     case 'FETCH_DONATION_DETAILS_SUCCESS':
       return {

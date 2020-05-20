@@ -36,11 +36,20 @@ const Donate = ({ organization, items, dispatch, activePage, totalItemsCount, pa
         </DonationHolder>
     )
 }
-const mapState = (state, { match }) => {
-    const { organization } = state;
+const mapState = (state, { match,type }) => {
+    const { organization,campaign } = state;
+    console.log(type);
+    let items = [];
+    if(type==='campaign'){
+        items = campaign.items;
+    }
+    if(type==='organization'){
+        items = organization.items;
+    }
+    
     return {
         //organization: organization.organizations[match.params.id],
-        items: organization.items,
+        items,
         activePage: organization && organization.activePage ? organization.activePage : 0,
         totalItemsCount: organization && organization.totalItemsCount ? organization.totalItemsCount : 0,
         itemsCountPerPage: organization && organization.itemsCountPerPage ? organization.itemsCountPerPage : 0,

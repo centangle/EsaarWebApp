@@ -1,44 +1,59 @@
-import React, {useState} from "react";
-import {connect} from "react-redux";
-import {CartHolder} from "./donate.styles";
-const DonateCart = ({items, dispatch, campaign, match}) => {
-  const [state, setState] = useState({note: "", uom: ""});
+import React, { useState } from "react";
+import { connect } from "react-redux";
+import { CartHolder } from "./donate.styles";
+const DonateCart = ({ items, dispatch, campaign, organization, type, match }) => {
+  const [state, setState] = useState({ note: "", uom: "" });
   const handleChange = (item, quantity) => {
     dispatch({
       type: "QUANTITY_CHANGED",
-      payload: {...item, quantity: parseFloat(quantity)},
+      payload: { ...item, quantity: parseFloat(quantity) },
     });
   };
   const handleNote = (e) => {
-    setState({...state, note: e.target.value});
+    setState({ ...state, note: e.target.value });
   };
   const handleSubmit = () => {
     const mappedItems = items.map((item) => {
       return {
-        Item: {...item},
+        Item: { ...item },
         Quantity: item.quantity,
-        QuantityUOM: state.uom ? state.uom : item.ItemUOMs[0],
+        QuantityUOM: state.uom ? {Id:state.uom} : item.ItemUOMs[0],
       };
     });
-    let type = "Donor";
+    let donationType = "Donor";
     if (match.params.slug === "get-donation") {
-      type = "Beneficiary";
+      donationType = "Beneficiary";
     }
-    dispatch({
-      type: "ADD_DONATION_START",
-      payload: {
-        Items: mappedItems,
-        Note: state.note,
-        CampaignId: campaign.Id,
-        Type: type,
-      },
-    });
+    if (type === 'campaign') {
+      dispatch({
+        type: "ADD_DONATION_START",
+        payload: {
+          Items: mappedItems,
+          Note: state.note,
+          Campaign: {Id:campaign.Id},
+          OrganizationId:campaign.Organization.Id,
+          Type: donationType,
+        },
+      });
+    }
+    if (type === 'organization') {
+      dispatch({
+        type: "ADD_DONATION_START",
+        payload: {
+          Items: mappedItems,
+          Note: state.note,
+          OrganizationId: organization.Id,
+          Type: donationType,
+        },
+      });
+    }
+
   };
   const handleDrop = (e) => {
-    setState({...state, uom: e.target.value});
+    setState({ ...state, uom: e.target.value });
   };
   const handleRemove = (item) => {
-    dispatch({type: "REMOVE_DONATION_ITEM", payload: item});
+    dispatch({ type: "REMOVE_DONATION_ITEM", payload: item });
   };
   return (
     <CartHolder>
@@ -99,7 +114,7 @@ const DonateCart = ({items, dispatch, campaign, match}) => {
   );
 };
 const mapState = (state) => {
-  const {donation} = state;
+  const { donation } = state;
   return {
     items: Object.keys(donation.cartItems).map(
       (key) => donation.cartItems[key]
