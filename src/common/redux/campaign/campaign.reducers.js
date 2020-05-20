@@ -171,15 +171,15 @@ const campaign = (state = INITIAL_STATE, action) => {
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
         regionsLoading: false,
       }
-    case 'REQUEST_START':
+    case 'CAMPAIGN_REQUEST_START':
       return {
         ...state,
         volunteerJoining: action.payload.Type === "Volunteer",
         moderatorJoining: action.payload.Type === "Moderator",
         memberJoining: action.payload.Type === 'Member'
       }
-    case 'REQUEST_SUCCESS':
-    case 'REQUEST_FAILURE':
+    case 'CAMPAIGN_REQUEST_SUCCESS':
+    case 'CAMPAIGN_REQUEST_FAILURE':
       if (action.payload.result && action.payload.result.ExceptionMessage)
         toaster.error("Notification Message", action.payload.result.ExceptionMessage, { timeOut: 50000 })
       //alert(action.payload.result.ExceptionMessage);

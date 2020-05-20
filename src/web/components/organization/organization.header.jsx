@@ -2,11 +2,6 @@ import React, { useState } from "react";
 import CustomButton from "../custom-button/custom-button.component";
 import Dropdown from "../dropdown/dropdown.component";
 import {
-  White70,
-  White30,
-  FlexFull,
-  ActionRow,
-  ListItems,
   Row,
   FormHolder,
 } from "./organization.styles";
@@ -40,6 +35,7 @@ const OrganizationHeader = ({ organization, dispatch, regions, form }) => {
     history.push("/organizations/" + organization.Id + "/" + slug);
   };
   const openModal = (type) => {
+    dispatch({ type: 'OPEN_MODAL', payload: 'VOLUNTEER' });
     setState({
       ...state,
       modal: true,
@@ -47,6 +43,7 @@ const OrganizationHeader = ({ organization, dispatch, regions, form }) => {
     });
   };
   const closeModal = () => {
+    dispatch({ type: 'CLOSE_MODAL' });
     setState({
       ...state,
       modal: false,
@@ -89,7 +86,7 @@ const OrganizationHeader = ({ organization, dispatch, regions, form }) => {
       <div className="org-logo">
         {organization.ImageUrl ? <img src={baseUrl + organization.ImageUrl} alt="logo" /> : <img src={noImage} alt="logo" />}
       </div>
-      {state.modal ? (
+      {form.volunteerModal ? (
         <Modal closeModal={closeModal}>
           <FormHolder>
             <div>

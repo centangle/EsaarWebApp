@@ -750,7 +750,7 @@ export function* fetchCampaign() {
     yield takeLatest(campaignTypes.FETCH_CAMPAIGN_START, fetchCampaignAsync);
 }
 export function* campaignRequest() {
-    yield takeLatest(campaignTypes.REQUEST_START, campaignRequestAsync)
+    yield takeLatest(campaignTypes.CAMPAIGN_REQUEST_START, campaignRequestAsync)
 }
 
 export function* fetchCampaignItems() {

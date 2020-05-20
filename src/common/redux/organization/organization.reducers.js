@@ -182,6 +182,11 @@ const organization = (state = INITIAL_STATE, action) => {
         memberJoining: action.payload.Type === 'Member'
       }
     case 'REQUEST_SUCCESS':
+      toaster.success("Notification Message", "Your request has been sent.", { timeOut: 50000 })
+      return{
+        ...state,
+        form: { modal: false,orgModal:false }
+      }
     case 'REQUEST_FAILURE':
       if (action.payload.result && action.payload.result.ExceptionMessage)
         toaster.error("Notification Message", action.payload.result.ExceptionMessage, { timeOut: 50000 })
@@ -190,8 +195,7 @@ const organization = (state = INITIAL_STATE, action) => {
         ...state,
         volunteerJoining: false,
         moderatorJoining: false,
-        memberJoining: false,
-        form: { modal: false }
+        memberJoining: false
       }
     case 'FETCH_ORG_REQUESTS_START':
       return {
@@ -267,6 +271,7 @@ const organization = (state = INITIAL_STATE, action) => {
           ...state.form,
           modal: action.payload !== 'ORG' ? true : false,
           orgModal: action.payload === 'ORG' ? true : false,
+          volunteerModal:action.payload === 'VOLUNTEER' ? true : false,
         }
       }
     case 'CLOSE_MODAL':
@@ -275,7 +280,8 @@ const organization = (state = INITIAL_STATE, action) => {
         form: {
           ...state.form,
           modal: false,
-          orgModal: false
+          orgModal: false,
+          volunteerModal:false
         }
       }
     case 'FETCH_ORG_CATEGORIES_SUCCESS':

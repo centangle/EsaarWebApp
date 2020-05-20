@@ -50,6 +50,7 @@ const Organzation = ({
     });
   };
   const closeVolunteer = () => {
+    dispatch({type:'CLOSE_MODAL'});
     setState({ ...state, volunteer: false });
   };
   const handleJoin = (type, regions = []) => {
@@ -78,6 +79,7 @@ const Organzation = ({
     );
   };
   const openVolunteer = (item) => {
+    dispatch({type:'OPEN_MODAL',payload:'VOLUNTEER'});
     setState({ ...state, id: item.Id, volunteer: true });
   };
   const buttonsWithActions = [
@@ -86,7 +88,7 @@ const Organzation = ({
   ];
   return (
     <div className="page-right">
-      {state.volunteer ? (
+      {form.volunteerModal ? (
         <Modal closeModal={closeVolunteer}>
           <FormHolder>
             <div>

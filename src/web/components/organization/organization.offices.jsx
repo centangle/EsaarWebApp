@@ -9,13 +9,13 @@ import UploadedComponent from '../uploader/uploaded.component';
 import Pagination from "react-js-pagination";
 import { fetchUomStart } from '../../../common/redux/uom/uom.actions';
 
-const OrganizationOffices = ({ offices, organizations, dispatch, organization, fetchUomStart,form,activePage,totalItemsCount,pageRangeDisplayed,itemsCountPerPage }) => {
+const OrganizationOffices = ({ offices, organizations,latitude,longitude, dispatch, organization, fetchUomStart,form,activePage,totalItemsCount,pageRangeDisplayed,itemsCountPerPage }) => {
   useEffect(() => {
     fetchUomStart();
   }, [fetchUomStart]);
   const [state, setState] = useState({
     addedItems: {},
-    modal: false, Name: '', NativeName: '', Description: ''
+    modal: false, Name: '',Address:'',AddressLatLong:latitude+','+longitude, NativeName: '', Description: ''
   });
   let history = useHistory();
 
@@ -23,6 +23,8 @@ const OrganizationOffices = ({ offices, organizations, dispatch, organization, f
     return {
       Name: request.Name,
       NativeName:request.NativeName,
+      Address:request.Address,
+      AddressLatLong:request.AddressLatLong,
       Description:request.Description
     }
   });
@@ -60,7 +62,7 @@ const OrganizationOffices = ({ offices, organizations, dispatch, organization, f
     })
   }
 
-  const { Name, NativeName, Description, ImageUrl, ImageInBase64 } = state;
+  const { Name, NativeName,Address,AddressLatLong, Description, ImageUrl, ImageInBase64 } = state;
   const handlePageChange = (page) =>{
     dispatch({
       type:'FETCH_ORG_OFFICES_START',payload:organization.Id,
@@ -85,6 +87,8 @@ const OrganizationOffices = ({ offices, organizations, dispatch, organization, f
               <div className='input-holder'>
                 <input placeholder='Name' type='text' onChange={handleChange} name="Name" value={Name} />
                 <input placeholder='Native Name' type='text' onChange={handleChange} name="NativeName" value={NativeName} />
+                <input placeholder='Latitude,Longitude' type='text' onChange={handleChange} name="AddressLatLong" value={AddressLatLong} />
+                <textarea placeholder='Address' type='text' onChange={handleChange} name="Address" value={Address}></textarea>
                 <textarea placeholder='Description' type='text' onChange={handleChange} name="Description" value={Description}></textarea>
                 <button onClick={handleSubmit}>Add Office</button>
               </div>
@@ -110,8 +114,10 @@ const OrganizationOffices = ({ offices, organizations, dispatch, organization, f
   )
 }
 const mapState = (state) => {
-  const { organization } = state;
+  const { organization,user } = state;
+  const {latitude,longitude} = user;
   return {
+    latitude,longitude,
     offices: organization.offices,
     organizations: organization.organizations,
     organization: organization.current,
