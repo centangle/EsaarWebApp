@@ -11,6 +11,7 @@ const INITIAL_STATE = {
   itemSaving: false,
   current: {},
   fetching:false,
+  selectedFilters: { Item: [] }
 };
 let newItems = [];
 const item = (state = INITIAL_STATE, action) => {

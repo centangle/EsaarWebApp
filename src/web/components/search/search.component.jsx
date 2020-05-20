@@ -179,7 +179,7 @@ const Search = ({handleSearch, type, dispatch, filter, selectedFilters}) => {
 };
 const mapState = (state, ownProps) => {
   const {type} = ownProps;
-  const {setting, organization, donation, request,campaign} = state;
+  const {setting, organization, donation, request,campaign,item} = state;
   let selectedFilters = organization.selectedFilters;
   if (type === "doantion") {
     selectedFilters = donation.selectedFilters;
@@ -189,6 +189,9 @@ const mapState = (state, ownProps) => {
   }
   if (type === "campaign") {
     selectedFilters = campaign.selectedFilters;
+  }
+  if(type==='organization-items'){
+    selectedFilters = item.selectedFilters;
   }
   return {
     filter: setting.filter,

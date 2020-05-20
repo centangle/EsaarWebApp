@@ -89,6 +89,7 @@ const organization = (state = INITIAL_STATE, action) => {
         logo: null,
         form: { modal: false, ...action.payload },
       }
+    case 'ADD_ORG_REGION_FAILURE':
     case 'ADD_ORG_ATTACHMENT_FAILURE':
     case 'ADD_ORG_OFFICE_FAILURE':
     case 'ADD_ORG_ACCOUNT_FAILURE':
@@ -97,7 +98,7 @@ const organization = (state = INITIAL_STATE, action) => {
     case 'ADD_ORG_PACKAGE_FAILURE':
     case 'ADD_ORGANIZATION_FAILURE':
       if (action.payload.result && action.payload.result.ExceptionMessage)
-        toaster.error("Notification Message", action.payload.result.ExceptionMessage, { timeOut: 50000 })
+        toaster.error("Notification Message", action.payload.result.ExceptionMessage, { timeOut: 500000 })
       return {
         ...state,
         form: { ...state.form, error: action.payload, modal: true }

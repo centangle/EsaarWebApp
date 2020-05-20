@@ -64,7 +64,7 @@ const CampaignAttachments = ({ campaign, attachments, campaigns, dispatch, type,
         <button onClick={openModal}>Add New</button>
       </TitleWithAction>
       {
-        form.modal ? <Modal closeModal={closeModal} >
+        form.attachmentModal ? <Modal closeModal={closeModal} >
           <UploaderComponent title="Select Files" />
           {
             files.map(f => {

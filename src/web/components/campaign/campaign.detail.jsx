@@ -58,7 +58,7 @@ const CampaignDetail = ({ campaign,match, dispatch, fetchCampaignItemsStart,fetc
             case 'items':
                 //fetchCampaignRequestsStart({type:'FETCH_PERIFERAL_ITEMS_START',payload:{id},params});
                 dispatch({type:'FETCH_ORG_ITEMS_START',payload:id,params});
-                fetchCampaignRequestsStart({type:'FETCH_UOM_START',id:true,params});
+                fetchCampaignRequestsStart({type:'FETCH_UOM_START',payload:true,params});
                 return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ITEMS_START',payload:{id},params});
             case 'attachments':
                 return fetchCampaignRequestsStart({type:'FETCH_CAMPAIGN_ATTACHMENTS_START',payload:{id},params});

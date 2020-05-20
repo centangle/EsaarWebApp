@@ -73,7 +73,7 @@ const campaign = (state = INITIAL_STATE, action) => {
     case 'ADD_CAMPAIGN_START':
       return {
         ...state,
-        form: { ...action.payload, modal: true }
+        form: { ...state.form,...action.payload, modal: true }
       }
     case 'ADD_CAMPAIGN_ATTACHMENT_SUCCESS':
     case 'ADD_CAMPAIGN_OFFICE_SUCCESS':
@@ -95,6 +95,8 @@ const campaign = (state = INITIAL_STATE, action) => {
     case 'ADD_CAMPAIGN_ITEMS_FAILURE':
     case 'ADD_CAMPAIGN_PACKAGE_FAILURE':
     case 'ADD_CAMPAIGN_FAILURE':
+      if (action.payload.result && action.payload.result.ExceptionMessage)
+        toaster.error("Notification Message", action.payload.result.ExceptionMessage, { timeOut: 500000 })
       return {
         ...state,
         form: { ...state.form, error: action.payload, modal: true }
@@ -265,7 +267,8 @@ const campaign = (state = INITIAL_STATE, action) => {
           campaignModal: action.payload==='CAMPAIGN'?true:false,
           orgModal:action.payload==='ORG'?true:false,
           regionModal:action.payload==='CAMPAIGN_REGION'?true:false,
-          campaignItemModal:action.payload==='CAMPAIGN_ITEMS_MODAL'?true:false
+          campaignItemModal:action.payload==='CAMPAIGN_ITEMS_MODAL'?true:false,
+          attachmentModal:action.payload==='ATTACHMENT'?true:false
         }
       }
     case 'CLOSE_MODAL':
@@ -277,7 +280,8 @@ const campaign = (state = INITIAL_STATE, action) => {
           orgModal:false,
           regionModal:false,
           campaignItemModal:false,
-          campaignModal:false
+          campaignModal:false,
+          attachmentModal:false
         }
       }
     case 'FETCH_CAMPAIGN_CATEGORIES_SUCCESS':

@@ -1,4 +1,9 @@
 import styled from "styled-components";
+export const PreSearch = styled.div`
+  label{
+    padding:10px;
+  }
+`;
 export const White70 = styled.div`
   width: 75%;
   display: block;

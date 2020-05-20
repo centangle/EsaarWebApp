@@ -15,32 +15,12 @@ export function* addUserStart() {
 }
 
 export function* signInAsync(action) {
-  const response = yield fetch(url + "/token", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json" },
-    ////withCredentials: true,
-    body: formEncode(action.payload)
-    //credentials: "include"
-  }).then(async (response) => {
-      if (response.status >= 205) {
-        const result = await response.json();
-        return { result, error: true };
-      }
-      return response.json();
-    });
-  if (response.error) {
-    yield put(signInFailure(response));
-  } else {
-    yield put(signInSuccess(response));
-  }
-}
-export function* refreshTokenAsync(action) {
-  if (action.payload) {
-    const response = yield fetch(url + "/refresh", {
+  try {
+    const response = yield fetch(url + "/token", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json" },
       ////withCredentials: true,
-      body: formEncode({ token: action.payload.access_token, refreshToken: action.payload.refresh_token })
+      body: formEncode(action.payload)
       //credentials: "include"
     }).then(async (response) => {
       if (response.status >= 205) {
@@ -54,7 +34,36 @@ export function* refreshTokenAsync(action) {
     } else {
       yield put(signInSuccess(response));
     }
+  } catch (error) {
+    yield put(signInFailure({result:"Could not signin this time"}));
   }
+}
+export function* refreshTokenAsync(action) {
+  try {
+    if (action.payload) {
+      const response = yield fetch(url + "/refresh", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json" },
+        ////withCredentials: true,
+        body: formEncode({ token: action.payload.access_token, refreshToken: action.payload.refresh_token })
+        //credentials: "include"
+      }).then(async (response) => {
+        if (response.status >= 205) {
+          const result = await response.json();
+          return { result, error: true };
+        }
+        return response.json();
+      });
+      if (response.error) {
+        yield put(signInFailure(response));
+      } else {
+        yield put(signInSuccess(response));
+      }
+    }
+  } catch (error) {
+    yield put(signInFailure({result:"Can not signin this time"}));
+  }
+
 }
 export function* enterWithEmailStart() {
   yield takeEvery(
@@ -89,9 +98,9 @@ export function* checkSessionAsync(action) {
       now.getSeconds(),
       now.getMilliseconds(),
       now.getTimezoneOffset() * 60000
-      );
+    );
     let userTime = user ? new Date(user.expires_in) : null;
-    if(userTime){
+    if (userTime) {
       userTime = new Date(
         userTime.getFullYear(),
         userTime.getMonth(),
@@ -103,7 +112,7 @@ export function* checkSessionAsync(action) {
         userTime.getTimezoneOffset() * 60000
       );
     }
-    console.log(userTime,'-',utc,userTime<=utc);
+    console.log(userTime, '-', utc, userTime <= utc);
     try {
       if (user.access_token && (userTime <= utc || user.expires_in === undefined)) {
         yield put(refreshLogin(user))

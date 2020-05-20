@@ -553,13 +553,16 @@ export function* orgRequestAsync(action) {
 export function* fetchOrgItemsAsync(action) {
     //GET /api/OrganizationItem/GetPaginated
     const currentUser = yield select(selectCurrentUser);
-    const q = "organizationId=" + action.payload
+    let q = "organizationId=" + action.payload
         + "&recordsPerPage=" + action.params.itemsCountPerPage
         + "&currentPage=" + action.params.activePage
         + "&orderDir=Asc"
         + "&itemType=General"
         + "&calculateTotal=true"
         + "&disablePagination=false";
+    if(action.params.itemName){
+        q+= "&itemName="+action.params.itemName;
+    }
     //const q = "organizationId=" + action.payload + "&itemType=General&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
     const response = yield fetch(url + "/api/OrganizationItem/GetPaginated?" + q, {
         method: "GET",
