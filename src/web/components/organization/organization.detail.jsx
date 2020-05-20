@@ -14,6 +14,8 @@ import OfficesOverview from './offices.overview';
 import AttachmentsOverview from './attachments.overview';
 import AccountsOverview from './accounts.overview';
 import RegionsOverview from './regions.overview';
+import TasksOverview from './tasks.overview';
+import StatsOverview from './stats.overview';
 
 import { fetchOrgItemsStart,fetchOrgRequestsStart,fetchOrgCampaignsStart } from '../../../common/redux/organization/organization.actions';
 
@@ -124,6 +126,12 @@ const OrganizationDetail = ({ organization,match, dispatch, fetchOrgItemsStart,f
                         </Route>
                         <Route exact path='/organizations/:id/get-donation'>
                             <DonateOverview organization={organization} type='Donate' />
+                        </Route>
+                        <Route exact path='/organizations/:id/tasks'>
+                            <TasksOverview organization={organization} type='Task' />
+                        </Route>
+                        <Route exact path='/organizations/:id/stats'>
+                            <StatsOverview organization={organization} type='Stats' />
                         </Route>
                         </Suspense>
                     </Switch>

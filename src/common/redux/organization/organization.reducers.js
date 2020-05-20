@@ -20,6 +20,8 @@ const INITIAL_STATE = {
   membersLoading: false,
   officesLoading: false,
   accountsLoading: false,
+  tasksLoading:false,
+  statsLoading:false,
   attachmentsLoading: false,
   volunteerJoining: false,
   moderatorJoining: false,
@@ -27,7 +29,7 @@ const INITIAL_STATE = {
   regionsLoading: false,
   logo: null,
   form: {},
-  selectedFilters: { Item: [] }
+  selectedFilters: { Item: [] },
 };
 
 const organization = (state = INITIAL_STATE, action) => {

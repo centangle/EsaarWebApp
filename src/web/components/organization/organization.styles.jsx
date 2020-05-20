@@ -4,6 +4,11 @@ export const PreSearch = styled.div`
     padding:10px;
   }
 `;
+export const CommingSoon = styled.div`
+    margin-top: 3%;
+    background: #f6faff;
+    padding: 10px;
+`
 export const White70 = styled.div`
   width: 75%;
   display: block;
