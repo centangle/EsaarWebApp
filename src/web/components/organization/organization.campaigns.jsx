@@ -10,6 +10,8 @@ import { Link } from 'react-router-dom';
 import { fetchUomStart } from '../../../common/redux/uom/uom.actions';
 import Pagination from "react-js-pagination";
 import Select from 'react-select';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const OrganizationCampaigns = ({ events, campaigns, organizations, dispatch, organization, fetchUomStart, form, activePage, totalItemsCount, pageRangeDisplayed, itemsCountPerPage }) => {
   useEffect(() => {
@@ -83,7 +85,7 @@ const OrganizationCampaigns = ({ events, campaigns, organizations, dispatch, org
   const handleUom = (item) => {
     setState({ ...state, DefaultUOM: item });
   }
-  const { Name, NativeName,Event, StartDate, EndDate, Worth, Description, DefaultUOM, ImageUrl, ImageInBase64 } = state;
+  const { Name, NativeName, Event, StartDate, EndDate, Worth, Description, DefaultUOM, ImageUrl, ImageInBase64 } = state;
   const handleAdd = (input) => {
     setState({
       ...state,
@@ -109,10 +111,14 @@ const OrganizationCampaigns = ({ events, campaigns, organizations, dispatch, org
     })
   }
   const handleDrop = (item) => {
-    console.log(Event);
     setState({ ...state, Event: item });
   }
+  const handleDateChange=(selected)=>{
+    const {name,value} = selected;
+    setState({...state,[name]:value});
+  }
   const mappedEvents = Object.keys(events).map(key => { return { value: events[key].Id, label: events[key].Name } });
+
   return (
     <>
       <TitleWithAction>
@@ -133,8 +139,24 @@ const OrganizationCampaigns = ({ events, campaigns, organizations, dispatch, org
                 <input placeholder='Native Name' type='text' onChange={handleChange} name="NativeName" value={NativeName} />
                 <Select value={Event} onChange={(item) => handleDrop(item)} options={mappedEvents} className='dropdown' placeholder="Event..." />
                 <textarea placeholder='Description' type='text' onChange={handleChange} name="Description" value={Description}></textarea>
-                <input placeholder='Start Date' type='text' onChange={handleChange} name="StartDate" value={StartDate} />
-                <input placeholder='End Date' type='text' onChange={handleChange} name="EndDate" value={EndDate} />
+                <DatePicker
+                  name="StartDate"
+                  showTimeSelect
+                  dateFormat="Pp"
+                  selected={StartDate}
+                  onSelect={(date)=>handleDateChange({name:'StartDate',value:date})} //when day is clicked
+                  onChange={(date)=>handleDateChange({name:'StartDate',value:date})} //only when value has changed
+                />
+                <DatePicker
+                  name="EndDate"
+                  showTimeSelect
+                  dateFormat="Pp"
+                  selected={EndDate}
+                  onSelect={(date)=>handleDateChange({name:'EndDate',value:date})} //when day is clicked
+                  onChange={(date)=>handleDateChange({name:'EndDate',value:date})} //only when value has changed
+                />
+                {/* <input placeholder='Start Date' type='text' onChange={handleChange} name="StartDate" value={StartDate} /> */}
+                {/* {<input placeholder='End Date' type='text' onChange={handleChange} name="EndDate" value={EndDate} />} */}
                 <button onClick={handleSubmit}>Add Campaign</button>
               </div>
             </div>

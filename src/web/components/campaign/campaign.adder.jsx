@@ -7,6 +7,9 @@ import UploadedComponent from '../uploader/uploaded.component';
 
 import { FormHolder } from './campaign.styles';
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 const CAMPAIGNaniztionAdder = ({ events, dispatch, logo, current }) => {
     const [state, setState] = useState({
         Name: current && current.Name ? current.Name : '',
@@ -47,8 +50,12 @@ const CAMPAIGNaniztionAdder = ({ events, dispatch, logo, current }) => {
         setState({ ...state, Event: item });
     }
     const mappedEvents = Object.keys(events).map(key => { return { value: events[key].Id, label: events[key].Name } });
-
+    const handleDateChange = (selected) => {
+        const { name, value } = selected;
+        setState({ ...state, [name]: value });
+    }
     const { Name, NativeName, Event, Description, StartDate, EndDate, ImageUrl, ImageInBase64 } = state;
+   console.log(new Date(StartDate));
     return (
         <FormHolder>
             <h2>{current ? 'Update' : 'Add'} your Campaign</h2>
@@ -62,8 +69,22 @@ const CAMPAIGNaniztionAdder = ({ events, dispatch, logo, current }) => {
                     <input placeholder='Native Name' type='text' onChange={handleChange} name="NativeName" value={NativeName} />
                     <Select value={Event} onChange={(item) => handleDrop(item)} options={mappedEvents} className='dropdown' placeholder="Event..." />
                     <textarea placeholder='Description' type='text' onChange={handleChange} name="Description" value={Description}></textarea>
-                    <input placeholder='Start Date' type='text' onChange={handleChange} name="StartDate" value={StartDate} />
-                    <input placeholder='End Date' type='text' onChange={handleChange} name="EndDate" value={EndDate} />
+                    <DatePicker
+                        name="StartDate"
+                        showTimeSelect
+                        dateFormat="Pp"
+                        selected={new Date(StartDate)}
+                        onSelect={(date) => handleDateChange({ name: 'StartDate', value: date })} //when day is clicked
+                        onChange={(date) => handleDateChange({ name: 'StartDate', value: date })} //only when value has changed
+                    />
+                    <DatePicker
+                        name="EndDate"
+                        showTimeSelect
+                        dateFormat="Pp"
+                        selected={new Date(EndDate)}
+                        onSelect={(date) => handleDateChange({ name: 'EndDate', value: date })} //when day is clicked
+                        onChange={(date) => handleDateChange({ name: 'EndDate', value: date })} //only when value has changed
+                    />
                     <button type='button' onClick={handleClick}>Save Campaign</button>
                 </div>
             </div>
