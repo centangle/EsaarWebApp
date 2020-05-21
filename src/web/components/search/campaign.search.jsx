@@ -1,10 +1,11 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./search.styles.scss";
 import RegionSelector from "../region/region.selector";
 import Modal from "../modal/modal.component";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import Select from "react-select";
-const CampaignSearch = ({handleCheck, regions, rootItems}) => {
+
+const CampaignSearch = ({ handleCheck, regions, rootItems }) => {
   const initState = {
     searchType: "InMyRegion",
     ByRegion: "",
@@ -13,15 +14,29 @@ const CampaignSearch = ({handleCheck, regions, rootItems}) => {
     modal: false,
   };
   const [state, setState] = useState(initState);
-  const handleChange = (event) => {
+  const handleChange = ({target}) => {
     let modal = false;
-    if (event.target.value === "ByRegion") {
+    if (target.value === "ByRegion") {
       modal = true;
     }
-    setState({...state, [event.target.name]: event.target.value, modal});
+    if (target.value === 'All' || target.value === 'InMyRegion') {
+      handleCheck({
+        Id: target.value,
+        Name: target.value,
+      }, "Filter", 0, true, true
+      );
+    }
+    if (target.name === 'ByMeOnly') {
+      handleCheck({
+        Id: target.name,
+        Name: "true",
+      }, target.name, 0, true, false
+      );
+    }
+    setState({ ...state, [target.name]: target.value, modal });
   };
   const handleClose = () => {
-    setState({...state, modal: false});
+    setState({ ...state, modal: false });
   };
   const handleFilter = () => {
     Object.keys(regions).forEach((key) => {
@@ -37,7 +52,7 @@ const CampaignSearch = ({handleCheck, regions, rootItems}) => {
         true
       );
     });
-    setState({...state, modal: false, ...initState});
+    setState({ ...state, modal: false, ...initState });
   };
   const handleSubmit = (from) => {
     handleCheck(
@@ -67,8 +82,8 @@ const CampaignSearch = ({handleCheck, regions, rootItems}) => {
   };
   const mappedOptions = rootItems.length
     ? rootItems.map((i) => {
-        return {value: i.Id, label: i.Name};
-      })
+      return { value: i.Id, label: i.Name };
+    })
     : [];
   return (
     <div className="search-input-holder">
@@ -87,6 +102,7 @@ const CampaignSearch = ({handleCheck, regions, rootItems}) => {
           <option value="InMyRegion">InMyRegion</option>
           <option value="InRadius">InRadius</option>
           <option value="ByRegion">ByRegion</option>
+          <option value="All">All Campaigns</option>
         </select>
         {state.searchType === "InRadius" ? (
           <span>
@@ -121,12 +137,16 @@ const CampaignSearch = ({handleCheck, regions, rootItems}) => {
           <button onClick={handleFilter}>Add Filter</button>
         </Modal>
       ) : null}
+      <label>
+        <input name="ByMeOnly" checked={state.MyItemsOnly} onChange={(event) => handleChange({ target: { name: event.target.name, value: event.target.checked } })} type='checkbox' />
+        Owned by me
+      </label>
     </div>
   );
 };
 const mapState = (state) => {
-  const {region} = state;
-  const {item} = state;
+  const { region } = state;
+  const { item } = state;
   return {
     regions: region.regions,
     rootItems: item.rootItems,

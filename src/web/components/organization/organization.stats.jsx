@@ -5,7 +5,7 @@ import {CommingSoon} from './organization.styles';
 const OrganizationStats = () =>{
     return(
         <CommingSoon>
-            <h1>comming soon...</h1>
+            <h1>coming soon...</h1>
         </CommingSoon>
     )
 }

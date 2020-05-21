@@ -116,7 +116,6 @@ const CampaignHeader = ({ campaign, dispatch, regions, form }) => {
           <Dropdown
             className="icon-drop-round"
             options={[
-              { value: "Moderator", content: "Request Moderation" },
               { value: "Edit", content: "Edit Campaign" },
             ]}
             onChange={(e) => handleChange(e)}

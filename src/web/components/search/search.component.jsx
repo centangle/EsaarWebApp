@@ -5,7 +5,7 @@ import filterIcon from "./../../../assets/filter.png";
 import {connect} from "react-redux";
 import OrganizationSearch from "./organization.search";
 import RequestSearch from "./request.search";
-import DonationSearch from "./request.search";
+import DonationSearch from "./donation.search";
 import CampaignSearch from "./campaign.search";
 const Filters = ({type, selectedFilters, handleCheck}) => {
   const filters = {
@@ -181,7 +181,8 @@ const mapState = (state, ownProps) => {
   const {type} = ownProps;
   const {setting, organization, donation, request,campaign,item} = state;
   let selectedFilters = organization.selectedFilters;
-  if (type === "doantion") {
+
+  if (type === "donation") {
     selectedFilters = donation.selectedFilters;
   }
   if (type === "request") {

@@ -87,12 +87,23 @@ export function* fetchOrganizationAsync(action) {
             }
             if (filter.InRadius) {
                 filter.InRadius.forEach(f => {
-                    console.log(f);
                     q += "&radiusType=" + f.radiusType;
                     q += "&radius=" + f.radius;
                     q +="&searchType=InRadius";
                     searching.push(['InRadius']);
                 })
+            }
+            if(filter.Filter){
+                filter.Filter.forEach(f=>{
+                    q +="&searchType="+f.Name;
+                })
+                
+            }
+            if(filter.ByMeOnly){
+                filter.ByMeOnly.forEach(f=>{
+                    q +="&fetchOwnedByMeOnly="+f.Name;
+                })
+                
             }
         });
         if(searching.length<1){

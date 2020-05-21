@@ -121,7 +121,7 @@ const OrganizationHeader = ({ organization, dispatch, regions, form }) => {
           <Dropdown
             className="icon-drop-round"
             options={[
-              { value: "Volunteer", content: "Join as Volunteer" },
+              { value: "Volunteer", content: "Volunteer" },
               { value: "Moderator", content: "Request Moderation" },
               { value: "Edit", content: "Edit Organization" },
             ]}

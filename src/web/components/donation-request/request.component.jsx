@@ -35,10 +35,11 @@ const Request = ({ data, dispatch, organizations,activePage,totalItemsCount,page
       params:{activePage:page,totalItemsCount,pageRangeDisplayed,itemsCountPerPage}
       })
   }
+
   return (
     <div className='page-right'>
       {/* <RequestAdder /> */}
-      <Search type='donation' filters={{location:['Lahore','Islamabad'],categories:['Education','Health']}} handleSearch={handleSearch} />
+      <Search type='donation' handleSearch={handleSearch} />
       <Tabular type='REQUEST' data={mappedData} />
       <Pagination
           activePage={activePage}

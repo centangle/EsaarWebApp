@@ -27,7 +27,7 @@ const DonationSearch = ({ handleCheck, regions }) => {
                 Id: 'timePeriod',
                 Name: 'from:' + event.target.value + 'to:' + state.endDate,
                 startDate: event.target.value,
-                endDate:state.endDate
+                endDate: state.endDate
             }, 'timePeriod', 0, true);
         }
         if (event.target.name === 'endDate') {
@@ -35,7 +35,7 @@ const DonationSearch = ({ handleCheck, regions }) => {
                 Id: 'timePeriod',
                 Name: 'from:' + state.startDate + 'to:' + event.target.value,
                 endDate: event.target.value,
-                startDate:state.startDate
+                startDate: state.startDate
             }, 'timePeriod', 0, true);
         }
 

@@ -89,6 +89,18 @@ export function* fetchCampaignAsync(action) {
                     q += "&searchType=InRadius";
                 })
             }
+            if(filter.Filter){
+                filter.Filter.forEach(f=>{
+                    q +="&searchType="+f.Name;
+                })
+                
+            }
+            if(filter.ByMeOnly){
+                filter.ByMeOnly.forEach(f=>{
+                    q +="&fetchOwnedByMeOnly="+f.Name;
+                })
+                
+            }
         })
     } else {
         if (action.params.searchType) {
