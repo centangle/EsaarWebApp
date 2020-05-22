@@ -15,17 +15,17 @@ const OrganzationDetail = lazy(() =>
 );
 
 
-const OrganzationPage = ({ match, fetchOrganizationStart, fetchOrgDetailStart, fetchRootItemStart }) => {
+const OrganzationPage = ({ match,filters, fetchOrganizationStart, fetchOrgDetailStart, fetchRootItemStart }) => {
   
   const [state, setState] = useState({ match,params });
   const page =  match.params.id;
   
   useEffect(() => {
     if (state.match.params.id === undefined && state.params!==undefined) {
-      fetchOrganizationStart(state.params);
+      fetchOrganizationStart({...state.params,filters:[filters]});
       fetchRootItemStart();
     }
-  }, [state.match.params.id,fetchOrganizationStart,state.params,fetchRootItemStart]);
+  }, [state.match.params.id,fetchOrganizationStart,state.params,fetchRootItemStart,filters]);
   useEffect(()=>{
     if(page!==undefined)
     fetchOrgDetailStart(page);
@@ -51,9 +51,10 @@ const OrganzationPage = ({ match, fetchOrganizationStart, fetchOrgDetailStart, f
   )
 }
 const mapState = (state) => {
-  const { setting } = state;
+  const { setting,organization } = state;
   return {
-    isLoading: setting.isLoading
+    isLoading: setting.isLoading,
+    filters:organization.selectedFilters?organization.selectedFilters:[]
   }
 }
 const mapDispatch = dispatch => ({

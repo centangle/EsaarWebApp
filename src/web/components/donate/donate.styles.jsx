@@ -70,10 +70,18 @@ export const DonationHolder = styled.div`
     width: 300px;
     height: 200px;
     margin: 0 10px;
+    z-index: -1;
+    position: relative;
     .leaflet-container {
       width: 100%;
       height: 100%;
       border-radius: 8px;
+    }
+  }
+  .other-inputs{
+    padding:10px 0px;
+    label{
+      padding:10px;
     }
   }
 `;

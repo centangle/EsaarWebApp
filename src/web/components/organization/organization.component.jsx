@@ -18,6 +18,7 @@ const Organzation = ({
   totalItemsCount,
   pageRangeDisplayed,
   itemsCountPerPage,
+  pageFilters
 }) => {
   let history = useHistory();
   const [state, setState] = useState({ treeData: data, volunteer: false, id: 0 });
@@ -46,6 +47,7 @@ const Organzation = ({
         totalItemsCount,
         pageRangeDisplayed,
         itemsCountPerPage,
+        filters:[pageFilters]
       },
     });
   };
@@ -146,6 +148,7 @@ const mapState = (state) => {
   const { region } = state;
   return {
     regions: region.regions,
+    pageFilters:organization.selectedFilters?organization.selectedFilters:[],
     data: Object.keys(organization.organizations).map((key) => {
       return {
         ...organization.organizations[key],

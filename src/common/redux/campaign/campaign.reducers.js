@@ -26,7 +26,7 @@ const INITIAL_STATE = {
   regionsLoading: false,
   logo: null,
   form: {},
-  selectedFilters:{Item:[]}
+  selectedFilters:{Item:[],Filter:[{Id: "InMyRegion", Name: "InMyRegion"}]}
 };
 
 const campaign = (state = INITIAL_STATE, action) => {

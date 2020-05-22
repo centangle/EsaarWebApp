@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { CartHolder } from "./donate.styles";
-const DonateCart = ({ items, dispatch, campaign, organization, type, match }) => {
+const DonateCart = ({ items,AddressLatLong,PrefferedCollectionTime, dispatch, campaign, organization, type, match }) => {
   const [state, setState] = useState({ note: "", uom: "" });
   const handleChange = (item, quantity) => {
     dispatch({
@@ -33,6 +33,8 @@ const DonateCart = ({ items, dispatch, campaign, organization, type, match }) =>
           Campaign: {Id:campaign.Id},
           OrganizationId:campaign.Organization.Id,
           Type: donationType,
+          AddressLatLong,
+          PrefferedCollectionTime
         },
       });
     }
@@ -44,6 +46,8 @@ const DonateCart = ({ items, dispatch, campaign, organization, type, match }) =>
           Note: state.note,
           OrganizationId: organization.Id,
           Type: donationType,
+          AddressLatLong,
+          PrefferedCollectionTime
         },
       });
     }
@@ -121,6 +125,8 @@ const DonateCart = ({ items, dispatch, campaign, organization, type, match }) =>
 const mapState = (state) => {
   const { donation } = state;
   return {
+    AddressLatLong:donation.AddressLatLong,
+    PrefferedCollectionTime:donation.PrefferedCollectionTime,
     items: Object.keys(donation.cartItems).map(
       (key) => donation.cartItems[key]
     ),

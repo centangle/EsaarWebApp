@@ -19,6 +19,7 @@ const CAMPAIGNanzation = ({
   totalItemsCount,
   pageRangeDisplayed,
   itemsCountPerPage,
+  pageFilters
 }) => {
   let history = useHistory();
   const [state, setState] = useState({ treeData: data, volunteer: false, id: 0 });
@@ -35,7 +36,7 @@ const CAMPAIGNanzation = ({
   const handleSearch = (term, filters) => {
     dispatch({
       type: "FETCH_CAMPAIGN_START",
-      params: { ...params, name: term,filters:[filters] },
+      params: { ...params, name: term, filters: [filters] },
     });
   };
   const handlePageChange = (page) => {
@@ -47,6 +48,7 @@ const CAMPAIGNanzation = ({
         totalItemsCount,
         pageRangeDisplayed,
         itemsCountPerPage,
+        filters: [pageFilters]
       },
     });
   };
@@ -81,7 +83,7 @@ const CAMPAIGNanzation = ({
   const openVolunteer = (item) => {
     setState({ ...state, id: item.Id, volunteer: true });
   };
-  const buttonsWithActions = [{label:'details',action:handleClick}];
+  const buttonsWithActions = [{ label: 'details', action: handleClick }];
   return (
     <div className="page-right">
       {state.volunteer ? (
@@ -139,6 +141,7 @@ const mapState = (state) => {
   const { region } = state;
   return {
     regions: region.regions,
+    pageFilters: campaign.selectedFilters ? campaign.selectedFilters : [],
     data: Object.keys(campaign.campaigns).map((key) => {
       return {
         ...campaign.campaigns[key],
@@ -146,7 +149,7 @@ const mapState = (state) => {
       };
     }),
     form: campaign.form,
-    campaignModal:campaign.form.campaignModal,
+    campaignModal: campaign.form.campaignModal,
     activePage: campaign.activePage ? campaign.activePage : 0,
     totalItemsCount: campaign.totalItemsCount
       ? campaign.totalItemsCount

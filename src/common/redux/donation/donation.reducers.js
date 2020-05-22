@@ -1,17 +1,31 @@
 import { donationTypes } from './donation.types';
 import { addItemToCart } from './donation.actions';
+import {selectUser} from '../user/user.selectors';
 const toaster = require('../../../web/components/toaster/index');
+
 const INITIAL_STATE = {
   sider: false,
   cartItems: {},
   donations: {},
   replies: {},
   status: {},
-  selectedFilters: {}
+  selectedFilters: {},
+  PrefferedCollectionTime:new Date(),
+  AddressLatLong:''
 };
 
 const donation = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case 'CHECK_USER_SESSION':
+      return{
+        ...state,
+        'AddressLatLong':action.payload.latitude + ',' + action.payload.longitude,
+      }
+    case 'CHANGE_DONATION_DETAILS':
+      return{
+        ...state,
+        [action.payload.name]:action.payload.value
+      }
     case 'SET_DONATION_FILTERS':
       let current = state.selectedFilters[action.payload.from]
         ? state.selectedFilters[action.payload.from]

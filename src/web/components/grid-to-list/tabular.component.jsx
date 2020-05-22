@@ -2,6 +2,8 @@ import React from "react";
 import {ItemHolder, ListHolder} from "./grid-to-list.styles";
 import {connect} from "react-redux";
 import CustomButton from "../custom-button/custom-button.component";
+import noImage from "../../../assets/no-image.png";
+
 const baseUrl = require("../../../common/utility/request").baseUrl;
 
 const Tabular = ({data, dispatch, type}) => {
@@ -14,7 +16,7 @@ const Tabular = ({data, dispatch, type}) => {
               {data[key].ImageUrl ? (
                 <img alt="logo" src={baseUrl + "/" + data[key].ImageUrl} />
               ) : (
-                "icon"
+                 <img alt="logo" src={noImage} />
               )}
             </div>
             <div className="right">

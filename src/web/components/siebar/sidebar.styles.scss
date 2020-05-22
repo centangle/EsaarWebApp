@@ -10,8 +10,10 @@
       padding: 5px 0;
       img {
         width: 30px;
+        max-height: 30px;
         &.profile {
           width: 40px;
+          max-height: 50px;
           background: none;
           &:hover {
             background: none;
