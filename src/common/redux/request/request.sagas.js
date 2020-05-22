@@ -22,8 +22,8 @@ export function* fetchRequestAsync(action) {
             if (filter.searchType) {
                 let count = 0;
                 filter.searchType.forEach(f => {
-                    
-                    q += "&types["+count+"]=" + f.Name;
+
+                    q += "&types[" + count + "]=" + f.Name;
 
                     count++;
                 })
@@ -31,16 +31,16 @@ export function* fetchRequestAsync(action) {
             if (filter.status) {
                 let count = 0;
                 filter.status.forEach(f => {
-                    q += "&statuses["+count+"]=" + f.Name;
+                    q += "&statuses[" + count + "]=" + f.Name;
                     count++;
                 })
             }
             if (filter.timePeriod) {
                 filter.timePeriod.forEach(f => {
-                    if(f.startDate || f.endDate ){
+                    if (f.startDate || f.endDate) {
                         q += "&startDate=" + f.startDate;
                         q += "&endDate=" + f.endDate;
-                    }else{
+                    } else {
                         q += "&timePeriod=" + f.Name;
                     }
                 })
@@ -48,65 +48,77 @@ export function* fetchRequestAsync(action) {
         })
     }
     //const q = "recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/OrganizationRequest/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/OrganizationRequest/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true, result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount
+            };
+        });
+        if (response.ok) {
+            yield put(fetchRequestSuccess(response));
         }
-        return {
-            ok: true, result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount
-        };
-    });
-    if (response.ok) {
-        yield put(fetchRequestSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchThreadAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     const q = "recordsPerPage=0&type=General&currentPage=1&orderDir=Desc&disablePagination=true&entityType=Organization&entityId=" + action.payload;
-    const response = yield fetch(url + "/api/RequestThread/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/RequestThread/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return { ok: true, result: result.Items, Id: action.payload };
+        });
+        if (response.ok) {
+            yield put(fetchRequestThreadSuccess(response));
         }
-        return { ok: true, result: result.Items, Id: action.payload };
-    });
-    if (response.ok) {
-        yield put(fetchRequestThreadSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchRequestStatusAsync() {
     const currentUser = yield select(selectCurrentUser);
     //const q = "recordsPerPage=0&type=General&currentPage=1&orderDir=Desc&disablePagination=true&entityType=Organization&entityId=" + action.payload;
-    const response = yield fetch(url + "/api/OrganizationRequest/GetRequestStatus", {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/OrganizationRequest/GetRequestStatus", {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return { ok: true, result: result };
+        });
+        if (response.ok) {
+            yield put(fetchRequestStatusSuccess(response));
         }
-        return { ok: true, result: result };
-    });
-    if (response.ok) {
-        yield put(fetchRequestStatusSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* addRequestThreadAsync(action) {

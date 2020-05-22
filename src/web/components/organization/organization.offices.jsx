@@ -10,23 +10,23 @@ import Pagination from "react-js-pagination";
 import { fetchUomStart } from '../../../common/redux/uom/uom.actions';
 import { canView } from "../../../common/utility/request";
 
-const OrganizationOffices = ({ offices, organizations,latitude,longitude, dispatch, organization, fetchUomStart,form,activePage,totalItemsCount,pageRangeDisplayed,itemsCountPerPage }) => {
+const OrganizationOffices = ({ offices, organizations, latitude, longitude, dispatch, organization, fetchUomStart, form, activePage, totalItemsCount, pageRangeDisplayed, itemsCountPerPage }) => {
   useEffect(() => {
     fetchUomStart();
   }, [fetchUomStart]);
   const [state, setState] = useState({
     addedItems: {},
-    modal: false, Name: '',Address:'',AddressLatLong:latitude+','+longitude, NativeName: '', Description: ''
+    modal: false, Name: '', Address: '', AddressLatLong: latitude + ',' + longitude, NativeName: '', Description: ''
   });
   let history = useHistory();
 
   const mappedData = offices.map(request => {
     return {
       Name: request.Name,
-      NativeName:request.NativeName,
-      Address:request.Address,
-      AddressLatLong:request.AddressLatLong,
-      Description:request.Description
+      NativeName: request.NativeName,
+      Address: request.Address,
+      AddressLatLong: request.AddressLatLong,
+      Description: request.Description
     }
   });
 
@@ -63,18 +63,21 @@ const OrganizationOffices = ({ offices, organizations,latitude,longitude, dispat
     })
   }
 
-  const { Name, NativeName,Address,AddressLatLong, Description, ImageUrl, ImageInBase64 } = state;
-  const handlePageChange = (page) =>{
+  const { Name, NativeName, Address, AddressLatLong, Description, ImageUrl, ImageInBase64 } = state;
+  const handlePageChange = (page) => {
     dispatch({
-      type:'FETCH_ORG_OFFICES_START',payload:organization.Id,
-      params:{activePage:page,totalItemsCount,pageRangeDisplayed,itemsCountPerPage}
-      })
+      type: 'FETCH_ORG_OFFICES_START', payload: organization.Id,
+      params: { activePage: page, totalItemsCount, pageRangeDisplayed, itemsCountPerPage }
+    })
   }
   return (
     <>
       <TitleWithAction>
         <h2>{organization ? organization.Name : null} Offices</h2>
-        <button onClick={openModal}>Add a office</button>
+        {
+          canView(["Owner", "Moderator"], organization.CurrentMemberRoles) ?
+            <button onClick={openModal}>Add a office</button> : null
+        }
       </TitleWithAction>
       <div className='modal-holder'>
         {form.modal ? <Modal closeModal={closeModal}>
@@ -115,19 +118,19 @@ const OrganizationOffices = ({ offices, organizations,latitude,longitude, dispat
   )
 }
 const mapState = (state) => {
-  const { organization,user } = state;
-  const {latitude,longitude} = user;
+  const { organization, user } = state;
+  const { latitude, longitude } = user;
   return {
-    latitude,longitude,
+    latitude, longitude,
     offices: organization.offices,
     organizations: organization.organizations,
     organization: organization.current,
     items: organization.items,
-    form:organization.form,
-    activePage:organization && organization.activePage ?organization.activePage:0,
-    totalItemsCount:organization && organization.totalItemsCount ?organization.totalItemsCount:0,
-    itemsCountPerPage:organization && organization.itemsCountPerPage ?organization.itemsCountPerPage:0,
-    pageRangeDisplayed:organization && organization.pageRangeDisplayed ?organization.pageRangeDisplayed:0
+    form: organization.form,
+    activePage: organization && organization.activePage ? organization.activePage : 0,
+    totalItemsCount: organization && organization.totalItemsCount ? organization.totalItemsCount : 0,
+    itemsCountPerPage: organization && organization.itemsCountPerPage ? organization.itemsCountPerPage : 0,
+    pageRangeDisplayed: organization && organization.pageRangeDisplayed ? organization.pageRangeDisplayed : 0
   }
 }
 const mapDispatch = dispatch => ({

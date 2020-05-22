@@ -56,14 +56,14 @@ export function* fetchOrganizationAsync(action) {
     if (action.params.latitude) {
         q += "&latitude=" + action.params.latitude;
     } else {
-        if(user.latitude)
-        q += "&latitude=" + user.latitude;
+        if (user.latitude)
+            q += "&latitude=" + user.latitude;
     }
     if (action.params.longitude) {
         q += "&longitude=" + action.params.longitude;
     } else {
-        if(user.longitude)
-        q += "&longitude=" + user.longitude;
+        if (user.longitude)
+            q += "&longitude=" + user.longitude;
     }
     let searching = [];
     if (action.params && action.params.filters) {
@@ -71,9 +71,9 @@ export function* fetchOrganizationAsync(action) {
             if (filter.ByRegion) {
                 let count = 0;
                 filter.ByRegion.forEach(f => {
-                    q += "&regions["+count+"].regionLevel=" + f.RegionLevel;
-                    q += "&regions["+count+"].regionId=" + f.Id;
-                    q +="&searchType=ByRegion";
+                    q += "&regions[" + count + "].regionLevel=" + f.RegionLevel;
+                    q += "&regions[" + count + "].regionId=" + f.Id;
+                    q += "&searchType=ByRegion";
                     count++;
                     searching.push(['ByRegion']);
                 })
@@ -81,7 +81,7 @@ export function* fetchOrganizationAsync(action) {
             if (filter.Item) {
                 let count = 0;
                 filter.Item.forEach(f => {
-                    q += "&rootCategories["+count+"]=" + f.Id;
+                    q += "&rootCategories[" + count + "]=" + f.Id;
                     count++;
                 })
             }
@@ -89,25 +89,25 @@ export function* fetchOrganizationAsync(action) {
                 filter.InRadius.forEach(f => {
                     q += "&radiusType=" + f.radiusType;
                     q += "&radius=" + f.radius;
-                    q +="&searchType=InRadius";
+                    q += "&searchType=InRadius";
                     searching.push(['InRadius']);
                 })
             }
-            if(filter.Filter){
-                filter.Filter.forEach(f=>{
-                    q +="&searchType="+f.Name;
+            if (filter.Filter) {
+                filter.Filter.forEach(f => {
+                    q += "&searchType=" + f.Name;
                 })
-                
+
             }
-            if(filter.ByMeOnly){
-                filter.ByMeOnly.forEach(f=>{
-                    q +="&fetchOwnedByMeOnly="+f.Name;
+            if (filter.ByMeOnly) {
+                filter.ByMeOnly.forEach(f => {
+                    q += "&fetchOwnedByMeOnly=" + f.Name;
                 })
-                
+
             }
         });
-        if(searching.length<1){
-            q+="&searchType=InMyRegion";
+        if (searching.length < 1) {
+            q += "&searchType=InMyRegion";
         }
     } else {
         if (action.params.searchType) {
@@ -117,26 +117,30 @@ export function* fetchOrganizationAsync(action) {
         }
     }
 
-    const response = yield fetch(url + "/api/Organization/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + user.currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/Organization/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + user.currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount
+            };
+        });
+        if (response.ok) {
+            yield put(fetchOrganizationSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount
-        };
-    });
-    if (response.ok) {
-        yield put(fetchOrganizationSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchOrgAccountsAsync(action) {
@@ -151,26 +155,30 @@ export function* fetchOrgAccountsAsync(action) {
     //     q += "&name=" + action.params.name
     // }
     //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/OrganizationAccount/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/OrganizationAccount/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount,
+            };
+        });
+        if (response.ok) {
+            yield put(fetchOrgAccountsSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount,
-        };
-    });
-    if (response.ok) {
-        yield put(fetchOrgAccountsSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchOrgOfficesAsync(action) {
@@ -182,26 +190,30 @@ export function* fetchOrgOfficesAsync(action) {
         + "&itemType=Package"
         + "&disablePagination=false";
     //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/OrganizationOffice/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/OrganizationOffice/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount,
+            };
+        });
+        if (response.ok) {
+            yield put(fetchOrgOfficesSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount,
-        };
-    });
-    if (response.ok) {
-        yield put(fetchOrgOfficesSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchOrgAttachmentsAsync(action) {
@@ -213,26 +225,30 @@ export function* fetchOrgAttachmentsAsync(action) {
         + "&itemType=Package"
         + "&disablePagination=false";
     //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/OrganizationAttachment/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/OrganizationAttachment/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount,
+            };
+        });
+        if (response.ok) {
+            yield put(fetchOrgAttachmentsSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount,
-        };
-    });
-    if (response.ok) {
-        yield put(fetchOrgAttachmentsSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchOrgRegionsAsync(action) {
@@ -244,26 +260,30 @@ export function* fetchOrgRegionsAsync(action) {
         + "&itemType=Package"
         + "&disablePagination=false";
     //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/OrganizationRegion/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/OrganizationRegion/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount,
+            };
+        });
+        if (response.ok) {
+            yield put(fetchOrgRegionsSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount,
-        };
-    });
-    if (response.ok) {
-        yield put(fetchOrgRegionsSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* addOrganizationAsync(action) {
@@ -288,7 +308,7 @@ export function* addOrganizationAsync(action) {
             yield put(addOrganizationFailure(organization));
         } else {
             yield put(addOrganizationSuccess({ organization }));
-            yield redirect('/organizations/'+organization);
+            yield redirect('/organizations/' + organization);
             //yield put(fetchOrganizationStart(params));
         }
     } catch (error) {
@@ -317,7 +337,7 @@ export function* addCampaignAsync(action) {
             yield put(addCampaignFailure(organization));
         } else {
             yield put(addCampaignSuccess({ organization }));
-            yield redirect('/campaigns/'+organization);
+            yield redirect('/campaigns/' + organization);
         }
     } catch (error) {
         yield put(addCampaignFailure(error));
@@ -431,7 +451,7 @@ export function* addOrgRegionAsyn(action) {
             yield put(addOrgRegionFailure(organization));
         } else {
             yield put(addOrgRegionSuccess({ organization }));
-            yield put(fetchOrgRegionsStart({ payload:action.payload.organizationId,params }));
+            yield put(fetchOrgRegionsStart({ payload: action.payload.organizationId, params }));
         }
     } catch (error) {
         yield put(addOrgRegionFailure(error));
@@ -522,21 +542,25 @@ export function* updateOrganizationAsync(action) {
 }
 export function* fetchOrgDetailAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    const response = yield fetch(url + "/api/Organization/Get/" + action.payload, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/Organization/Get/" + action.payload, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return { ok: true, result };
+        });
+        if (response.ok) {
+            yield put(fetchOrgDetailSuccess(response));
         }
-        return { ok: true, result };
-    });
-    if (response.ok) {
-        yield put(fetchOrgDetailSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* orgRequestAsync(action) {
@@ -576,30 +600,34 @@ export function* fetchOrgItemsAsync(action) {
         + "&itemType=General"
         + "&calculateTotal=true"
         + "&disablePagination=false";
-    if(action.params.itemName){
-        q+= "&itemName="+action.params.itemName;
+    if (action.params.itemName) {
+        q += "&itemName=" + action.params.itemName;
     }
     //const q = "organizationId=" + action.payload + "&itemType=General&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/OrganizationItem/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/OrganizationItem/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount,
+            };
+        });
+        if (response.ok) {
+            yield put(fetchOrgItemsSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount,
-        };
-    });
-    if (response.ok) {
-        yield put(fetchOrgItemsSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchOrgRequestsAsync(action) {
@@ -611,29 +639,33 @@ export function* fetchOrgRequestsAsync(action) {
         + "&orderDir=Asc"
         + "&calculateTotal=true"
         + "&disablePagination=false";
-    const response = yield fetch(url + "/api/OrganizationRequest/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/OrganizationRequest/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount,
+                // activePage:action.payload.activePage,
+                // itemsCountPerPage:action.payload.itemsCountPerPage,
+                // pageRangeDisplayed:action.payload.pageRangeDisplayed
+            };
+        });
+        if (response.ok) {
+            yield put(fetchOrgRequestsSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount,
-            // activePage:action.payload.activePage,
-            // itemsCountPerPage:action.payload.itemsCountPerPage,
-            // pageRangeDisplayed:action.payload.pageRangeDisplayed
-        };
-    });
-    if (response.ok) {
-        yield put(fetchOrgRequestsSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchOrgPackagesAsync(action) {
@@ -645,26 +677,30 @@ export function* fetchOrgPackagesAsync(action) {
         + "&itemType=Package"
         + "&disablePagination=false";
     //const q = "organizationId=" + action.payload + "&itemType=Package&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/OrganizationItem/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/OrganizationItem/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount,
+            };
+        });
+        if (response.ok) {
+            yield put(fetchOrgPackagesSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount,
-        };
-    });
-    if (response.ok) {
-        yield put(fetchOrgPackagesSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchOrgMembersAsync(action) {
@@ -676,46 +712,54 @@ export function* fetchOrgMembersAsync(action) {
         + "&type=" + action.userType
         + "&disablePagination=false";
     //const q = "organizationId=" + action.payload + "&type=" + action.userType + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/OrganizationMember/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/OrganizationMember/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount,
+            };
+        });
+        if (response.ok) {
+            yield put(fetchOrgMembersSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount,
-        };
-    });
-    if (response.ok) {
-        yield put(fetchOrgMembersSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchOrgCategoriesAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     const q = action.payload;//"organizationId="+action.payload+"&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/Organization/GetCategories/" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/Organization/GetCategories/" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return { ok: true, result };
+        });
+        if (response.ok) {
+            yield put(fetchOrgCategoriesSuccess(response.result));
         }
-        return { ok: true, result };
-    });
-    if (response.ok) {
-        yield put(fetchOrgCategoriesSuccess(response.result));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchOrgCampaignAsync(action) {
@@ -727,7 +771,8 @@ export function* fetchOrgCampaignAsync(action) {
         + "&calculateTotal=true"
         + "&disablePagination=false";
     //const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/Campaign/GetPaginated?" + q, {
+    try{
+        const response = yield fetch(url + "/api/Campaign/GetPaginated?" + q, {
         method: "GET",
         //withCredentials: true,
         credentials: 'include',
@@ -747,6 +792,9 @@ export function* fetchOrgCampaignAsync(action) {
     });
     if (response.ok) {
         yield put(fetchOrgCampaignsSuccess(response));
+    }
+    }catch(error){
+        alert(error);
     }
 }
 export function* addItemAsync(action) {

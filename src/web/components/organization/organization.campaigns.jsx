@@ -114,9 +114,9 @@ const OrganizationCampaigns = ({ events, campaigns, organizations, dispatch, org
   const handleDrop = (item) => {
     setState({ ...state, Event: item });
   }
-  const handleDateChange=(selected)=>{
-    const {name,value} = selected;
-    setState({...state,[name]:value});
+  const handleDateChange = (selected) => {
+    const { name, value } = selected;
+    setState({ ...state, [name]: value });
   }
   const mappedEvents = Object.keys(events).map(key => { return { value: events[key].Id, label: events[key].Name } });
 
@@ -124,7 +124,10 @@ const OrganizationCampaigns = ({ events, campaigns, organizations, dispatch, org
     <>
       <TitleWithAction>
         <h2>{organization ? organization.Name : null} Campaigns</h2>
-        <button onClick={openModal}>Add a campaign</button>
+        {
+          canView(["Owner", "Moderator"], organization.CurrentMemberRoles) ?
+            <button onClick={openModal}>Add a campaign</button> : null
+        }
       </TitleWithAction>
       <div className='modal-holder'>
         {form.modal ? <Modal closeModal={closeModal}>
@@ -145,16 +148,16 @@ const OrganizationCampaigns = ({ events, campaigns, organizations, dispatch, org
                   showTimeSelect
                   dateFormat="Pp"
                   selected={StartDate}
-                  onSelect={(date)=>handleDateChange({name:'StartDate',value:date})} //when day is clicked
-                  onChange={(date)=>handleDateChange({name:'StartDate',value:date})} //only when value has changed
+                  onSelect={(date) => handleDateChange({ name: 'StartDate', value: date })} //when day is clicked
+                  onChange={(date) => handleDateChange({ name: 'StartDate', value: date })} //only when value has changed
                 />
                 <DatePicker
                   name="EndDate"
                   showTimeSelect
                   dateFormat="Pp"
                   selected={EndDate}
-                  onSelect={(date)=>handleDateChange({name:'EndDate',value:date})} //when day is clicked
-                  onChange={(date)=>handleDateChange({name:'EndDate',value:date})} //only when value has changed
+                  onSelect={(date) => handleDateChange({ name: 'EndDate', value: date })} //when day is clicked
+                  onChange={(date) => handleDateChange({ name: 'EndDate', value: date })} //only when value has changed
                 />
                 {/* <input placeholder='Start Date' type='text' onChange={handleChange} name="StartDate" value={StartDate} /> */}
                 {/* {<input placeholder='End Date' type='text' onChange={handleChange} name="EndDate" value={EndDate} />} */}

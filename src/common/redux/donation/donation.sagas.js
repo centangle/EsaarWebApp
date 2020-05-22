@@ -104,105 +104,125 @@ export function* fetchRequestAsync(action) {
         })
     }
     //const q = "recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/DonationRequest/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/DonationRequest/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true, result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount
+            };
+        });
+        if (response.ok) {
+            yield put(fetchDonationRequestSuccess(response));
         }
-        return {
-            ok: true, result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount
-        };
-    });
-    if (response.ok) {
-        yield put(fetchDonationRequestSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchThreadAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     const q = "recordsPerPage=0&type=General&currentPage=1&orderDir=Desc&disablePagination=true&entityType=Donation&entityId=" + action.payload;
-    const response = yield fetch(url + "/api/RequestThread/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/RequestThread/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return { ok: true, result: result.Items, Id: action.payload };
+        });
+        if (response.ok) {
+            yield put(fetchDonationRequestThreadSuccess(response));
         }
-        return { ok: true, result: result.Items, Id: action.payload };
-    });
-    if (response.ok) {
-        yield put(fetchDonationRequestThreadSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchRequestStatusAsync() {
     const currentUser = yield select(selectCurrentUser);
-    //const q = "recordsPerPage=0&type=General&currentPage=1&orderDir=Desc&disablePagination=true&entityType=Organization&entityId=" + action.payload;
-    const response = yield fetch(url + "/api/DonationRequest/GetRequestStatus", {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/DonationRequest/GetRequestStatus", {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return { ok: true, result: result };
+        });
+        if (response.ok) {
+            yield put(fetchRequestStatusSuccess(response));
         }
-        return { ok: true, result: result };
-    });
-    if (response.ok) {
-        yield put(fetchRequestStatusSuccess(response));
+    } catch (error) {
+        alert(error);
     }
+
 }
 export function* fetchDonationDetailsAsync(action) {
     const currentUser = yield select(selectCurrentUser);
-    //const q = "recordsPerPage=0&type=General&currentPage=1&orderDir=Desc&disablePagination=true&entityType=Organization&entityId=" + action.payload;
-    const response = yield fetch(url + "/api/DonationRequest/Get?organizationRequestId=" + action.payload, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/DonationRequest/Get?organizationRequestId=" + action.payload, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return { ok: true, result: result };
+        });
+        if (response.ok) {
+            yield put(fetchDonationDetailsSuccess(response.result));
         }
-        return { ok: true, result: result };
-    });
-    if (response.ok) {
-        yield put(fetchDonationDetailsSuccess(response.result));
+    } catch (error) {
+        alert(error);
     }
+
 }
 export function* fetchDonationItemsAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     //const q = "recordsPerPage=0&type=General&currentPage=1&orderDir=Desc&disablePagination=true&entityType=Organization&entityId=" + action.payload;
-    const response = yield fetch(url + "/api/DonationRequest/GetItems?organizationRequestId=" + action.payload, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/DonationRequest/GetItems?organizationRequestId=" + action.payload, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return { ok: true, result: result };
+        });
+        if (response.ok) {
+            yield put(fetchDonationItemsSuccess(response));
         }
-        return { ok: true, result: result };
-    });
-    if (response.ok) {
-        yield put(fetchDonationItemsSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* addDonation() {

@@ -78,7 +78,10 @@ const OrganizationAccounts = ({ accounts, organizations, dispatch, organization,
         <>
             <TitleWithAction>
                 <h2>{organization ? organization.Name : null} Accounts</h2>
-                <button onClick={openModal}>Add a accounts</button>
+                {
+                    canView(["Owner", "Moderator"], organization.CurrentMemberRoles) ?
+                        <button onClick={openModal}>Add a accounts</button> : null
+                }
             </TitleWithAction>
             <div className='modal-holder'>
                 {form.modal ? <Modal closeModal={closeModal}>

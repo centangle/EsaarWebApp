@@ -49,8 +49,12 @@ const DonateCart = ({ items, dispatch, campaign, organization, type, match }) =>
     }
 
   };
-  const handleDrop = (e) => {
-    setState({ ...state, uom: e.target.value });
+  const handleDrop = (item,unit) => {
+    dispatch({
+      type: "UNIT_CHANGED",
+      payload: { ...item, QuantityUOM:{Id:unit} },
+    });
+    //setState({ ...state, [e.target.name]: e.target.value });
   };
   const handleRemove = (item) => {
     dispatch({ type: "REMOVE_DONATION_ITEM", payload: item });
@@ -74,9 +78,10 @@ const DonateCart = ({ items, dispatch, campaign, organization, type, match }) =>
               </span>
               <span>
                 <select
+                  name={`uom${item.Id}`}
                   className="form-field select-field"
-                  value={state.uom}
-                  onChange={(e) => handleDrop(e)}
+                  value={item.ItemUOM}
+                  onChange={(e) => handleDrop(item,e.target.value)}
                 >
                   {item.ItemUOMs.map((uom) => {
                     return (

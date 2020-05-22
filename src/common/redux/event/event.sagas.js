@@ -1,9 +1,9 @@
 import { takeLatest, all, call, put, select, takeEvery } from 'redux-saga/effects';
 import { eventTypes } from './event.types';
 import { selectCurrentUser } from "../user/user.selectors";
-import { fetchEventStart,addEventSuccess, addEventFailure, fetchEventSuccess, fetchEventDetailSuccess } from './event.actions';
+import { fetchEventStart, addEventSuccess, addEventFailure, fetchEventSuccess, fetchEventDetailSuccess } from './event.actions';
 import { apiLink } from '../api.links';
-import {params} from '../../utility/request';
+import { params } from '../../utility/request';
 const url = apiLink;
 export function* fetchEventAsync(action) {
   const currentUser = yield select(selectCurrentUser);
@@ -11,51 +11,59 @@ export function* fetchEventAsync(action) {
     + "&currentPage=" + action.params.activePage
     + "&orderDir=Asc"
     + "&calculateTotal=true";
-  if(action.params.disablePagination){
-    q += "&disablePagination="+action.params.disablePagination;
-  }else{
+  if (action.params.disablePagination) {
+    q += "&disablePagination=" + action.params.disablePagination;
+  } else {
     q += "&disablePagination=false";
-  } 
+  }
   if (action.params.name) {
     q += "&name=" + action.params.name
   }
-  const response = yield fetch(url + "/api/Event/GetPaginated?" + q, {
-    method: "GET",
-    //withCredentials: true,
-    credentials: 'include',
-    headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-  }).then(async (response) => {
-    const result = await response.json();
-    if (response.status >= 205) {
-      return { result, error: true };
+  try {
+    const response = yield fetch(url + "/api/Event/GetPaginated?" + q, {
+      method: "GET",
+      //withCredentials: true,
+      credentials: 'include',
+      headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+    }).then(async (response) => {
+      const result = await response.json();
+      if (response.status >= 205) {
+        return { result, error: true };
+      }
+      return {
+        ok: true, result: result.Items,
+        ...action.params,
+        totalItemsCount: result.TotalCount
+      };
+    });
+    if (response.ok) {
+      yield put(fetchEventSuccess(response));
     }
-    return {
-      ok: true, result: result.Items,
-      ...action.params,
-      totalItemsCount: result.TotalCount
-    };
-  });
-  if (response.ok) {
-    yield put(fetchEventSuccess(response));
+  } catch (error) {
+    alert(error)
   }
 }
 
 export function* fetchEventDetailAsync(action) {
   const currentUser = yield select(selectCurrentUser);
-  const response = yield fetch(url + "/api/Event/Get" + action.payload.id, {
-    method: "GET",
-    //withCredentials: true,
-    credentials: 'include',
-    headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-  }).then(async (response) => {
-    const result = await response.json();
-    if (response.status >= 205) {
-      return { result, error: true };
+  try {
+    const response = yield fetch(url + "/api/Event/Get" + action.payload.id, {
+      method: "GET",
+      //withCredentials: true,
+      credentials: 'include',
+      headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+    }).then(async (response) => {
+      const result = await response.json();
+      if (response.status >= 205) {
+        return { result, error: true };
+      }
+      return { ok: true, result };
+    });
+    if (response.ok) {
+      yield put(fetchEventDetailSuccess(response));
     }
-    return { ok: true, result };
-  });
-  if (response.ok) {
-    yield put(fetchEventDetailSuccess(response));
+  } catch (error) {
+    alert(error);
   }
 }
 export function* addEventAsync(action) {

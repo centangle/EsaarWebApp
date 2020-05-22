@@ -14,97 +14,117 @@ const url = apiLink;
 
 export function* fetchUomTreeAsync() {
   const currentUser = yield select(selectCurrentUser);
-  const response = yield fetch(url + "/api/UOM/GetAllUOMs?dataStructure=List", {
-    method: "GET",
-    //withCredentials: true,
-    credentials: 'include',
-    headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-  }).then(async (response) => {
-    const result = await response.json();
-    if (response.status >= 205) {
-      return { result, error: true };
+  try {
+    const response = yield fetch(url + "/api/UOM/GetAllUOMs?dataStructure=List", {
+      method: "GET",
+      //withCredentials: true,
+      credentials: 'include',
+      headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+    }).then(async (response) => {
+      const result = await response.json();
+      if (response.status >= 205) {
+        return { result, error: true };
+      }
+      return { ok: true, result: result.Items };
+    });
+    if (response.ok) {
+      yield put(fetchUomSuccess(response));
     }
-    return { ok: true, result: result.Items };
-  });
-  if (response.ok) {
-    yield put(fetchUomSuccess(response));
+  } catch (error) {
+    alert(error);
   }
 }
 export function* removeUomAsync(action) {
   const currentUser = yield select(selectCurrentUser);
-  const response = yield fetch(url + "/api/UOM/DeleteUOMWithChildren/" + action.payload, {
-    method: "DELETE",
-    //withCredentials: true,
-    credentials: 'include',
-    headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-  }).then(async (response) => {
-    const result = await response.json();
-    if (response.status >= 205) {
-      return { result, error: true };
+  try {
+    const response = yield fetch(url + "/api/UOM/DeleteUOMWithChildren/" + action.payload, {
+      method: "DELETE",
+      //withCredentials: true,
+      credentials: 'include',
+      headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+    }).then(async (response) => {
+      const result = await response.json();
+      if (response.status >= 205) {
+        return { result, error: true };
+      }
+      return { ok: true, result: result, Id: action.payload };
+    });
+    if (response.ok) {
+      yield put(fetchUomStart())
+      yield put(removeUomSuccess(response));
+    } else {
+      yield put(removeUomFailure(response));
     }
-    return { ok: true, result: result, Id: action.payload };
-  });
-  if (response.ok) {
-    yield put(fetchUomStart())
-    yield put(removeUomSuccess(response));
-  }else{
-    yield put(removeUomFailure(response));
+  } catch (error) {
+    alert(error);
   }
 }
 export function* fetchUomAsync(action) {
   const currentUser = yield select(selectCurrentUser);
-  const dd = action.payload?action.payload:false;
-  const response = yield fetch(url + "/api/UOM/Get?forDropDown="+dd, {
-    method: "GET",
-    //withCredentials: true,
-    credentials: 'include',
-    headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-  }).then(async (response) => {
-    const result = await response.json();
-    if (response.status >= 205) {
-      return { result, error: true };
+  const dd = action.payload ? action.payload : false;
+  try {
+    const response = yield fetch(url + "/api/UOM/Get?forDropDown=" + dd, {
+      method: "GET",
+      //withCredentials: true,
+      credentials: 'include',
+      headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+    }).then(async (response) => {
+      const result = await response.json();
+      if (response.status >= 205) {
+        return { result, error: true };
+      }
+      return { ok: true, result: result.Items };
+    });
+    if (response.ok) {
+      yield put(fetchUomSuccess(response));
     }
-    return { ok: true, result: result.Items };
-  });
-  if (response.ok) {
-    yield put(fetchUomSuccess(response));
+  } catch (error) {
+    alert(error);
   }
 }
 export function* fetchPeriferalUomAsync() {
   const currentUser = yield select(selectCurrentUser);
-  const response = yield fetch(url + "/api/Uom/GetPeripheralUoms", {
-    method: "GET",
-    //withCredentials: true,
-    credentials: 'include',
-    headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-  }).then(async (response) => {
-    const result = await response.json();
-    if (response.status >= 205) {
-      return { result, error: true };
+  try {
+    const response = yield fetch(url + "/api/Uom/GetPeripheralUoms", {
+      method: "GET",
+      //withCredentials: true,
+      credentials: 'include',
+      headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+    }).then(async (response) => {
+      const result = await response.json();
+      if (response.status >= 205) {
+        return { result, error: true };
+      }
+      return { ok: true, result };
+    });
+    if (response.ok) {
+      yield put(fetchPeriferalUomSuccess(response));
     }
-    return { ok: true, result };
-  });
-  if (response.ok) {
-    yield put(fetchPeriferalUomSuccess(response));
+  } catch (error) {
+    alert(error);
   }
 }
 
 export function* fetchUomDetailAsync(action) {
   const currentUser = yield select(selectCurrentUser);
-  const response = yield fetch(url + "/api/Uom/Get" + action.payload.id, {
-    method: "GET",
-    //withCredentials: true,
-    credentials: 'include',
-    headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-  }).then(async (response) => {
-    const result = await response.json();
-    if (response.status >= 205) {
-      return { result, error: true };
+  try {
+    const response = yield fetch(url + "/api/Uom/Get" + action.payload.id, {
+      method: "GET",
+      //withCredentials: true,
+      credentials: 'include',
+      headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+    }).then(async (response) => {
+      const result = await response.json();
+      if (response.status >= 205) {
+        return { result, error: true };
+      }
+      return { ok: true, result };
+    });
+    if (response.ok) {
+      yield put(fetchUomDetailSuccess(response));
     }
-    return { ok: true, result };
-  });
-  if (response.ok) {
-    yield put(fetchUomDetailSuccess(response));
+  } catch (error) {
+    alert(error);
   }
 }
 export function* addUomAsync(action) {
@@ -117,7 +137,7 @@ export function* addUomAsync(action) {
         'Content-Type': 'application/json',
         'Authorization': 'bearer ' + currentUser.access_token
       },
-      body: JSON.stringify({...action.payload,NoOfBaseUnit:parseFloat(action.payload.NoOfBaseUnit)})
+      body: JSON.stringify({ ...action.payload, NoOfBaseUnit: parseFloat(action.payload.NoOfBaseUnit) })
     }).then(async (response) => {
       if (response.status >= 205) {
         const result = await response.json();

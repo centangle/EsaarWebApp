@@ -88,6 +88,14 @@ const donation = (state = INITIAL_STATE, action) => {
           [action.payload.Id]: action.payload
         },
       }
+    case donationTypes.UNIT_CHANGED:
+      return {
+        ...state,
+        cartItems: {
+          ...state.cartItems,
+          [action.payload.Id]: action.payload
+        },
+      }
     case donationTypes.ADD_DONATION_ITEM:
       return {
         ...state,

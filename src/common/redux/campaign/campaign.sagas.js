@@ -89,17 +89,17 @@ export function* fetchCampaignAsync(action) {
                     q += "&searchType=InRadius";
                 })
             }
-            if(filter.Filter){
-                filter.Filter.forEach(f=>{
-                    q +="&searchType="+f.Name;
+            if (filter.Filter) {
+                filter.Filter.forEach(f => {
+                    q += "&searchType=" + f.Name;
                 })
-                
+
             }
-            if(filter.ByMeOnly){
-                filter.ByMeOnly.forEach(f=>{
-                    q +="&fetchOwnedByMeOnly="+f.Name;
+            if (filter.ByMeOnly) {
+                filter.ByMeOnly.forEach(f => {
+                    q += "&fetchOwnedByMeOnly=" + f.Name;
                 })
-                
+
             }
         })
     } else {
@@ -110,26 +110,30 @@ export function* fetchCampaignAsync(action) {
         }
     }
 
-    const response = yield fetch(url + "/api/Campaign/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + user.currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/Campaign/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + user.currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount
+            };
+        });
+        if (response.ok) {
+            yield put(fetchCampaignSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount
-        };
-    });
-    if (response.ok) {
-        yield put(fetchCampaignSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchCampaignAccountsAsync(action) {
@@ -144,26 +148,30 @@ export function* fetchCampaignAccountsAsync(action) {
     //     q += "&name=" + action.params.name
     // }
     //const q = "campaignId=" + action.payload.id + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/CampaignAccount/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/CampaignAccount/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount,
+            };
+        });
+        if (response.ok) {
+            yield put(fetchCampaignAccountsSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount,
-        };
-    });
-    if (response.ok) {
-        yield put(fetchCampaignAccountsSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchCampaignOfficesAsync(action) {
@@ -175,26 +183,30 @@ export function* fetchCampaignOfficesAsync(action) {
         + "&itemType=Package"
         + "&disablePagination=false";
     //const q = "campaignId=" + action.payload.id + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/CampaignOffice/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/CampaignOffice/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount,
+            };
+        });
+        if (response.ok) {
+            yield put(fetchCampaignOfficesSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount,
-        };
-    });
-    if (response.ok) {
-        yield put(fetchCampaignOfficesSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchCampaignAttachmentsAsync(action) {
@@ -206,26 +218,30 @@ export function* fetchCampaignAttachmentsAsync(action) {
         + "&itemType=Package"
         + "&disablePagination=false";
     //const q = "campaignId=" + action.payload.id + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/CampaignAttachment/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/CampaignAttachment/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount,
+            };
+        });
+        if (response.ok) {
+            yield put(fetchCampaignAttachmentsSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount,
-        };
-    });
-    if (response.ok) {
-        yield put(fetchCampaignAttachmentsSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchCampaignRegionsAsync(action) {
@@ -237,26 +253,30 @@ export function* fetchCampaignRegionsAsync(action) {
         + "&itemType=Package"
         + "&disablePagination=false";
     //const q = "campaignId=" + action.payload.id + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/CampaignRegion/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/CampaignRegion/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount,
+            };
+        });
+        if (response.ok) {
+            yield put(fetchCampaignRegionsSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount,
-        };
-    });
-    if (response.ok) {
-        yield put(fetchCampaignRegionsSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* addCampaignAsync(action) {
@@ -384,7 +404,7 @@ export function* addCampaignRegionAsyn(action) {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
             },
-            body: JSON.stringify({Regions:action.payload.regions,CampaignId:q})
+            body: JSON.stringify({ Regions: action.payload.regions, CampaignId: q })
         }).then(async (response) => {
             if (response.status >= 205) {
                 const result = await response.json();
@@ -395,7 +415,7 @@ export function* addCampaignRegionAsyn(action) {
         if (campaign.error) {
             yield put(addCampaignRegionFailure(campaign));
         } else {
-            yield put(fetchCampaignRegionsStart({id:action.payload.campaignId,params}));
+            yield put(fetchCampaignRegionsStart({ id: action.payload.campaignId, params }));
             yield put(addCampaignRegionSuccess({ campaign }));
         }
     } catch (error) {
@@ -547,26 +567,30 @@ export function* fetchCampaignItemsAsync(action) {
         + "&calculateTotal=true"
         + "&disablePagination=false";
     //const q = "campaignId=" + action.payload.id + "&itemType=General&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/CampaignItem/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/CampaignItem/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount,
+            };
+        });
+        if (response.ok) {
+            yield put(fetchCampaignItemsSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount,
-        };
-    });
-    if (response.ok) {
-        yield put(fetchCampaignItemsSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchCampaignRequestsAsync(action) {
@@ -578,29 +602,33 @@ export function* fetchCampaignRequestsAsync(action) {
         + "&orderDir=Asc"
         + "&calculateTotal=true"
         + "&disablePagination=false";
-    const response = yield fetch(url + "/api/CampaignRequest/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/CampaignRequest/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount,
+                // activePage:action.payload.id.activePage,
+                // itemsCountPerPage:action.payload.id.itemsCountPerPage,
+                // pageRangeDisplayed:action.payload.id.pageRangeDisplayed
+            };
+        });
+        if (response.ok) {
+            yield put(fetchCampaignRequestsSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount,
-            // activePage:action.payload.id.activePage,
-            // itemsCountPerPage:action.payload.id.itemsCountPerPage,
-            // pageRangeDisplayed:action.payload.id.pageRangeDisplayed
-        };
-    });
-    if (response.ok) {
-        yield put(fetchCampaignRequestsSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchCampaignPackagesAsync(action) {
@@ -612,26 +640,30 @@ export function* fetchCampaignPackagesAsync(action) {
         + "&itemType=Package"
         + "&disablePagination=false";
     //const q = "campaignId=" + action.payload.id + "&itemType=Package&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/CampaignItem/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/CampaignItem/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount,
+            };
+        });
+        if (response.ok) {
+            yield put(fetchCampaignPackagesSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount,
-        };
-    });
-    if (response.ok) {
-        yield put(fetchCampaignPackagesSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchCampaignMembersAsync(action) {
@@ -643,26 +675,30 @@ export function* fetchCampaignMembersAsync(action) {
         + "&type=" + action.userType
         + "&disablePagination=false";
     //const q = "campaignId=" + action.payload.id + "&type=" + action.userType + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
-    const response = yield fetch(url + "/api/CampaignMember/GetPaginated?" + q, {
-        method: "GET",
-        //withCredentials: true,
-        credentials: 'include',
-        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-        //credentials: "include"
-    }).then(async (response) => {
-        const result = await response.json();
-        if (response.status >= 205) {
-            return { result, error: true };
+    try {
+        const response = yield fetch(url + "/api/CampaignMember/GetPaginated?" + q, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return {
+                ok: true,
+                result: result.Items,
+                ...action.params,
+                totalItemsCount: result.TotalCount,
+            };
+        });
+        if (response.ok) {
+            yield put(fetchCampaignMembersSuccess(response));
         }
-        return {
-            ok: true,
-            result: result.Items,
-            ...action.params,
-            totalItemsCount: result.TotalCount,
-        };
-    });
-    if (response.ok) {
-        yield put(fetchCampaignMembersSuccess(response));
+    } catch (error) {
+        alert(error);
     }
 }
 export function* fetchCampaignCategoriesAsync(action) {
