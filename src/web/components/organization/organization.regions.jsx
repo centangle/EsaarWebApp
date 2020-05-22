@@ -1,13 +1,14 @@
-import React, {useState, useEffect} from "react";
-import {connect} from "react-redux";
-import {useHistory} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import DataTable from "../table/DataTable/DataTable";
-import {TitleWithAction, FormHolder} from "./organization.styles";
+import { TitleWithAction, FormHolder } from "./organization.styles";
 import Modal from "../modal/modal.component";
 import RegionSelector from "../region/region.selector";
 
-import {fetchUomStart} from "../../../common/redux/uom/uom.actions";
+import { fetchUomStart } from "../../../common/redux/uom/uom.actions";
 import Pagination from "react-js-pagination";
+import { canView } from "../../../common/utility/request";
 
 const OrganizationRegions = ({
   regions,
@@ -21,6 +22,7 @@ const OrganizationRegions = ({
   totalItemsCount,
   pageRangeDisplayed,
   itemsCountPerPage,
+
 }) => {
   useEffect(() => {
     fetchUomStart();
@@ -78,18 +80,18 @@ const OrganizationRegions = ({
     },
   ];
   const closeModal = () => {
-    dispatch({type: "UNLOAD_ORG_REGIONS"});
-    dispatch({type: "CLOSE_MODAL", payload: "ORG_REGION"});
+    dispatch({ type: "UNLOAD_ORG_REGIONS" });
+    dispatch({ type: "CLOSE_MODAL", payload: "ORG_REGION" });
   };
   const openModal = () => {
-    dispatch({type: "OPEN_MODAL", payload: "ORG_REGION"});
-    dispatch({type: "LOAD_ORG_REGIONS", payload: regions});
+    dispatch({ type: "OPEN_MODAL", payload: "ORG_REGION" });
+    dispatch({ type: "LOAD_ORG_REGIONS", payload: regions });
   };
   const handleChange = (event) => {
-    setState({...state, [event.target.name]: event.target.value});
+    setState({ ...state, [event.target.name]: event.target.value });
   };
   const handleSubmit = () => {
-    const form = {...state};
+    const form = { ...state };
     delete form["modal"];
     delete form["addedItems"];
 
@@ -102,7 +104,7 @@ const OrganizationRegions = ({
     });
   };
 
-  const {Name, NativeName, Description, ImageUrl, ImageInBase64} = state;
+  const { Name, NativeName, Description, ImageUrl, ImageInBase64 } = state;
   const handlePageChange = (page) => {
     dispatch({
       type: "FETCH_ORG_REGIONS_START",
@@ -119,7 +121,10 @@ const OrganizationRegions = ({
     <>
       <TitleWithAction>
         <h2>{organization ? organization.Name : null} Regions</h2>
-        <button onClick={openModal}>Add/Edit a region</button>
+        {
+          canView(["Owner", "Moderator"], organization.CurrentMemberRoles) ?
+            <button onClick={openModal}>Add/Edit a region</button> : null
+        }
       </TitleWithAction>
       <div className="modal-holder">
         {form.modal ? (
@@ -152,8 +157,8 @@ const OrganizationRegions = ({
   );
 };
 const mapState = (state) => {
-  const {organization} = state;
-  const {region} = state;
+  const { organization } = state;
+  const { region } = state;
   return {
     regions: organization.regions,
     organizations: organization.organizations,

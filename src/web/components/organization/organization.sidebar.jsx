@@ -1,6 +1,6 @@
-import React from "react";
-import {OrgSideHolder} from "./organization.styles";
-import {Link} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { OrgSideHolder } from "./organization.styles";
+import { Link } from "react-router-dom";
 import homeIcon from "../../../assets/home-side.png";
 import officesIcon from "../../../assets/offices.png";
 import listAltIcon from "../../../assets/list-alt.png";
@@ -13,7 +13,9 @@ import supportIcon from "../../../assets/support.png";
 import volunteerIcon from "../../../assets/volunteer-alt.png";
 import listIcon from "../../../assets/list.png";
 import campaignIcon from '../../../assets/campaigns.png';
-const OrganizationSidebar = ({organization}) => {
+import { connect } from "react-redux";
+import {canView} from "../../../common/utility/request";
+const OrganizationSidebar = ({ organization, CurrentMemberRoles }) => {
   return (
     <OrgSideHolder>
       <nav>
@@ -27,24 +29,30 @@ const OrganizationSidebar = ({organization}) => {
               <span>تفصیلات</span>
             </Link>
           </li>
-          <li>
-            <Link to={`/organizations/${organization.Id}/requests`}>
-              <span>
-                <img src={listAltIcon} alt="" />
-              </span>
-              <span>Requests</span>
-              <span>درخواستیں</span>
-            </Link>
-          </li>
-          <li>
-            <Link to={`/organizations/${organization.Id}/packages`}>
-              <span>
-                <img src={listIcon} alt="" />
-              </span>
-              <span>Packages</span>
-              <span>پیکیجز</span>
-            </Link>
-          </li>
+          {
+            canView(["Owner", "Moderator"], CurrentMemberRoles) ?
+              <li>
+                <Link to={`/organizations/${organization.Id}/requests`}>
+                  <span>
+                    <img src={listAltIcon} alt="" />
+                  </span>
+                  <span>Requests</span>
+                  <span>درخواستیں</span>
+                </Link>
+              </li> : null
+          }
+          {
+            canView(["Owner", "Moderator"], CurrentMemberRoles) ?
+              <li>
+                <Link to={`/organizations/${organization.Id}/packages`}>
+                  <span>
+                    <img src={listIcon} alt="" />
+                  </span>
+                  <span>Packages</span>
+                  <span>پیکیجز</span>
+                </Link>
+              </li> : null
+          }
           <li>
             <Link to={`/organizations/${organization.Id}/regions`}>
               <span>
@@ -63,69 +71,89 @@ const OrganizationSidebar = ({organization}) => {
               <span>مہمات</span>
             </Link>
           </li>
-          <li>
-            <Link to={`/organizations/${organization.Id}/tasks`}>
-              <span>
-                <img src={listIcon} alt="" />
-              </span>
-              <span>Tasks</span>
-              <span>ٹاسک</span>
-            </Link>
-          </li>
-          <li>
-            <Link to={`/organizations/${organization.Id}/volunteers`}>
-              <span>
-                <img src={volunteerIcon} alt="" />
-              </span>
-              <span>Volunteers</span>
-              <span>رضا کار</span>
-            </Link>
-          </li>
-          <li>
-            <Link to={`/organizations/${organization.Id}/modarators`}>
-              <span>
-                <img src={supportIcon} alt="" />
-              </span>
-              <span>Modarators</span>
-              <span>مدارات</span>
-            </Link>
-          </li>
-          <li>
-            <Link to={`/organizations/${organization.Id}/members`}>
-              <span>
-                <img src={groupIcon} alt="" />
-              </span>
-              <span>Members</span>
-              <span>ممبران</span>
-            </Link>
-          </li>
-          <li>
-            <Link to={`/organizations/${organization.Id}/stats`}>
-              <span>
-                <img src={moneyIcon} alt="" />
-              </span>
-              <span>Stats</span>
-              <span>اعدادوشمار</span>
-            </Link>
-          </li>
-          <li>
-            <Link to={`/organizations/${organization.Id}/attachments`}>
-              <span>
-                <img src={attachIcon} alt="" />
-              </span>
-              <span>Attachments</span>
-              <span>اٹیچمنٹ</span>
-            </Link>
-          </li>
-          <li>
-            <Link to={`/organizations/${organization.Id}/owners`}>
-              <span>
-                <img src={accountIcon} alt="" />
-              </span>
-              <span>Owners</span>
-              <span>مالکان</span>
-            </Link>
-          </li>
+          {
+            canView(["Owner", "Volunteer", "Moderator"], CurrentMemberRoles) ? <li>
+              <Link to={`/organizations/${organization.Id}/tasks`}>
+                <span>
+                  <img src={listIcon} alt="" />
+                </span>
+                <span>Tasks</span>
+                <span>ٹاسک</span>
+              </Link>
+            </li> : null
+          }
+          {
+            canView(["Owner", "Moderator"], CurrentMemberRoles) ?
+              <li>
+                <Link to={`/organizations/${organization.Id}/volunteers`}>
+                  <span>
+                    <img src={volunteerIcon} alt="" />
+                  </span>
+                  <span>Volunteers</span>
+                  <span>رضا کار</span>
+                </Link>
+              </li> : null
+          }
+          {
+            canView(["Owner", "Moderator"], CurrentMemberRoles) ?
+              <li>
+                <Link to={`/organizations/${organization.Id}/modarators`}>
+                  <span>
+                    <img src={supportIcon} alt="" />
+                  </span>
+                  <span>Modarators</span>
+                  <span>مدارات</span>
+                </Link>
+              </li> : null
+          }
+          {
+            canView(["Owner", "Moderator"], CurrentMemberRoles) ?
+              <li>
+                <Link to={`/organizations/${organization.Id}/members`}>
+                  <span>
+                    <img src={groupIcon} alt="" />
+                  </span>
+                  <span>Members</span>
+                  <span>ممبران</span>
+                </Link>
+              </li> : null
+          }
+          {
+            canView(["Owner", "Moderator"], CurrentMemberRoles) ?
+              <li>
+                <Link to={`/organizations/${organization.Id}/stats`}>
+                  <span>
+                    <img src={moneyIcon} alt="" />
+                  </span>
+                  <span>Stats</span>
+                  <span>اعدادوشمار</span>
+                </Link>
+              </li> : null
+          }
+          {
+            canView(["Owner", "Moderator"], CurrentMemberRoles) ?
+              <li>
+                <Link to={`/organizations/${organization.Id}/attachments`}>
+                  <span>
+                    <img src={attachIcon} alt="" />
+                  </span>
+                  <span>Attachments</span>
+                  <span>اٹیچمنٹ</span>
+                </Link>
+              </li> : null
+          }
+          {
+            canView(["Owner", "Moderator"], CurrentMemberRoles) ?
+              <li>
+                <Link to={`/organizations/${organization.Id}/owners`}>
+                  <span>
+                    <img src={accountIcon} alt="" />
+                  </span>
+                  <span>Owners</span>
+                  <span>مالکان</span>
+                </Link>
+              </li> : null
+          }
           <li>
             <Link to={`/organizations/${organization.Id}/offices`}>
               <span>
@@ -158,4 +186,12 @@ const OrganizationSidebar = ({organization}) => {
     </OrgSideHolder>
   );
 };
-export default OrganizationSidebar;
+const mapState = (state) => {
+
+  const { organization } = state;
+  const { current } = organization;
+  return {
+    CurrentMemberRoles: current.CurrentMemberRoles
+  }
+}
+export default connect(mapState)(OrganizationSidebar);

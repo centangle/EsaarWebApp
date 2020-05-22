@@ -12,6 +12,7 @@ import Pagination from "react-js-pagination";
 import Select from 'react-select';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { canView } from "../../../common/utility/request";
 
 const OrganizationCampaigns = ({ events, campaigns, organizations, dispatch, organization, fetchUomStart, form, activePage, totalItemsCount, pageRangeDisplayed, itemsCountPerPage }) => {
   useEffect(() => {
