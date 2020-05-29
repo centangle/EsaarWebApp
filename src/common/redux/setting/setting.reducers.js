@@ -13,6 +13,7 @@ const INITIAL_STATE = {
 
 const setting = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case 'FETCH_CAMPAIGN_START':
     case 'FETCH_ORGANIZATION_START':
     case 'ADD_ORGANIZATION_START':
     case 'FETCH_ORGANIZATION_DETAIL':
@@ -40,6 +41,7 @@ const setting = (state = INITIAL_STATE, action) => {
         ...state,
         miniLoading: true,
       }
+    case 'FETCH_CAMPAIGN_SUCCESS':
     case 'FETCH_ORGANIZATION_SUCCESS':
     case 'ADD_ORGANIZATION_SUCCESS':
     case 'FETCH_ORGANIZATION_DETAIL_SUCCESS':

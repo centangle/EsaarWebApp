@@ -86,10 +86,6 @@ const OrganizationItems = ({ dispatch, organization, items, selectedItems, activ
                 </label>
             </PreSearch>
             <Search
-                filters={{
-                    location: ["Lahore", "Islamabad"],
-                    categories: ["Education", "Health"],
-                }}
                 type='organization-items'
                 handleSearch={handleSearch}
             />

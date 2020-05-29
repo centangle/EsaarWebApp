@@ -44,7 +44,7 @@ const Request = ({ data, pageFilters, dispatch, organizations, activePage, total
   return (
     <div className='page-right'>
       {/* <RequestAdder /> */}
-      <Search type='request' handleSearch={handleSearch} />
+      <Search type='request' showFilter={true} handleSearch={handleSearch} />
       <Tabular type='REQUEST' data={mappedData} />
       <Pagination
         activePage={activePage}

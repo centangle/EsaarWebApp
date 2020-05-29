@@ -89,6 +89,7 @@
     .dropdown{
       display: inline-block;
       min-width: 200px;
+      z-index: 99;
     }
     .filters-input {
       display: inline-block;

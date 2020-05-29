@@ -118,6 +118,7 @@ const CAMPAIGNanzation = ({
 
       <Search
         type="campaign"
+        showFilter={true}
         handleSearch={handleSearch}
       />
       <GridToList

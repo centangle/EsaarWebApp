@@ -32,10 +32,18 @@ export function* fetchItemAsync() {
     alert(error);
   }
 }
-export function* fetchPeriferalItemAsync() {
+export function* fetchPeriferalItemAsync(action) {
   const currentUser = yield select(selectCurrentUser);
+  let q = "recordsPerPage=" + action.params.itemsCountPerPage
+    + "&currentPage=" + action.params.activePage
+    + "&orderDir=Asc"
+    + "&calculateTotal=true"
+    + "&calculateTotal=true";
+    if(action.params.name){
+      q+="&itemName="+action.params.name;
+    }
   try {
-    const response = yield fetch(url + "/api/Item/GetPeripheralItems", {
+    const response = yield fetch(url + "/api/Item/GetPeripheralItemsPaginated?"+q, {
       method: "GET",
       //withCredentials: true,
       credentials: 'include',

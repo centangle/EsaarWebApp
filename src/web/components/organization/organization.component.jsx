@@ -124,6 +124,7 @@ const Organzation = ({
 
       <Search
         type="organization"
+        showFilter={true}
         handleSearch={handleSearch}
       />
       <GridToList

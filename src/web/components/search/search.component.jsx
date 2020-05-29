@@ -7,17 +7,11 @@ import OrganizationSearch from "./organization.search";
 import RequestSearch from "./request.search";
 import DonationSearch from "./donation.search";
 import CampaignSearch from "./campaign.search";
-const Filters = ({type, selectedFilters, handleCheck}) => {
   const filters = {
-    location: [
-      {Id: "Lahore", Name: "Lahore"},
-      {Id: "Islamabad", Name: "Islamabad"},
-    ],
-    categories: [
-      {Id: "Education", Name: "Education"},
-      {Id: "Health", Name: "Health"},
-    ],
+
   };
+const Filters = ({type, selectedFilters, handleCheck}) => {
+
   if (type === "organization") {
     return <OrganizationSearch handleCheck={handleCheck} />;
   }
@@ -56,7 +50,7 @@ const Filters = ({type, selectedFilters, handleCheck}) => {
     );
   });
 };
-const Search = ({handleSearch, type, dispatch, filter, selectedFilters}) => {
+const Search = ({handleSearch, type, dispatch, showFilter,filter, selectedFilters}) => {
   const [state, setState] = useState({
     term: "",
     filter: false,
@@ -129,9 +123,11 @@ const Search = ({handleSearch, type, dispatch, filter, selectedFilters}) => {
           </div>
         </div>
         <div className="right">
-          <span className="filter" onClick={toggleFilter}>
+          {
+            showFilter?<span className="filter" onClick={toggleFilter}>
             <img src={filterIcon} alt="filter" /> <span>Filter</span>
-          </span>
+          </span>:null
+          }
         </div>
       </div>
       {/* <div className="adv">

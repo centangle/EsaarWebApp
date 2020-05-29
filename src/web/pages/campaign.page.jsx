@@ -15,17 +15,17 @@ const CampaignDetail = lazy(() =>
 );
 
 
-const CampaignsPage = ({ match, fetchCampaignStart,fetchCampaignDetailStart, fetchRootItemStart }) => {
+const CampaignsPage = ({ match,filters, fetchCampaignStart,fetchCampaignDetailStart, fetchRootItemStart }) => {
   
   const [state, setState] = useState({ match,params });
   const page =  match.params.id;
   
   useEffect(() => {
     if (state.match.params.id === undefined && state.params!==undefined) {
-      fetchCampaignStart(state.params);
+      fetchCampaignStart({...state.params,filters:[filters]});
       fetchRootItemStart();
     }
-  }, [state.match.params.id,fetchCampaignStart,state.params,fetchRootItemStart]);
+  }, [state.match.params.id,fetchCampaignStart,state.params,fetchRootItemStart,filters]);
   useEffect(()=>{
     if(page!==undefined)
     fetchCampaignDetailStart(page);
@@ -51,9 +51,10 @@ const CampaignsPage = ({ match, fetchCampaignStart,fetchCampaignDetailStart, fet
   )
 }
 const mapState = (state) => {
-  const { setting } = state;
+  const { setting,campaign } = state;
   return {
-    isLoading: setting.isLoading
+    isLoading: setting.isLoading,
+    filters:campaign.selectedFilters?campaign.selectedFilters:[]
   }
 }
 const mapDispatch = dispatch => ({
