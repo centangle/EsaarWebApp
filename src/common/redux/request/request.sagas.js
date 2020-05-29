@@ -142,6 +142,13 @@ export function* addRequestThreadAsync(action) {
         if (request.error) {
             yield put(addRequestThreadFailure(request));
         } else {
+            console.log(action);
+            if(action.payload.EntityType==='Donation'){
+                yield put({type:'FETCH_DONATION_REQUEST_THREAD_START',payload:action.payload.Entity.Id});
+            }
+            if(action.payload.EntityType==='Organization'){
+                yield put({type:'FETCH_REQUEST_THREAD_START',payload:action.payload.Entity.Id});
+            }
             yield put(addRequestThreadSuccess({ request }));
         }
     } catch (error) {
