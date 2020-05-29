@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { CartHolder } from "./donate.styles";
-const DonateCart = ({ items,AddressLatLong,PrefferedCollectionTime, dispatch, campaign, organization, type, match }) => {
+const DonateCart = ({ files,items,AddressLatLong,PrefferedCollectionTime, dispatch, campaign, organization, type, match }) => {
   const [state, setState] = useState({ note: "", uom: "" });
   const handleChange = (item, quantity) => {
     dispatch({
@@ -13,6 +13,9 @@ const DonateCart = ({ items,AddressLatLong,PrefferedCollectionTime, dispatch, ca
     setState({ ...state, note: e.target.value });
   };
   const handleSubmit = () => {
+    const attachments = files.map(file=>{
+      return {Url:file.file}
+    })
     const mappedItems = items.map((item) => {
       return {
         Item: { ...item },
@@ -34,7 +37,8 @@ const DonateCart = ({ items,AddressLatLong,PrefferedCollectionTime, dispatch, ca
           OrganizationId:campaign.Organization.Id,
           Type: donationType,
           AddressLatLong,
-          PrefferedCollectionTime
+          PrefferedCollectionTime,
+          Attachments:attachments
         },
       });
     }
@@ -47,7 +51,8 @@ const DonateCart = ({ items,AddressLatLong,PrefferedCollectionTime, dispatch, ca
           OrganizationId: organization.Id,
           Type: donationType,
           AddressLatLong,
-          PrefferedCollectionTime
+          PrefferedCollectionTime,
+          Attachments:attachments
         },
       });
     }
@@ -123,9 +128,10 @@ const DonateCart = ({ items,AddressLatLong,PrefferedCollectionTime, dispatch, ca
   );
 };
 const mapState = (state) => {
-  const { donation } = state;
+  const { donation,upload } = state;
   return {
     AddressLatLong:donation.AddressLatLong,
+    files:upload.files,
     PrefferedCollectionTime:donation.PrefferedCollectionTime,
     items: Object.keys(donation.cartItems).map(
       (key) => donation.cartItems[key]

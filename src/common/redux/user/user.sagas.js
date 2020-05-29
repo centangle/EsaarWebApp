@@ -154,13 +154,13 @@ export function* signUpAsync(action) {
         const result = await response.json();
         return { result, error: true };
       }
-      return response.json();
+      return {...action.payload};
     });
     if (user.error) {
       yield put(signUpFailure(user));
     } else {
       yield put(signUpSuccess({ user }));
-      yield signInAsync(action);
+      //yield signInAsync({username:user.Email,password:user.Password,grant_type:'password'});
     }
   } catch (error) {
     yield put(signUpFailure(error));

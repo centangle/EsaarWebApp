@@ -67,16 +67,23 @@ export const CartHolder = styled.div`
 `;
 export const DonationHolder = styled.div`
   .map-holder {
-    width: 300px;
+    width: 290px;
     height: 200px;
     margin: 0 10px;
     z-index: -1;
     position: relative;
+    display: inline-flex;
     .leaflet-container {
       width: 100%;
       height: 100%;
       border-radius: 8px;
     }
+  }
+  .attachment-holder{
+    width: 65%;
+    display: flex;
+    min-height: 300px;
+    float: right;
   }
   .other-inputs{
     padding:10px 0px;

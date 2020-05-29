@@ -13,14 +13,13 @@ import {
 } from "../../common/redux/user/user.actions";
 import { Link } from "react-router-dom";
 
-const LoginPage = ({ dispatch, emailSignInStart, signUpStart, isSigningIn, isSigningUp }) => {
+const LoginPage = ({ dispatch, emailSignInStart,isLogin, signUpStart, isSigningIn, isSigningUp }) => {
   const INITIAL_STATE = {
     email: "",
     mobile: "",
     name: "",
     password: "",
     name: "",
-    isLogin: true,
   };
   const [state, setState] = useState(INITIAL_STATE);
 
@@ -47,6 +46,12 @@ const LoginPage = ({ dispatch, emailSignInStart, signUpStart, isSigningIn, isSig
       grant_type: "password",
     });
   };
+  const login = () =>{
+    dispatch({type:'LOGIN'});
+  }
+  const signup = () =>{
+    dispatch({type:'SIGNUP'})
+  }
   return (
     <div className="landing-page">
       <div className="login-wrapper">
@@ -54,7 +59,7 @@ const LoginPage = ({ dispatch, emailSignInStart, signUpStart, isSigningIn, isSig
           {
             isSigningIn ? <Spinner /> : <form
               className={
-                "guest-button-wrapper " + (!state.isLogin ? "hidden" : "")
+                "guest-button-wrapper " + (!isLogin ? "hidden" : "")
               }
               onSubmit={handleSubmit}
             >
@@ -82,7 +87,7 @@ const LoginPage = ({ dispatch, emailSignInStart, signUpStart, isSigningIn, isSig
             </button>
               <p
                 className="change-mode"
-                onClick={() => setState({ ...state, isLogin: false })}
+                onClick={() => signup()}
               >
                 Don't have an account?
             </p>
@@ -91,11 +96,10 @@ const LoginPage = ({ dispatch, emailSignInStart, signUpStart, isSigningIn, isSig
           {
             isSigningUp?<Spinner />:<form
             className={
-              "guest-button-wrapper " + (state.isLogin ? "hidden" : "")
+              "guest-button-wrapper " + (isLogin ? "hidden" : "")
             }
             onSubmit={handleRegSubmit}
           >
-            {}
             <img src={logo} alt="logo" className="landing-page-logo" />
             <div className="form-field">
               <label>Full Name</label>
@@ -137,7 +141,7 @@ const LoginPage = ({ dispatch, emailSignInStart, signUpStart, isSigningIn, isSig
             </button>
             <p
               className="change-mode"
-              onClick={() => setState({ ...state, isLogin: true })}
+              onClick={() => login()}
             >
               Already have an account?
             </p>
@@ -163,12 +167,14 @@ const mapState = (state) => {
   const { user } = state;
   return {
     isSigningIn: user.isSigningIn,
-    isSigningUp: user.isSigningUp
+    isSigningUp: user.isSigningUp,
+    isLogin:user.isLogin
   }
 }
 const mapDispatchToProps = (dispatch) => ({
   emailSignInStart: (emailAndPassword) =>
-    dispatch(emailSignInStart(emailAndPassword)),
+  dispatch(emailSignInStart(emailAndPassword)),
   signUpStart: (emailAndPassword) => dispatch(signUpStart(emailAndPassword)),
+  dispatch
 });
 export default connect(mapState, mapDispatchToProps)(LoginPage);

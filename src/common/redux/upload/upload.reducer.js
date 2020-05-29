@@ -24,6 +24,7 @@ const upload = (state = INITIAL_STATE, action) => {
         progress: action.payload
       }
     case 'OPEN_MODAL':
+    case 'ADD_DONATION_SUCCESS':
       return{
         ...state,
         files:[]

@@ -5,11 +5,27 @@ const INITIAL_STATE = {
   socket:false,
   currentUser:null,
   isSigningIn:false,
-  isIsSigningUp:false
+  isIsSigningUp:false,
+  isLogin:true
 };
 
 const user = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case 'LOGIN':
+    case 'SIGN_UP_SUCCESS':
+      return{
+        ...state,
+        isLogin:true,
+        isSigningUp:false,
+        isSigningIn:false
+      }
+    case 'SIGNUP':
+      return{
+        ...state,
+        isLogin:false,
+        isSigningUp:false,
+        isSigningIn:false
+      }
     case userTypes.ADD_USER_START:
       return {
         ...state

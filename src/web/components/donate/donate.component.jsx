@@ -5,10 +5,12 @@ import { DonationHolder } from './donate.styles';
 import Pagination from "react-js-pagination";
 import Map from '../map/map.component';
 import DatePicker from "react-datepicker";
+import UploaderComponent from '../uploader/uploader.component';
 import "react-datepicker/dist/react-datepicker.css";
+const baseUrl = require('../../../common/utility/request').baseUrl;
 
-const Donate = ({ organization,PrefferedCollectionTime,AddressLatLong, latitude, longitude, items, dispatch, activePage, totalItemsCount, pageRangeDisplayed, itemsCountPerPage }) => {
-    
+const Donate = ({ files, organization, PrefferedCollectionTime, AddressLatLong, latitude, longitude, items, dispatch, activePage, totalItemsCount, pageRangeDisplayed, itemsCountPerPage }) => {
+
     const mapItems = items.map(item => {
         return { ...item.Item, ItemUOMs: item.ItemUOMs, Description: "" }
     });
@@ -22,7 +24,7 @@ const Donate = ({ organization,PrefferedCollectionTime,AddressLatLong, latitude,
         })
     }
     const handleChange = (selected) => {
-        dispatch({type:'CHANGE_DONATION_DETAILS',payload:selected})
+        dispatch({ type: 'CHANGE_DONATION_DETAILS', payload: selected })
         //setState({ ...state, [name]: value });
     }
     const buttonsWithActions = [{ label: 'Add', action: handleClick }]
@@ -38,6 +40,10 @@ const Donate = ({ organization,PrefferedCollectionTime,AddressLatLong, latitude,
             />
             <div className='other-inputs'>
                 <label>
+                    Pickup Location
+                    <input type='text' name="AddressLatLong" value={AddressLatLong} onChange={(event) => handleChange({ name: event.target.name, value: event.target.value })} />
+                </label>
+                <label>
                     Preffered Pickup time
                 <DatePicker
                         name="PrefferedCollectionTime"
@@ -48,20 +54,33 @@ const Donate = ({ organization,PrefferedCollectionTime,AddressLatLong, latitude,
                         onChange={(date) => handleChange({ name: 'PrefferedCollectionTime', value: date })} //only when value has changed
                     />
                 </label>
-                <label>
-                    Pickup Location
-                    <input type='text' name="AddressLatLong" value={AddressLatLong} onChange={(event) => handleChange({ name: event.target.name, value: event.target.value })} />
-                </label>
+
             </div>
             <div className='map-holder'>
                 <Map />
+            </div>
+            <div className='attachment-holder'>
+                <UploaderComponent title="Upload Photos" />
+                <div className='files-holder'>
+                    {
+                        files.map(f => {
+                            return (
+                                <div key={f.file} className='inline-tr'>
+                                    <img src={baseUrl + '/' + f.file} alt="File" />
+                                    <input name={`naam-${f.file}`} type='text' onChange={(e) => handleChange(e, f)} placeholder='Name' />
+                                    <textarea name={`kaam-${f.file}`} onChange={(e) => handleChange(e, f)} className='note'></textarea>
+                                </div>
+                            )
+                        })
+                    }
+                </div>
             </div>
 
         </DonationHolder>
     )
 }
 const mapState = (state, { match, type }) => {
-    const { organization, campaign, user,donation } = state;
+    const { organization, campaign, user, donation, upload } = state;
     let items = [];
 
     if (type === 'campaign') {
@@ -72,10 +91,11 @@ const mapState = (state, { match, type }) => {
     }
 
     return {
+        files: upload.files,
         latitude: user.latitude,
         longitude: user.longitude,
-        AddressLatLong:donation.AddressLatLong,
-        PrefferedCollectionTime:donation.PrefferedCollectionTime,
+        AddressLatLong: donation.AddressLatLong,
+        PrefferedCollectionTime: donation.PrefferedCollectionTime,
         //organization: organization.organizations[match.params.id],
         items,
         activePage: organization && organization.activePage ? organization.activePage : 0,
