@@ -5,7 +5,6 @@ import RequestAdder from "./request.adder";
 import { connect } from "react-redux";
 import moment from "moment";
 import RegionSelector from "../region/region.selector";
-
 import {
   fetchDonationDetailsStart,
   fetchDonationRequestThreadStart,
@@ -23,7 +22,8 @@ const RequestDetail = ({
   fetchDonationDetailsStart,
   fetchDonationRequestThreadStart,
   detailModal,
-  openThread
+  openThread,
+  replyModal
 }) => {
   useEffect(() => {
     fetchDonationDetailsStart(match.params.id);
@@ -74,6 +74,12 @@ const RequestDetail = ({
   const handleCloseDetail = () => {
     dispatch({ type: 'CLOSE_THREAD_MODAL' });
   }
+  const handleOpenReply = ()=>{
+    dispatch({ type: 'OPEN_REPLY_MODAL' })
+  }
+  const handleCloseReplyModal = () =>{
+    dispatch({ type: 'CLOSE_REPLY_MODAL' });
+  }
   return (
     <div className="page-right">
       <ThreadHeader>
@@ -100,10 +106,16 @@ const RequestDetail = ({
             request.DonationRequestOrganization.Status
             : null}
         </span>
+        <button className='reply-btn' onClick={handleOpenReply}>Reply</button>
       </ThreadHeader>
-      {(request && request.CanUpdateStatus) || true ? (
+      
+      {
+        replyModal?<Modal closeModal={handleCloseReplyModal}>
+          {(request && request.CanUpdateStatus) || true ? (
         <RequestAdder request={request} match={match} />
       ) : null}
+        </Modal>:null
+      }
       {
         detailModal ? <Modal closeModal={handleCloseDetail} >
           <h4>
@@ -169,7 +181,8 @@ const mapState = (state, { match }) => {
     request: donation.donations[match.params.id],
     regions: region.regions,
     detailModal: donation.detailModal,
-    openThread: donation.openThread
+    openThread: donation.openThread,
+    replyModal:donation.replyModal
   };
 };
 const mapDispatch = (dispatch) => {

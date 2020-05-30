@@ -13,11 +13,27 @@ const INITIAL_STATE = {
   PrefferedCollectionTime:new Date(),
   AddressLatLong:'',
   detailModal:false,
+  replyModal:false,
   openThread:{}
 };
 
 const donation = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case 'ADD_REQUEST_THREAD_SUCCESS':
+      return{
+        ...state,
+        replyModal:false
+      }
+    case 'OPEN_REPLY_MODAL':
+      return{
+        ...state,
+        replyModal:true,
+      }
+    case 'CLOSE_REPLY_MODAL':
+      return{
+        ...state,
+        replyModal:false
+      }
     case 'CHECK_USER_SESSION':
       return{
         ...state,

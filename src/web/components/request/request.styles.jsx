@@ -44,4 +44,14 @@ export const ThreadHeader = styled.div`
     display: block;
     padding: 10px 0px;
   }
+  .reply-btn{
+    margin: auto;
+    display: block;
+    padding: 0;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    outline: none;
+    cursor: pointer;
+  }
 `;

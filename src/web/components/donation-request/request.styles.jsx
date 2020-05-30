@@ -11,6 +11,7 @@ export const FormHolder = styled.div`
     border-radius: 20px;
     outline: none;
   }
+
   .submit,
   select {
     padding: 10px;
@@ -65,5 +66,15 @@ export const ThreadHeader = styled.div`
     clear: both;
     display: block;
     padding: 10px 0px;
+  }
+    .reply-btn{
+        margin: auto;
+    display: block;
+    padding: 0;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    outline: none;
+    cursor: pointer;
   }
 `;

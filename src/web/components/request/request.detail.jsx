@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { VerticalTimeline, VerticalTimelineElement } from "../timeline";
 import { ThreadHeader } from "./request.styles";
 import RequestAdder from "./request.adder";
@@ -11,7 +11,10 @@ import {
   fetchOrgRequestThreadStart
 } from "../../../common/redux/request/request.actions";
 const baseUrl = require('../../../common/utility/request').baseUrl;
-const RequestDetail = ({ fetchOrgRequestDetailStart,fetchOrgRequestThreadStart,match, replies, request, dispatch, regions, detailModal, openThread }) => {
+const RequestDetail = ({
+  replyModal, fetchOrgRequestDetailStart, fetchOrgRequestThreadStart,
+  match, replies, request, dispatch, regions, detailModal, openThread
+}) => {
   useEffect(() => {
     fetchOrgRequestDetailStart(match.params.id);
     fetchOrgRequestThreadStart(match.params.id);
@@ -59,6 +62,12 @@ const RequestDetail = ({ fetchOrgRequestDetailStart,fetchOrgRequestThreadStart,m
   }
   const handleCloseDetail = () => {
     dispatch({ type: 'CLOSE_ORG_THREAD_MODAL' });
+  }
+  const handleOpenReply = () => {
+    dispatch({ type: 'OPEN_REPLY_MODAL' })
+  }
+  const handleCloseReplyModal = () => {
+    dispatch({ type: 'CLOSE_REPLY_MODAL' });
   }
   return (
     <div className="page-right">
@@ -114,10 +123,15 @@ const RequestDetail = ({ fetchOrgRequestDetailStart,fetchOrgRequestThreadStart,m
             request.Status
             : null}
         </span>
+        <button className='reply-btn' onClick={handleOpenReply}>Reply</button>
       </ThreadHeader>
-      {request && request.CanUpdateStatus ? (
-        <RequestAdder request={request} match={match} />
-      ) : null}
+      {
+        replyModal ? <Modal closeModal={handleCloseReplyModal}>
+          {(request && request.CanUpdateStatus) || true ? (
+            <RequestAdder request={request} match={match} />
+          ) : null}
+        </Modal> : null
+      }
       {replies ? (
         <VerticalTimeline>
           {replies.map((reply) => {
@@ -156,7 +170,8 @@ const mapState = (state, { match }) => {
     request: request.requests[match.params.id],
     regions: region.regions,
     detailModal: request.detailModal,
-    openThread: request.openThread
+    openThread: request.openThread,
+    replyModal: request.replyModal
   };
 };
 const mapDispatch = (dispatch) => {
@@ -167,4 +182,4 @@ const mapDispatch = (dispatch) => {
       dispatch(fetchOrgRequestThreadStart(Id))
   };
 };
-export default connect(mapState,mapDispatch)(RequestDetail);
+export default connect(mapState, mapDispatch)(RequestDetail);

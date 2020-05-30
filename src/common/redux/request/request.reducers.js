@@ -5,14 +5,30 @@ const INITIAL_STATE = {
   requests: [],
   replies: {},
   status: {},
-  selectedFilters:{},
-  detailModal:false,
-  openThread:{}
+  selectedFilters: {},
+  detailModal: false,
+  openThread: {},
+  replyModal: false
 };
 
 const request = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-        case 'SET_REQUEST_FILTERS':
+    case 'ADD_REQUEST_THREAD_SUCCESS':
+      return{
+        ...state,
+        replyModal:false
+      }
+    case 'OPEN_REPLY_MODAL':
+      return {
+        ...state,
+        replyModal: true,
+      }
+    case 'CLOSE_REPLY_MODAL':
+      return {
+        ...state,
+        replyModal: false
+      }
+    case 'SET_REQUEST_FILTERS':
       let current = state.selectedFilters[action.payload.from]
         ? state.selectedFilters[action.payload.from]
         : [];
@@ -25,8 +41,8 @@ const request = (state = INITIAL_STATE, action) => {
       } else {
         current.splice(current.indexOf(action.payload.item), 1);
       }
-      if(action.payload.clearAllExceptCat){
-        state.selectedFilters={};
+      if (action.payload.clearAllExceptCat) {
+        state.selectedFilters = {};
       }
       return {
         ...state,
@@ -36,19 +52,19 @@ const request = (state = INITIAL_STATE, action) => {
         },
       }
     case 'FETCH_ORG_THREAD_DETAIL_START':
-      return{
+      return {
         ...state,
-        detailModal:true
+        detailModal: true
       }
     case 'CLOSE_ORG_THREAD_MODAL':
-      return{
+      return {
         ...state,
-        detailModal:false
+        detailModal: false
       }
     case 'FETCH_ORG_THREAD_DETAIL_SUCCESS':
-      return{
+      return {
         ...state,
-        openThread:action.payload.result
+        openThread: action.payload.result
       }
     case 'FETCH_REQUEST_THREAD_SUCCESS':
       return {
@@ -90,13 +106,13 @@ const request = (state = INITIAL_STATE, action) => {
         }
       }
     case 'ASSIGN_REQUEST_SUCCESS':
-      return{
+      return {
         ...state,
-        requests:{
+        requests: {
           ...state.requests,
-          [action.payload.result.requestId]:{
+          [action.payload.result.requestId]: {
             ...state.requests[action.payload.result.requestId],
-            IsOpenRequest:false
+            IsOpenRequest: false
           }
         },
       }

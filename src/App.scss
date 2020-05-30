@@ -28,7 +28,12 @@ html {
   background: #fff;
   overflow: none;
 }
-
+.files-holder{
+  img{
+    max-width:150px;
+    max-height: 150px;
+  }
+}
 #root {
   width: 100%;
 }
