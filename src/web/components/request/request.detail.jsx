@@ -1,21 +1,34 @@
-import React, {useState} from "react";
-import {VerticalTimeline, VerticalTimelineElement} from "../timeline";
-import {ThreadHeader} from "./request.styles";
+import React, { useState,useEffect } from "react";
+import { VerticalTimeline, VerticalTimelineElement } from "../timeline";
+import { ThreadHeader } from "./request.styles";
 import RequestAdder from "./request.adder";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import moment from "moment";
 import RegionSelector from "../region/region.selector";
 import Modal from "../modal/modal.component";
-const RequestDetail = ({match, replies, request, dispatch, regions}) => {
-  const [state, setState] = useState({modal: false});
-  const TimelineIcon = ({title}) => {
+import {
+  fetchOrgRequestDetailStart,
+  fetchOrgRequestThreadStart
+} from "../../../common/redux/request/request.actions";
+const baseUrl = require('../../../common/utility/request').baseUrl;
+const RequestDetail = ({ fetchOrgRequestDetailStart,fetchOrgRequestThreadStart,match, replies, request, dispatch, regions, detailModal, openThread }) => {
+  useEffect(() => {
+    fetchOrgRequestDetailStart(match.params.id);
+    fetchOrgRequestThreadStart(match.params.id);
+  }, [
+    fetchOrgRequestDetailStart,
+    fetchOrgRequestThreadStart,
+    match.params.id,
+  ]);
+  const [state, setState] = useState({ modal: false });
+  const TimelineIcon = ({ title }) => {
     return <span className="customIcon">{title}</span>;
   };
   const openModal = () => {
-    setState({...state, modal: true});
+    setState({ ...state, modal: true });
   };
   const closeModal = () => {
-    setState({...state, modal: false});
+    setState({ ...state, modal: false });
   };
   const handleSubmit = () => {
     const payloadRegions = Object.keys(regions).map((key) => {
@@ -40,6 +53,13 @@ const RequestDetail = ({match, replies, request, dispatch, regions}) => {
       },
     });
   };
+  const handleOpenDetail = (id) => {
+    //console.log(request,id);
+    dispatch({ type: 'FETCH_ORG_THREAD_DETAIL_START', payload: { requestId: request.Id, id } })
+  }
+  const handleCloseDetail = () => {
+    dispatch({ type: 'CLOSE_ORG_THREAD_MODAL' });
+  }
   return (
     <div className="page-right">
       <ThreadHeader>
@@ -51,6 +71,32 @@ const RequestDetail = ({match, replies, request, dispatch, regions}) => {
             </button>
           </span>
         ) : null}
+        {
+          detailModal ? <Modal closeModal={handleCloseDetail} >
+            <h4>
+              {
+                openThread && openThread.Creator && openThread.EntityType
+                + ' created by ' + openThread.Creator.Name
+                + ' on ' + openThread.CreatedDate
+              }
+            </h4>
+            <span>Current Status: {openThread && openThread.Status}</span>
+            <p>
+              {
+                openThread && openThread.Note
+              }
+            </p>
+            <div>
+              {
+                openThread && openThread.Attachments && openThread.Attachments.map(image => {
+                  return (
+                    <img key={image.Url} src={baseUrl + image.Url} alt='attachment' />
+                  )
+                })
+              }
+            </div>
+          </Modal> : null
+        }
         {state.modal ? (
           <Modal closeModal={closeModal}>
             <RegionSelector />
@@ -62,10 +108,10 @@ const RequestDetail = ({match, replies, request, dispatch, regions}) => {
         <span className="tread-topic">
           {request
             ? request.Entity.Name +
-              " has requested to " +
-              request.Type +
-              ". The current status is " +
-              request.Status
+            " has requested to " +
+            request.Type +
+            ". The current status is " +
+            request.Status
             : null}
         </span>
       </ThreadHeader>
@@ -80,10 +126,10 @@ const RequestDetail = ({match, replies, request, dispatch, regions}) => {
                 key={reply.Id}
                 className="vertical-timeline-element--education"
                 date={moment(reply.CreatedDate, "YYYY-MM-DD").fromNow()}
-                iconStyle={{background: "rgb(233, 30, 99)", color: "#fff"}}
+                iconStyle={{ background: "rgb(233, 30, 99)", color: "#fff" }}
                 icon={<TimelineIcon title={reply.Status} />}
               >
-                <h3 className="vertical-timeline-element-title">
+                <h3 onClick={() => handleOpenDetail(reply.Id)} className="vertical-timeline-element-title">
                   {reply.Creator.Name}
                 </h3>
                 <span className="vertical-timeline-element-subtitle">
@@ -102,14 +148,23 @@ const RequestDetail = ({match, replies, request, dispatch, regions}) => {
     </div>
   );
 };
-const mapState = (state, {match}) => {
-  const {request} = state;
-  const {region} = state;
+const mapState = (state, { match }) => {
+  const { request, region } = state;
   //console.log(request.replies,match.params.id);
   return {
     replies: request.replies[match.params.id],
     request: request.requests[match.params.id],
     regions: region.regions,
+    detailModal: request.detailModal,
+    openThread: request.openThread
   };
 };
-export default connect(mapState)(RequestDetail);
+const mapDispatch = (dispatch) => {
+  return {
+    dispatch,
+    fetchOrgRequestDetailStart: (Id) => dispatch(fetchOrgRequestDetailStart(Id)),
+    fetchOrgRequestThreadStart: (Id) =>
+      dispatch(fetchOrgRequestThreadStart(Id))
+  };
+};
+export default connect(mapState,mapDispatch)(RequestDetail);

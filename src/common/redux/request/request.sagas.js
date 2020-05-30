@@ -5,8 +5,10 @@ import {
     addRequestSuccess, addRequestFailure, fetchRequestSuccess,
     fetchRequestThreadSuccess,
     fetchRequestStatusSuccess,
+    fetchRequestDetailSuccess,
     addRequestThreadSuccess, addRequestThreadFailure,
-    assignRequestSuccess
+    assignRequestSuccess,
+    fetchThreadDetailSuccess
 } from './request.actions';
 import { apiLink } from '../api.links';
 const url = apiLink;
@@ -264,6 +266,54 @@ export function* assignRequestAsync(action) {
         yield put(addRequestFailure(error));
     }
 }
+export function* fetchRequestDetailsAsync(action) {
+    const currentUser = yield select(selectCurrentUser);
+    try {
+        const response = yield fetch(url + "/api/OrganizationRequest/Get?requestId=" + action.payload, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return { ok: true, result: result };
+        });
+        if (response.ok) {
+            yield put(fetchRequestDetailSuccess(response.result));
+        }
+    } catch (error) {
+        alert(error);
+    }
+
+}
+export function* fetchThreadDetailAsync(action){
+    const currentUser = yield select(selectCurrentUser);
+    //const q = "recordsPerPage=0&type=General&currentPage=1&orderDir=Desc&disablePagination=true&entityType=Organization&entityId=" + action.payload;
+    try {
+        const response = yield fetch(url + "/api/RequestThread/Get/" + action.payload.id, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return { ok: true, result: result };
+        });
+        if (response.ok) {
+            yield put(fetchThreadDetailSuccess(response));
+        }
+    } catch (error) {
+        alert(error);
+    }
+}
 export function* addRequestStart() {
     yield takeEvery(requestTypes.ADD_REQUEST_START, addRequestAsync)
 }
@@ -288,6 +338,12 @@ export function* assignRequest() {
 export function* modifyRegions() {
     yield takeLatest(requestTypes.MODIFY_REQUEST_REGIONS, modifyRegionsAsync)
 }
+export function* fetchThreadDetail() {
+    yield takeLatest(requestTypes.FETCH_ORG_THREAD_DETAIL_START, fetchThreadDetailAsync)
+}
+export function* fetchRequestDetaail(){
+    yield takeLatest(requestTypes.FETCH_ORG_REQUEST_DETAIL_START, fetchRequestDetailsAsync)
+}
 export function* requestSagas() {
     yield all([
         call(addRequestStart),
@@ -297,6 +353,8 @@ export function* requestSagas() {
         call(fetchThread),
         call(fetchRequestStatus),
         call(assignRequest),
-        call(modifyRegions)
+        call(modifyRegions),
+        call(fetchThreadDetail),
+        call(fetchRequestDetaail)
     ]);
 }

@@ -23,6 +23,10 @@ export const fetchDonationItemsSuccess = collections=>({
   type: donationTypes.FETCH_DONATION_ITEMS_SUCCESS,
   payload: collections
 });
+export const fetchThreadDetailSuccess = collection =>({
+  type: donationTypes.FETCH_THREAD_DETAIL_SUCCESS,
+  payload: collection
+});
 export const fetchDonationItemsStart = id=>({
   type: donationTypes.FETCH_DONATION_ITEMS_START,
   payload: id

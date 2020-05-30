@@ -8,7 +8,8 @@ import {
     fetchDonationRequestThreadSuccess,
     fetchDonationDetailsSuccess,
     fetchRequestStatusSuccess,
-    fetchDonationItemsSuccess
+    fetchDonationItemsSuccess,
+    fetchThreadDetailSuccess
 } from './donation.actions';
 import { apiLink } from '../api.links';
 const url = apiLink;
@@ -180,7 +181,7 @@ export function* fetchRequestStatusAsync() {
 export function* fetchDonationDetailsAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     try {
-        const response = yield fetch(url + "/api/DonationRequest/Get?organizationRequestId=" + action.payload, {
+        const response = yield fetch(url + "/api/DonationRequest/Get?donationRequstId=" + action.payload, {
             method: "GET",
             //withCredentials: true,
             credentials: 'include',
@@ -205,7 +206,7 @@ export function* fetchDonationItemsAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     //const q = "recordsPerPage=0&type=General&currentPage=1&orderDir=Desc&disablePagination=true&entityType=Organization&entityId=" + action.payload;
     try {
-        const response = yield fetch(url + "/api/DonationRequest/GetItems?organizationRequestId=" + action.payload, {
+        const response = yield fetch(url + "/api/DonationRequest/GetItems?donationRequestId=" + action.payload, {
             method: "GET",
             //withCredentials: true,
             credentials: 'include',
@@ -220,6 +221,30 @@ export function* fetchDonationItemsAsync(action) {
         });
         if (response.ok) {
             yield put(fetchDonationItemsSuccess(response));
+        }
+    } catch (error) {
+        alert(error);
+    }
+}
+export function* fetchThreadDetailAsync(action){
+    const currentUser = yield select(selectCurrentUser);
+    //const q = "recordsPerPage=0&type=General&currentPage=1&orderDir=Desc&disablePagination=true&entityType=Organization&entityId=" + action.payload;
+    try {
+        const response = yield fetch(url + "/api/RequestThread/Get/" + action.payload.id, {
+            method: "GET",
+            //withCredentials: true,
+            credentials: 'include',
+            headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+            //credentials: "include"
+        }).then(async (response) => {
+            const result = await response.json();
+            if (response.status >= 205) {
+                return { result, error: true };
+            }
+            return { ok: true, result: result };
+        });
+        if (response.ok) {
+            yield put(fetchThreadDetailSuccess(response));
         }
     } catch (error) {
         alert(error);
@@ -246,6 +271,10 @@ export function* fetchDonationDetails() {
 export function* addApproval() {
     yield takeLatest(donationTypes.ADD_DONATION_APPROVAL_START, addApprovalAsync)
 }
+export function* fetchThreadDetail() {
+    yield takeLatest(donationTypes.FETCH_THREAD_DETAIL_START, fetchThreadDetailAsync)
+}
+
 export function* donationSagas() {
     yield all([
         call(addDonation),
@@ -254,6 +283,7 @@ export function* donationSagas() {
         call(fetchThread),
         call(fetchRequestStatus),
         call(fetchDonationItems),
-        call(fetchDonationDetails)
+        call(fetchDonationDetails),
+        call(fetchThreadDetail)
     ]);
 }

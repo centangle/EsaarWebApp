@@ -5,7 +5,9 @@ const INITIAL_STATE = {
   requests: [],
   replies: {},
   status: {},
-  selectedFilters:{}
+  selectedFilters:{},
+  detailModal:false,
+  openThread:{}
 };
 
 const request = (state = INITIAL_STATE, action) => {
@@ -32,6 +34,21 @@ const request = (state = INITIAL_STATE, action) => {
           ...state.selectedFilters,
           [action.payload.from]: [...current],
         },
+      }
+    case 'FETCH_ORG_THREAD_DETAIL_START':
+      return{
+        ...state,
+        detailModal:true
+      }
+    case 'CLOSE_ORG_THREAD_MODAL':
+      return{
+        ...state,
+        detailModal:false
+      }
+    case 'FETCH_ORG_THREAD_DETAIL_SUCCESS':
+      return{
+        ...state,
+        openThread:action.payload.result
       }
     case 'FETCH_REQUEST_THREAD_SUCCESS':
       return {
@@ -60,6 +77,17 @@ const request = (state = INITIAL_STATE, action) => {
           obj[item.Id] = item
           return obj
         }, {})
+      }
+    case 'FETCH_ORG_REQUEST_DETAIL_SUCCESS':
+      return {
+        ...state,
+        requests: {
+          ...state.requests,
+          [action.payload.Id]: {
+            ...state.requests[action.payload.Id],
+            ...action.payload
+          }
+        }
       }
     case 'ASSIGN_REQUEST_SUCCESS':
       return{

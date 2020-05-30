@@ -27,11 +27,11 @@ const Request = ({ data, pageFilters, dispatch, organizations, activePage, total
     }
   });
   const handleSearch = (term, filters) => {
-    dispatch({ type: 'FETCH_REQUEST_START', params: { ...params, name: term, filters: [filters] } });
+    dispatch({ type: 'FETCH_DONATION_REQUEST_START', params: { ...params, name: term, filters: [filters] } });
   }
   const handlePageChange = (page) => {
     dispatch({
-      type: 'FETCH_REQUEST_START', payload: '',
+      type: 'FETCH_DONATION_REQUEST_START', payload: '',
       params: {
         activePage: page,
         totalItemsCount,

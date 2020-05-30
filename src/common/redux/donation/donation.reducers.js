@@ -11,7 +11,9 @@ const INITIAL_STATE = {
   status: {},
   selectedFilters: {},
   PrefferedCollectionTime:new Date(),
-  AddressLatLong:''
+  AddressLatLong:'',
+  detailModal:false,
+  openThread:{}
 };
 
 const donation = (state = INITIAL_STATE, action) => {
@@ -64,6 +66,21 @@ const donation = (state = INITIAL_STATE, action) => {
           obj[item] = item
           return obj
         }, {})
+      }
+    case 'FETCH_THREAD_DETAIL_SUCCESS':
+      return{
+        ...state,
+        openThread:action.payload.result
+      }
+    case 'FETCH_THREAD_DETAIL_START':
+    return{
+      ...state,
+      detailModal:true,
+    }
+    case 'CLOSE_THREAD_MODAL':
+      return{
+        ...state,
+        detailModal:false
       }
     case 'ADD_DONATION_SUCCESS':
       toaster.success("Notification Message", "Your request has been successfully submited.", { timeOut: 500000 })
