@@ -35,6 +35,14 @@ export const fetchDonationRequestStart = (params) => ({
   type: donationTypes.FETCH_DONATION_REQUEST_START,
   params
 });
+export const assignRequestSuccess = collection => ({
+  type: donationTypes.ADD_DONATION_REQUEST_SUCCESS,
+  payload:collection
+});
+export const assignRequestFailure = error => ({
+  type: donationTypes.ADD_DONATION_REQUEST_FAILURE,
+  payload:error
+})
 export const fetchDonationDetailsStart = (Id)=>({
   type: donationTypes.FETCH_DONATION_DETAILS_START,
   payload:Id

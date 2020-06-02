@@ -11,7 +11,8 @@ import {
   fetchDonationItemsStart,
 } from "../../../common/redux/donation/donation.actions";
 import Modal from "../modal/modal.component";
-const baseUrl = require('../../../common/utility/request').baseUrl;
+import RequestStatus from "./request.status";
+const baseUrl = require("../../../common/utility/request").baseUrl;
 const RequestDetail = ({
   match,
   replies,
@@ -23,7 +24,7 @@ const RequestDetail = ({
   fetchDonationRequestThreadStart,
   detailModal,
   openThread,
-  replyModal
+  replyModal,
 }) => {
   useEffect(() => {
     fetchDonationDetailsStart(match.params.id);
@@ -69,79 +70,81 @@ const RequestDetail = ({
     });
   };
   const handleOpenDetail = (id) => {
-    dispatch({ type: 'FETCH_THREAD_DETAIL_START', payload: { requestId: request.Id, id } })
-  }
+    dispatch({
+      type: "FETCH_THREAD_DETAIL_START",
+      payload: { requestId: request.Id, id },
+    });
+  };
   const handleCloseDetail = () => {
-    dispatch({ type: 'CLOSE_THREAD_MODAL' });
-  }
-  const handleOpenReply = ()=>{
-    dispatch({ type: 'OPEN_REPLY_MODAL' })
-  }
-  const handleCloseReplyModal = () =>{
-    dispatch({ type: 'CLOSE_REPLY_MODAL' });
-  }
+    dispatch({ type: "CLOSE_THREAD_MODAL" });
+  };
+  const handleOpenReply = () => {
+    dispatch({
+      type: "OPEN_REPLY_MODAL",
+      payload: {
+        status: request.DonationRequestOrganization
+          ? request.DonationRequestOrganization.Status
+          : "",
+      },
+    });
+  };
+  const handleCloseReplyModal = () => {
+    dispatch({ type: "CLOSE_REPLY_MODAL" });
+  };
   return (
     <div className="page-right">
       <ThreadHeader>
         <h2 className="tread-title">Request Thread</h2>
-        {request && request.CanUpdateRegions ? (
-          <span className="tread-actions">
-            <button onClick={openModal}>Update Regions</button>
-          </span>
-        ) : null}
-        {state.modal ? (
-          <Modal closeModal={closeModal}>
-            <RegionSelector />
-            <button className="btn btn-primary" onClick={handleSubmit}>
-              Save Regions
-            </button>
-          </Modal>
-        ) : null}
         <span className="tread-topic">
           {request
             ? request.Member.Name +
-            " has requested to " +
-            request.Type +
-            ". The current status is " +
-            request.DonationRequestOrganization.Status
+              " has requested to " +
+              request.Type +
+              ". The current status is " +
+              request.DonationRequestOrganization.Status
             : null}
         </span>
-        <button className='reply-btn' onClick={handleOpenReply}>Reply</button>
+        <RequestStatus request={request} />
+        <button className="reply-btn" onClick={handleOpenReply}>
+          Reply
+        </button>
       </ThreadHeader>
-      
-      {
-        replyModal?<Modal closeModal={handleCloseReplyModal}>
+
+      {replyModal ? (
+        <Modal closeModal={handleCloseReplyModal}>
           {(request && request.CanUpdateStatus) || true ? (
-        <RequestAdder request={request} match={match} />
+            <RequestAdder request={request} match={match} />
+          ) : null}
+        </Modal>
       ) : null}
-        </Modal>:null
-      }
-      {
-        detailModal ? <Modal closeModal={handleCloseDetail} >
+      {detailModal ? (
+        <Modal closeModal={handleCloseDetail}>
           <h4>
-            {
-              openThread && openThread.Creator && openThread.EntityType
-              + ' created by ' + openThread.Creator.Name
-              + ' on ' + openThread.CreatedDate
-            }
+            {openThread &&
+              openThread.Creator &&
+              openThread.EntityType +
+                " created by " +
+                openThread.Creator.Name +
+                " on " +
+                openThread.CreatedDate}
           </h4>
           <span>Current Status: {openThread && openThread.Status}</span>
-          <p>
-            {
-              openThread && openThread.Note
-            }
-          </p>
+          <p>{openThread && openThread.Note}</p>
           <div>
-            {
-              openThread && openThread.Attachments && openThread.Attachments.map(image=>{
-                return(
-                  <img key={image.Url} src={baseUrl+image.Url} alt='attachment' />
-                )
-              })
-            }
+            {openThread &&
+              openThread.Attachments &&
+              openThread.Attachments.map((image) => {
+                return (
+                  <img
+                    key={image.Url}
+                    src={baseUrl + image.Url}
+                    alt="attachment"
+                  />
+                );
+              })}
           </div>
-        </Modal> : null
-      }
+        </Modal>
+      ) : null}
       {replies ? (
         <VerticalTimeline>
           {replies.map((reply) => {
@@ -153,7 +156,10 @@ const RequestDetail = ({
                 iconStyle={{ background: "rgb(233, 30, 99)", color: "#fff" }}
                 icon={<TimelineIcon title={reply.Status} />}
               >
-                <h3 onClick={() => handleOpenDetail(reply.Id)} className="vertical-timeline-element-title">
+                <h3
+                  onClick={() => handleOpenDetail(reply.Id)}
+                  className="vertical-timeline-element-title"
+                >
                   {reply.Creator.Name}
                 </h3>
 
@@ -182,7 +188,7 @@ const mapState = (state, { match }) => {
     regions: region.regions,
     detailModal: donation.detailModal,
     openThread: donation.openThread,
-    replyModal:donation.replyModal
+    replyModal: donation.replyModal,
   };
 };
 const mapDispatch = (dispatch) => {

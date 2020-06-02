@@ -8,7 +8,28 @@ import Pagination from "react-js-pagination";
 const Request = ({ data, pageFilters, dispatch, organizations, activePage, totalItemsCount, pageRangeDisplayed, itemsCountPerPage }) => {
   let history = useHistory();
   const handleAssign = (item) => {
-    dispatch({ type: 'ASSIGN_REQUEST_START', payload: { organizationId: item.Organization.Id, requestId: item.Id } });
+    dispatch({
+      type: 'ADD_DONATION_REQUEST_START',
+      payload: {
+        recordId: item.DonationRequestOrganization.Id,
+        requestType: 'AssignModeratorToRequest',
+        DonationRequestOrganizationId: item.DonationRequestOrganization.Id,
+        requestId: item.Id,
+        Status:"ModeratorAssigned"
+      }
+    });
+  }
+  const handleAssignVolunteer = (item) => {
+    dispatch({
+      type: 'ADD_DONATION_REQUEST_START',
+      payload: {
+        recordId: item.DonationRequestOrganization.Id,
+        requestType: 'AssignVolunteerToRequest',
+        DonationRequestOrganizationId: item.DonationRequestOrganization.Id,
+        requestId: item.Id,
+        Status:"VolunteerAssigned"
+      }
+    });
   }
   const handleClick = (obj) => {
     //dispatch({ type: obj.Type.toUpperCase() + '_SELECTED', payload: obj });
@@ -21,7 +42,8 @@ const Request = ({ data, pageFilters, dispatch, organizations, activePage, total
       ImageUrl: request.Member.ImageUrl,
       children: [], Id: request.Id,
       actions: [
-        { id: request.Id + 'assign', item: request, title: 'Self Asign', handleClick: handleAssign, visible: request.CanSelfAssign === true },
+        { id: request.Id + 'assign', item: request, title: 'Moderate', handleClick: handleAssign, visible: request.CanModeratorSelfAssign === true },
+        { id: request.Id + 'volunteer', item: request, title: 'Volunteer', handleClick: handleAssignVolunteer, visible: request.CanVolunteerSelfAssign === true },
         { id: request.Id + 'view', item: request, title: 'View', handleClick: handleClick, visible: request.CanAccessRequestThread === true }
       ]
     }

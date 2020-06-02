@@ -2,33 +2,26 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { FormHolder } from "./request.styles";
 import Modal from "../modal/modal.component";
-import UploaderComponent from '../uploader/uploader.component';
-const baseUrl = require('../../../common/utility/request').baseUrl;
-const RequestAdder = ({ files, dispatch, match, statuses, request, items, modal }) => {
+import UploaderComponent from "../uploader/uploader.component";
+const baseUrl = require("../../../common/utility/request").baseUrl;
+const RequestAdder = ({
+  status,
+  files,
+  dispatch,
+  match,
+  statuses,
+  request,
+  items,
+  modal,
+}) => {
   const [state, setState] = useState({
     Note: "",
-    Status: "",
+    Status: status,
     modal: false,
     uom: "",
     StatusNote: "",
   });
-  const handleClick = () => {
-    dispatch({
-      type: "ADD_REQUEST_THREAD_START",
-      payload: {
-        Entity: {
-          Id: request.DonationRequestOrganization.Id,
-        },
-        EntityType: "Donation",
-        Status: state.Status,
-        Type: "General",
-        Attachments: files.map(file => {
-          return { Url: file.file }
-        }),
-        Note: state.Note,
-      },
-    });
-  };
+
   const handleChange = (event) => {
     if (
       event.target.value === "Approved" ||
@@ -103,22 +96,35 @@ const RequestAdder = ({ files, dispatch, match, statuses, request, items, modal 
       });
     }
   };
-  const handleApproveSubmit = () => {
+  const handleSubmit = () => {
     dispatch({
-      type: "ADD_DONATION_APPROVAL_START",
+      type: "ADD_DONATION_REQUEST_START",
       payload: {
         items,
         donationRequestOrganizationId: request.DonationRequestOrganization.Id,
-        status: state.Status,
-        note: state.StatusNote,
+        status: state.Status === status ? null : state.Status,
+        note: state.Note,
+        Attachments: files.map((file) => {
+          return { Url: file.file };
+        }),
       },
     });
   };
   const { Note, Status } = state;
   return (
     <FormHolder>
+      <span>{status}</span>
+      <input
+        className="reply"
+        placeholder="Reply"
+        type="text"
+        onChange={handleChange}
+        name="Note"
+        value={Note}
+      />
+
       {modal ? (
-        <Modal closeModal={handleClose}>
+        <React.Fragment>
           <h1>Modify Request {state.Status}</h1>
           <div className="item-adjust">
             <div className="item">
@@ -167,71 +173,44 @@ const RequestAdder = ({ files, dispatch, match, statuses, request, items, modal 
                 </div>
               );
             })}
-            <textarea
-              name="StatusNote"
-              value={state.StatusNote}
-              onChange={handleChange}
-              placeholder="Note"
-            ></textarea>
-            <button className="btn btn-success" onClick={handleApproveSubmit}>
-              Save
-            </button>
           </div>
-        </Modal>
-      ) : (
-          false
-        )}
-      <select
-        value={state.Status}
-        name="Status"
-        onChange={(event) => handleChange(event)}
-      >
-        {Object.keys(statuses).map((key) => {
-          return (
-            <option key={key} value={key}>
-              {key}
-            </option>
-          );
-        })}
-      </select>
-      <input
-        className="reply"
-        placeholder="Reply"
-        type="text"
-        onChange={handleChange}
-        name="Note"
-        value={Note}
-      />
-      <div className='attachment-holder'>
+        </React.Fragment>
+      ) : null}
+      <div className="attachment-holder">
         <UploaderComponent title="Upload Photos" />
-        <div className='files-holder'>
-          {
-            files.map(f => {
-              return (
-                <div key={f.file} className='inline-tr'>
-                  <img src={baseUrl + '/' + f.file} alt="File" />
-                  <input name={`naam-${f.file}`} type='text' onChange={(e) => handleChange(e, f)} placeholder='Name' />
-                  <textarea name={`kaam-${f.file}`} onChange={(e) => handleChange(e, f)} className='note'></textarea>
-                </div>
-              )
-            })
-          }
+        <div className="files-holder">
+          {files.map((f) => {
+            return (
+              <div key={f.file} className="inline-tr">
+                <img src={baseUrl + "/" + f.file} alt="File" />
+                <input
+                  name={`naam-${f.file}`}
+                  type="text"
+                  onChange={(e) => handleChange(e, f)}
+                  placeholder="Name"
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
-      <button className="submit" onClick={handleClick}>
+
+      <button className="submit" onClick={handleSubmit}>
         Add Replies
       </button>
     </FormHolder>
   );
 };
 const mapState = (state) => {
-  const { request, upload } = state;
+  const { request, upload, donation } = state;
   const { item } = state;
   return {
     files: upload.files,
     statuses: request.status,
     items: item.items,
     modal: item.modal,
+    replyModal: donation.replyModal,
+    status: donation.currentStatus,
   };
 };
 export default connect(mapState)(RequestAdder);
