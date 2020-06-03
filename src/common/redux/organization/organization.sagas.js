@@ -1011,6 +1011,9 @@ export function* removeItemAsync(action) {
   }
 }
 export function* fetchOrgMembersDDAsync(action) {
+  if (!action.payload.organizationId || !action.payload.type) {
+    return;
+  }
   try {
     const currentUser = yield select(selectCurrentUser);
     const q =
@@ -1176,6 +1179,9 @@ export function* toggleFilter() {
 export function* fetchOrgMembersDD() {
   yield takeEvery("OPEN_REPLY_MODAL", fetchOrgMembersDDAsync);
 }
+export function* fetchRequestMembersDD() {
+  yield takeEvery("OPEN_REPLY_MODAL_REQUEST", fetchOrgMembersDDAsync);
+}
 export function* organizationSagas() {
   yield all([
     call(orgRequest),
@@ -1205,5 +1211,6 @@ export function* organizationSagas() {
     call(logoUpload),
     call(toggleFilter),
     call(fetchOrgMembersDD),
+    call(fetchRequestMembersDD),
   ]);
 }

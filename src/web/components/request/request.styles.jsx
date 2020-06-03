@@ -1,6 +1,11 @@
 import styled from "styled-components";
 
 export const FormHolder = styled.div`
+  .dropdown {
+    display: inline-block;
+    min-width: 200px;
+    margin-left: 10px;
+  }
   .reply {
     padding: 10px;
     margin: 0 20px;
@@ -44,7 +49,7 @@ export const ThreadHeader = styled.div`
     display: block;
     padding: 10px 0px;
   }
-  .reply-btn{
+  .reply-btn {
     margin: auto;
     display: block;
     padding: 0;

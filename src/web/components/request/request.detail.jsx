@@ -10,6 +10,7 @@ import {
   fetchOrgRequestDetailStart,
   fetchOrgRequestThreadStart,
 } from "../../../common/redux/request/request.actions";
+import RequestStatus from "./request.status";
 const baseUrl = require("../../../common/utility/request").baseUrl;
 const RequestDetail = ({
   replyModal,
@@ -71,7 +72,12 @@ const RequestDetail = ({
     dispatch({ type: "CLOSE_ORG_THREAD_MODAL" });
   };
   const handleOpenReply = () => {
-    dispatch({ type: "OPEN_REPLY_MODAL_REQUEST" });
+    dispatch({
+      type: "OPEN_REPLY_MODAL_REQUEST",
+      payload: {
+        status: request.Status,
+      },
+    });
   };
   const handleCloseReplyModal = () => {
     dispatch({ type: "CLOSE_REPLY_MODAL" });
@@ -117,7 +123,10 @@ const RequestDetail = ({
         ) : null}
         {state.modal ? (
           <Modal closeModal={closeModal}>
-            <RegionSelector />
+            <RegionSelector
+              isOrganizationRegion={true}
+              organizationId={request.Organization.Id}
+            />
             <button className="btn btn-success" onClick={handleSubmit}>
               Save Regions
             </button>
@@ -132,6 +141,7 @@ const RequestDetail = ({
               request.Status
             : null}
         </span>
+        <RequestStatus request={request} />
         <button className="reply-btn" onClick={handleOpenReply}>
           Reply
         </button>

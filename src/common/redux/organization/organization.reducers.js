@@ -338,6 +338,7 @@ const organization = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         current: action.payload.result,
+        form: {},
         organizations: {
           ...state.organizations,
           [action.payload.result.Id]: action.payload.result,

@@ -10,6 +10,8 @@ const INITIAL_STATE = {
   openThread: {},
   replyModal: false,
   currentStatus: "",
+  statusToBe: "",
+  type: "",
 };
 
 const request = (state = INITIAL_STATE, action) => {
@@ -34,6 +36,8 @@ const request = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         replyModal: true,
+        type: action.payload.type,
+        statusToBe: action.payload.status,
       };
     case "CLOSE_REPLY_MODAL":
       return {
@@ -119,6 +123,13 @@ const request = (state = INITIAL_STATE, action) => {
         },
       };
     case "ASSIGN_REQUEST_SUCCESS":
+      toaster.success(
+        "Notification Message",
+        "Request submitted successfully",
+        {
+          timeOut: 500000,
+        }
+      );
       return {
         ...state,
         requests: {
@@ -126,6 +137,7 @@ const request = (state = INITIAL_STATE, action) => {
           [action.payload.result.requestId]: {
             ...state.requests[action.payload.result.requestId],
             IsOpenRequest: false,
+            CanSelfAssign: false,
           },
         },
       };
