@@ -14,6 +14,8 @@ const INITIAL_STATE = {
   replyModal: false,
   openThread: {},
   currentStatus: "",
+  current: {},
+  type: "",
 };
 
 const donation = (state = INITIAL_STATE, action) => {
@@ -65,6 +67,7 @@ const donation = (state = INITIAL_STATE, action) => {
     case "OPEN_REPLY_MODAL":
       return {
         ...state,
+        type: action.payload.type,
         replyModal: true,
         currentStatus: action.payload.status,
       };
@@ -153,8 +156,10 @@ const donation = (state = INITIAL_STATE, action) => {
     case "FETCH_DONATION_DETAILS_SUCCESS":
       return {
         ...state,
+        current: action.payload,
         donations: {
           ...state.donations,
+
           [action.payload.DonationRequestOrganization.Id]: {
             ...state.donations[action.payload.DonationRequestOrganization.Id],
             ...action.payload,

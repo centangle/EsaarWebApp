@@ -14,6 +14,7 @@ const INITIAL_STATE = {
 
 const request = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case "ADD_REQUEST_THREAD_FAILURE":
     case "ADD_REQUEST_FAILURE":
       if (action.payload.result && action.payload.result.ExceptionMessage)
         toaster.error(
@@ -29,7 +30,7 @@ const request = (state = INITIAL_STATE, action) => {
         ...state,
         replyModal: false,
       };
-    case "OPEN_REPLY_MODAL":
+    case "OPEN_REPLY_MODAL_REQUEST":
       return {
         ...state,
         replyModal: true,

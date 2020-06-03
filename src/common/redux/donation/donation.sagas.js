@@ -234,6 +234,10 @@ export function* assignRequestAsync(action) {
         type: "FETCH_DONATION_REQUEST_THREAD_START",
         payload: action.payload.donationRequestOrganizationId,
       });
+      yield put({
+        type: "FETCH_DONATION_DETAILS_START",
+        payload: action.payload.donationRequestOrganizationId,
+      });
       yield put(assignRequestSuccess({ request, result: action.payload }));
     }
   } catch (error) {

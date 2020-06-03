@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { FormHolder } from "./request.styles";
-import Modal from "../modal/modal.component";
 import UploaderComponent from "../uploader/uploader.component";
+import Select from "react-select";
 const baseUrl = require("../../../common/utility/request").baseUrl;
 const RequestAdder = ({
   status,
@@ -13,6 +13,10 @@ const RequestAdder = ({
   request,
   items,
   modal,
+  NextStatus,
+  volunteers,
+  moderators,
+  type,
 }) => {
   const [state, setState] = useState({
     Note: "",
@@ -20,6 +24,7 @@ const RequestAdder = ({
     modal: false,
     uom: "",
     StatusNote: "",
+    VolunteerAssigned: "",
   });
 
   const handleChange = (event) => {
@@ -97,23 +102,61 @@ const RequestAdder = ({
     }
   };
   const handleSubmit = () => {
+    const currentStatus = request.DonationRequestOrganization.Status;
     dispatch({
       type: "ADD_DONATION_REQUEST_START",
       payload: {
         items,
         donationRequestOrganizationId: request.DonationRequestOrganization.Id,
-        status: state.Status === status ? null : state.Status,
+        status: state.Status === currentStatus ? null : state.Status,
         note: state.Note,
         Attachments: files.map((file) => {
           return { Url: file.file };
         }),
+        Moderator: {
+          Id: state.ModeratorAssigned,
+        },
+        Volunteer: {
+          Id: state.VolunteerAssigned,
+        },
       },
     });
   };
   const { Note, Status } = state;
+  const handleSelectMember = ({ value, label, name }) => {
+    setState({ ...state, [name]: { value, label } });
+  };
+  const mappedVolunteers = volunteers.map((item) => {
+    return { value: item.Member.Id, label: item.Member.Name };
+  });
+  const mappedModerators = moderators.map((item) => {
+    return { value: item.Member.Id, label: item.Member.Name };
+  });
   return (
     <FormHolder>
       <span>{status}</span>
+      {type && NextStatus === "VolunteerAssigned" ? (
+        <Select
+          className="dropdown"
+          value={state.VolunteerAssigned}
+          onChange={(item) =>
+            handleSelectMember({ ...item, name: "VolunteerAssigned" })
+          }
+          placeholder={"Select Volunteer"}
+          options={mappedVolunteers}
+        />
+      ) : null}
+      {type && NextStatus === "ModeratorAssigned" ? (
+        <Select
+          className="dropdown"
+          value={state.ModeratorAssigned}
+          onChange={(item) =>
+            handleSelectMember({ ...item, name: "ModeratorAssigned" })
+          }
+          placeholder={"Select Moderator"}
+          options={mappedModerators}
+        />
+      ) : null}
       <input
         className="reply"
         placeholder="Reply"
@@ -202,7 +245,7 @@ const RequestAdder = ({
   );
 };
 const mapState = (state) => {
-  const { request, upload, donation } = state;
+  const { request, upload, donation, organization } = state;
   const { item } = state;
   return {
     files: upload.files,
@@ -211,6 +254,10 @@ const mapState = (state) => {
     modal: item.modal,
     replyModal: donation.replyModal,
     status: donation.currentStatus,
+    NextStatus: donation.current.NextStatus,
+    volunteers: organization.volunteersForDD,
+    moderators: organization.moderatorsForDD,
+    type: donation.type,
   };
 };
 export default connect(mapState)(RequestAdder);

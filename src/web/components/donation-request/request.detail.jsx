@@ -82,6 +82,7 @@ const RequestDetail = ({
     dispatch({
       type: "OPEN_REPLY_MODAL",
       payload: {
+        type: "",
         status: request.DonationRequestOrganization
           ? request.DonationRequestOrganization.Status
           : "",

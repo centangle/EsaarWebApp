@@ -8,21 +8,25 @@ import RegionSelector from "../region/region.selector";
 import Modal from "../modal/modal.component";
 import {
   fetchOrgRequestDetailStart,
-  fetchOrgRequestThreadStart
+  fetchOrgRequestThreadStart,
 } from "../../../common/redux/request/request.actions";
-const baseUrl = require('../../../common/utility/request').baseUrl;
+const baseUrl = require("../../../common/utility/request").baseUrl;
 const RequestDetail = ({
-  replyModal, fetchOrgRequestDetailStart, fetchOrgRequestThreadStart,
-  match, replies, request, dispatch, regions, detailModal, openThread
+  replyModal,
+  fetchOrgRequestDetailStart,
+  fetchOrgRequestThreadStart,
+  match,
+  replies,
+  request,
+  dispatch,
+  regions,
+  detailModal,
+  openThread,
 }) => {
   useEffect(() => {
     fetchOrgRequestDetailStart(match.params.id);
     fetchOrgRequestThreadStart(match.params.id);
-  }, [
-    fetchOrgRequestDetailStart,
-    fetchOrgRequestThreadStart,
-    match.params.id,
-  ]);
+  }, [fetchOrgRequestDetailStart, fetchOrgRequestThreadStart, match.params.id]);
   const [state, setState] = useState({ modal: false });
   const TimelineIcon = ({ title }) => {
     return <span className="customIcon">{title}</span>;
@@ -58,17 +62,20 @@ const RequestDetail = ({
   };
   const handleOpenDetail = (id) => {
     //console.log(request,id);
-    dispatch({ type: 'FETCH_ORG_THREAD_DETAIL_START', payload: { requestId: request.Id, id } })
-  }
+    dispatch({
+      type: "FETCH_ORG_THREAD_DETAIL_START",
+      payload: { requestId: request.Id, id },
+    });
+  };
   const handleCloseDetail = () => {
-    dispatch({ type: 'CLOSE_ORG_THREAD_MODAL' });
-  }
+    dispatch({ type: "CLOSE_ORG_THREAD_MODAL" });
+  };
   const handleOpenReply = () => {
-    dispatch({ type: 'OPEN_REPLY_MODAL' })
-  }
+    dispatch({ type: "OPEN_REPLY_MODAL_REQUEST" });
+  };
   const handleCloseReplyModal = () => {
-    dispatch({ type: 'CLOSE_REPLY_MODAL' });
-  }
+    dispatch({ type: "CLOSE_REPLY_MODAL" });
+  };
   return (
     <div className="page-right">
       <ThreadHeader>
@@ -80,32 +87,34 @@ const RequestDetail = ({
             </button>
           </span>
         ) : null}
-        {
-          detailModal ? <Modal closeModal={handleCloseDetail} >
+        {detailModal ? (
+          <Modal closeModal={handleCloseDetail}>
             <h4>
-              {
-                openThread && openThread.Creator && openThread.EntityType
-                + ' created by ' + openThread.Creator.Name
-                + ' on ' + openThread.CreatedDate
-              }
+              {openThread &&
+                openThread.Creator &&
+                openThread.EntityType +
+                  " created by " +
+                  openThread.Creator.Name +
+                  " on " +
+                  openThread.CreatedDate}
             </h4>
             <span>Current Status: {openThread && openThread.Status}</span>
-            <p>
-              {
-                openThread && openThread.Note
-              }
-            </p>
+            <p>{openThread && openThread.Note}</p>
             <div>
-              {
-                openThread && openThread.Attachments && openThread.Attachments.map(image => {
+              {openThread &&
+                openThread.Attachments &&
+                openThread.Attachments.map((image) => {
                   return (
-                    <img key={image.Url} src={baseUrl + image.Url} alt='attachment' />
-                  )
-                })
-              }
+                    <img
+                      key={image.Url}
+                      src={baseUrl + image.Url}
+                      alt="attachment"
+                    />
+                  );
+                })}
             </div>
-          </Modal> : null
-        }
+          </Modal>
+        ) : null}
         {state.modal ? (
           <Modal closeModal={closeModal}>
             <RegionSelector />
@@ -117,21 +126,23 @@ const RequestDetail = ({
         <span className="tread-topic">
           {request
             ? request.Entity.Name +
-            " has requested to " +
-            request.Type +
-            ". The current status is " +
-            request.Status
+              " has requested to " +
+              request.Type +
+              ". The current status is " +
+              request.Status
             : null}
         </span>
-        <button className='reply-btn' onClick={handleOpenReply}>Reply</button>
+        <button className="reply-btn" onClick={handleOpenReply}>
+          Reply
+        </button>
       </ThreadHeader>
-      {
-        replyModal ? <Modal closeModal={handleCloseReplyModal}>
+      {replyModal ? (
+        <Modal closeModal={handleCloseReplyModal}>
           {(request && request.CanUpdateStatus) || true ? (
             <RequestAdder request={request} match={match} />
           ) : null}
-        </Modal> : null
-      }
+        </Modal>
+      ) : null}
       {replies ? (
         <VerticalTimeline>
           {replies.map((reply) => {
@@ -143,7 +154,10 @@ const RequestDetail = ({
                 iconStyle={{ background: "rgb(233, 30, 99)", color: "#fff" }}
                 icon={<TimelineIcon title={reply.Status} />}
               >
-                <h3 onClick={() => handleOpenDetail(reply.Id)} className="vertical-timeline-element-title">
+                <h3
+                  onClick={() => handleOpenDetail(reply.Id)}
+                  className="vertical-timeline-element-title"
+                >
                   {reply.Creator.Name}
                 </h3>
                 <span className="vertical-timeline-element-subtitle">
@@ -171,15 +185,16 @@ const mapState = (state, { match }) => {
     regions: region.regions,
     detailModal: request.detailModal,
     openThread: request.openThread,
-    replyModal: request.replyModal
+    replyModal: request.replyModal,
   };
 };
 const mapDispatch = (dispatch) => {
   return {
     dispatch,
-    fetchOrgRequestDetailStart: (Id) => dispatch(fetchOrgRequestDetailStart(Id)),
+    fetchOrgRequestDetailStart: (Id) =>
+      dispatch(fetchOrgRequestDetailStart(Id)),
     fetchOrgRequestThreadStart: (Id) =>
-      dispatch(fetchOrgRequestThreadStart(Id))
+      dispatch(fetchOrgRequestThreadStart(Id)),
   };
 };
 export default connect(mapState, mapDispatch)(RequestDetail);

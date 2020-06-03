@@ -10,7 +10,17 @@ const button = (r, dispatch) => {
     ) {
       dispatch({ type: "OPEN_MODAL", payload: { status: toBeStatus } });
     } else {
-      dispatch({ type: "OPEN_REPLY_MODAL", payload: { status: toBeStatus } });
+      let type = "Moderator";
+      let organizationId = r.organizationId;
+      let memberName = "";
+      if (toBeStatus === "VolunteerAssigned") {
+        type = "Volunteer";
+        organizationId = r.DonationRequestOrganization.Organization.Id;
+      }
+      dispatch({
+        type: "OPEN_REPLY_MODAL",
+        payload: { status: toBeStatus, type, organizationId, memberName },
+      });
     }
   };
   if (r.DonationRequestOrganization.Status !== r.NextStatus) {
