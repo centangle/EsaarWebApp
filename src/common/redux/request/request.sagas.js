@@ -156,7 +156,7 @@ export function* fetchRequestStatusAsync() {
 export function* addRequestThreadAsync(action) {
   try {
     const currentUser = yield select(selectCurrentUser);
-    const request = yield fetch(url + "/api/RequestThread/AddRequestThread", {
+    const request = yield fetch(url + "/api/OrganizationRequest/UpdateStatus", {
       method: "POST",
       //withCredentials: true,
       headers: {
@@ -169,28 +169,27 @@ export function* addRequestThreadAsync(action) {
         const result = await response.json();
         return { result, error: true };
       }
-      return response.json();
+      return {
+        error: false,
+        organizationRequestId: action.payload.organizationRequestId,
+        Entity: { Id: action.payload.organizationRequestId },
+      };
     });
     if (request.error) {
       yield put(addRequestThreadFailure(request));
     } else {
       yield put({
         type: "FETCH_ORG_REQUEST_DETAIL_START",
-        payload: action.payload.Entity.Id,
+        payload: action.payload.organizationRequestId,
       });
-      if (action.payload.EntityType === "Donation") {
-        yield put({
-          type: "FETCH_DONATION_REQUEST_THREAD_START",
-          payload: action.payload.Entity.Id,
-        });
-      }
+
       if (action.payload.EntityType === "Organization") {
         yield put({
           type: "FETCH_REQUEST_THREAD_START",
-          payload: action.payload.Entity.Id,
+          payload: action.payload.organizationRequestId,
         });
       }
-      yield put(addRequestThreadSuccess({ request }));
+      yield put(addRequestThreadSuccess({ ...action.payload, ...request }));
     }
   } catch (error) {
     yield put(addRequestThreadFailure(error));

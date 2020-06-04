@@ -699,7 +699,7 @@ export function* fetchOrgItemsAsync(action) {
     "&orderDir=Asc" +
     "&itemType=General" +
     "&calculateTotal=true" +
-    "&disablePagination=false";
+    "&disablePagination=true";
   if (action.params.itemName) {
     q += "&itemName=" + action.params.itemName;
   }

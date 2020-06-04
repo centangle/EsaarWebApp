@@ -60,6 +60,9 @@ export function* fetchPeriferalItemAsync(action) {
   if (action.params.name) {
     q += "&itemName=" + action.params.name;
   }
+  if (action.payload) {
+    q += "&organizationId=" + action.payload;
+  }
   try {
     const response = yield fetch(
       url + "/api/Item/GetPeripheralItemsPaginated?" + q,

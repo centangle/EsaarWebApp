@@ -11,23 +11,25 @@ const RequestAdder = ({
   statusToBe,
   moderators,
   type,
+  currentStatus,
 }) => {
   const [state, setState] = useState({ Note: "", ModeratorAssigned: "" });
   const handleClick = () => {
+    const payload = {
+      organizationRequestId: match.params.id,
+      //Status: statusToBe,
+      Status: currentStatus === statusToBe ? null : statusToBe,
+      Note: state.Note,
+      EntityType: "Organization",
+      Type: "General",
+      Attachments: files.map((file) => {
+        return { Url: file.file };
+      }),
+    };
     dispatch({
       type: "ADD_REQUEST_THREAD_START",
-      payload: {
-        Entity: {
-          Id: match.params.id,
-        },
-        EntityType: "Organization",
-        Status: statusToBe,
-        Type: "General",
-        Attachments: files.map((file) => {
-          return { Url: file.file };
-        }),
-        Note: state.Note,
-      },
+
+      payload,
     });
   };
   const handleChange = (event) => {
@@ -106,6 +108,7 @@ const mapState = (state) => {
   return {
     files: upload.files,
     statusToBe: request.statusToBe,
+    currentStatus: request.currentStatus,
     moderators: organization.moderatorsForDD,
     type: request.type,
   };

@@ -345,6 +345,13 @@ const organization = (state = INITIAL_STATE, action) => {
         },
       };
     case "ADD_ORG_ITEMS_SUCCESS":
+      toaster.success(
+        "Notification Message",
+        "The item is added to your item list.",
+        {
+          timeOut: 50000,
+        }
+      );
       return {
         ...state,
         items: [
@@ -357,6 +364,13 @@ const organization = (state = INITIAL_STATE, action) => {
         ...state,
       };
     case "REMOVE_ORG_ITEMS_SUCCESS":
+      toaster.success(
+        "Notification Message",
+        "The item is no longer in your items list.",
+        {
+          timeOut: 50000,
+        }
+      );
       return {
         ...state,
         items: state.items.filter(

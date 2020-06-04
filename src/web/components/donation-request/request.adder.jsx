@@ -103,6 +103,12 @@ const RequestAdder = ({
   };
   const handleSubmit = () => {
     const currentStatus = request.DonationRequestOrganization.Status;
+    const Moderator = state.ModeratorAssigned
+      ? { Id: state.ModeratorAssigned.value }
+      : null;
+    const Volunteer = state.VolunteerAssigned
+      ? { Id: state.VolunteerAssigned.value }
+      : null;
     dispatch({
       type: "ADD_DONATION_REQUEST_START",
       payload: {
@@ -113,12 +119,8 @@ const RequestAdder = ({
         Attachments: files.map((file) => {
           return { Url: file.file };
         }),
-        Moderator: {
-          Id: state.ModeratorAssigned,
-        },
-        Volunteer: {
-          Id: state.VolunteerAssigned,
-        },
+        Moderator,
+        Volunteer,
       },
     });
   };

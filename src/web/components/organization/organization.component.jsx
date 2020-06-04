@@ -9,6 +9,7 @@ import Search from "../search/search.component";
 import Pagination from "react-js-pagination";
 import { params } from "../../../common/utility/request";
 import RegionSelector from "../region/region.selector";
+import Tour from "reactour";
 const Organzation = ({
   regions,
   data,
@@ -18,10 +19,15 @@ const Organzation = ({
   totalItemsCount,
   pageRangeDisplayed,
   itemsCountPerPage,
-  pageFilters
+  pageFilters,
 }) => {
   let history = useHistory();
-  const [state, setState] = useState({ treeData: data, volunteer: false, id: 0 });
+  const [state, setState] = useState({
+    treeData: data,
+    volunteer: false,
+    id: 0,
+    tour: false,
+  });
   const closeModal = () => {
     dispatch({ type: "CLOSE_MODAL", payload: "ORG" });
   };
@@ -47,12 +53,12 @@ const Organzation = ({
         totalItemsCount,
         pageRangeDisplayed,
         itemsCountPerPage,
-        filters:[pageFilters]
+        filters: [pageFilters],
       },
     });
   };
   const closeVolunteer = () => {
-    dispatch({type:'CLOSE_MODAL'});
+    dispatch({ type: "CLOSE_MODAL" });
     setState({ ...state, volunteer: false });
   };
   const handleJoin = (type, regions = []) => {
@@ -81,13 +87,66 @@ const Organzation = ({
     );
   };
   const openVolunteer = (item) => {
-    dispatch({type:'OPEN_MODAL',payload:'VOLUNTEER'});
+    dispatch({ type: "OPEN_MODAL", payload: "VOLUNTEER" });
     setState({ ...state, id: item.Id, volunteer: true });
   };
   const buttonsWithActions = [
-    { Id: '1', label: "volunteer", action: openVolunteer },
-    { Id: '2', label: 'details', action: handleClick }
+    { Id: "1", label: "volunteer", action: openVolunteer },
+    { Id: "2", label: "details", action: handleClick },
   ];
+  const closeTour = () => {
+    setState({ ...state, tour: false });
+  };
+  const openTour = () => {
+    setState({ ...state, tour: true });
+  };
+  const stepSetup = (step) => {
+    //alert(step);
+    setState({ ...state, tour: false });
+    dispatch({ type: "TOGGLE_FILTER", payload: { type: "organization" } });
+    //alert(step);
+  };
+  const steps = [
+    {
+      selector: ".link-profile",
+      content:
+        "This is your profile dashboard link. From anywhere you can move to your dashboard using this.",
+    },
+    {
+      selector: ".link-home",
+      content: "Link for home page.",
+    },
+    {
+      selector: ".link-orgs",
+      content:
+        "Search Organizations link. You can search organizations by a number of filters",
+    },
+    {
+      selector: ".btn-org-add",
+      content:
+        "Add your organization from here. Please make sure that you don't register organization that you don't represent.",
+    },
+    {
+      selector: ".search-input",
+      content: "You can search organization here",
+    },
+    {
+      selector: ".filter",
+      content: "Filter from here",
+    },
+    {
+      selector: ".selected-filters",
+      content:
+        "These are the applied filter for your search. You can add new filters or remove that are added.",
+    },
+    {
+      select: ".all",
+      content: "something",
+      action: stepSetup,
+    },
+    // ...
+  ];
+
   return (
     <div className="page-right">
       {form.volunteerModal ? (
@@ -117,13 +176,21 @@ const Organzation = ({
           </Modal>
         ) : null}
         <h2>Organizations / Clusters</h2>
-        <button onClick={handleAddOrg}>
+        <button onClick={openTour}>Open Tour</button>
+        <Tour
+          steps={steps}
+          isOpen={state.tour}
+          startAt={0}
+          onRequestClose={closeTour}
+        />
+        <button className="btn-org-add" onClick={handleAddOrg}>
           <i className="fa fa-plus"></i> Add Organization
         </button>
       </TitleWithAction>
 
       <Search
         type="organization"
+        className="search"
         showFilter={true}
         handleSearch={handleSearch}
       />
@@ -149,7 +216,9 @@ const mapState = (state) => {
   const { region } = state;
   return {
     regions: region.regions,
-    pageFilters:organization.selectedFilters?organization.selectedFilters:[],
+    pageFilters: organization.selectedFilters
+      ? organization.selectedFilters
+      : [],
     data: Object.keys(organization.organizations).map((key) => {
       return {
         ...organization.organizations[key],

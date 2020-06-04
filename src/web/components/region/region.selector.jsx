@@ -18,11 +18,11 @@ const RegionSelector = ({
   const [state, setState] = useState({
     isInit: "TRUE",
     RegionLevel: { ...levels[Object.keys(levels)[0]] },
-    Country: { Id: "", Name: "" },
-    State: { Id: "", Name: "" },
-    District: { Id: "", Name: "" },
-    Tehsil: { Id: "", Name: "" },
-    UnionCouncil: { Id: "", Name: "" },
+    Country: { Id: "", Name: "Select Country" },
+    State: { Id: "", Name: "Select State" },
+    District: { Id: "", Name: "Select District" },
+    Tehsil: { Id: "", Name: "Select Tehsil" },
+    UnionCouncil: { Id: "", Name: "Select Union Council" },
     saveable: false,
   });
   useEffect(() => {
@@ -59,9 +59,9 @@ const RegionSelector = ({
     } else if (name === "State") {
       setState({
         ...state,
-        District: { Id: "", Name: "" },
-        Tehsil: { Id: "", Name: "" },
-        UnionCouncil: { Id: "", Name: "" },
+        District: { Id: "", Name: "Select District" },
+        Tehsil: { Id: "", Name: "Select Tehsil" },
+        UnionCouncil: { Id: "", Name: "Select Union Council" },
         [name]: item,
       });
       dispatch({
@@ -75,8 +75,8 @@ const RegionSelector = ({
     } else if (name === "District") {
       setState({
         ...state,
-        Tehsil: { Id: "", Name: "" },
-        UnionCouncil: { Id: "", Name: "" },
+        Tehsil: { Id: "", Name: "Select Tehsil" },
+        UnionCouncil: { Id: "", Name: "Select Union Council" },
         [name]: item,
       });
       dispatch({
@@ -90,7 +90,7 @@ const RegionSelector = ({
     } else if (name === "Tehsil") {
       setState({
         ...state,
-        UnionCouncil: { Id: "", Name: "" },
+        UnionCouncil: { Id: "", Name: "Select Union Council" },
         [name]: item,
       });
       dispatch({
@@ -164,7 +164,7 @@ const RegionSelector = ({
         {state.RegionLevel.Id > 1 ? (
           <Select
             className="dropdown"
-            defaultValue={state.District.Id}
+            value={{ value: state.District.Id, label: state.District.Name }}
             onChange={(item) => onSelect("District", districts[item.value])}
             placeholder="Select District"
             options={mappedDistricts}
@@ -173,7 +173,7 @@ const RegionSelector = ({
         {state.RegionLevel.Id > 2 ? (
           <Select
             className="dropdown"
-            defaultValue={state.Tehsil.Id}
+            value={{ value: state.Tehsil.Id, label: state.Tehsil.Name }}
             onChange={(item) => onSelect("Tehsil", tehsils[item.value])}
             placeholder="Select Tehsil"
             options={mappedTehsils}
@@ -182,7 +182,10 @@ const RegionSelector = ({
         {state.RegionLevel.Id > 3 ? (
           <Select
             className="dropdown"
-            defaultValue={state.UnionCouncil.Id}
+            value={{
+              value: state.UnionCouncil.Id,
+              label: state.UnionCouncil.Name,
+            }}
             onChange={(item) => onSelect("UnionCouncil", ucs[item.value])}
             placeholder="Select Union Council"
             options={mappedUcs}

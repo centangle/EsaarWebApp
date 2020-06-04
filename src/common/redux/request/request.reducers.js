@@ -28,9 +28,21 @@ const request = (state = INITIAL_STATE, action) => {
         ...state,
       };
     case "ADD_REQUEST_THREAD_SUCCESS":
+      toaster.success(
+        "Notification Message",
+        "Your request is successfully submitted.",
+        { timeOut: 500000 }
+      );
       return {
         ...state,
         replyModal: false,
+        requests: {
+          ...state.requests,
+          [action.payload.Entity.Id]: {
+            ...state.requests[action.payload.Entity.Id],
+            CanSelfAssign: false,
+          },
+        },
       };
     case "OPEN_REPLY_MODAL_REQUEST":
       return {
@@ -114,6 +126,7 @@ const request = (state = INITIAL_STATE, action) => {
     case "FETCH_ORG_REQUEST_DETAIL_SUCCESS":
       return {
         ...state,
+        currentStatus: action.payload.Status,
         requests: {
           ...state.requests,
           [action.payload.Id]: {

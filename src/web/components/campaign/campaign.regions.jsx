@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from "react";
-import {connect} from "react-redux";
-import {useHistory} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import DataTable from "../table/DataTable/DataTable";
-import {TitleWithAction, FormHolder} from "./campaign.styles";
+import { TitleWithAction, FormHolder } from "./campaign.styles";
 import Modal from "../modal/modal.component";
 import RegionSelector from "../region/region.selector";
 
-import {fetchUomStart} from "../../../common/redux/uom/uom.actions";
+import { fetchUomStart } from "../../../common/redux/uom/uom.actions";
 import Pagination from "react-js-pagination";
 
 const CampaignRegions = ({
@@ -78,18 +78,23 @@ const CampaignRegions = ({
     },
   ];
   const closeModal = () => {
-    dispatch({type: "UNLOAD_CAMPAIGN_REGIONS"});
-    dispatch({type: "CLOSE_MODAL", payload: "CAMPAIGN_REGION"});
+    dispatch({ type: "UNLOAD_CAMPAIGN_REGIONS" });
+    dispatch({ type: "CLOSE_MODAL", payload: "CAMPAIGN_REGION" });
   };
   const openModal = () => {
-    dispatch({type: "OPEN_MODAL", payload: "CAMPAIGN_REGION"});
-    dispatch({type: "LOAD_CAMPAIGN_REGIONS", payload: regions});
+    dispatch({
+      type: "LOAD_CAMPAIGN_REGIONS",
+      payload: regions,
+      isOrganizationRegion: true,
+      organizationId: campaign.Organization.Id,
+    });
+    dispatch({ type: "OPEN_MODAL", payload: "CAMPAIGN_REGION" });
   };
   const handleChange = (event) => {
-    setState({...state, [event.target.name]: event.target.value});
+    setState({ ...state, [event.target.name]: event.target.value });
   };
   const handleSubmit = () => {
-    const form = {...state};
+    const form = { ...state };
     delete form["modal"];
     delete form["addedItems"];
 
@@ -102,7 +107,7 @@ const CampaignRegions = ({
     });
   };
 
-  const {Name, NativeName, Description, ImageUrl, ImageInBase64} = state;
+  const { Name, NativeName, Description, ImageUrl, ImageInBase64 } = state;
   const handlePageChange = (page) => {
     dispatch({
       type: "FETCH_CAMPAIGN_REGIONS_START",
@@ -128,7 +133,10 @@ const CampaignRegions = ({
             <FormHolder>
               <div>
                 <div className="input-holder">
-                  <RegionSelector />
+                  <RegionSelector
+                    isOrganizationRegion={true}
+                    organizationId={campaign.Organization.Id}
+                  />
                   <button className="btn btn-success" onClick={handleSubmit}>
                     Save Regions
                   </button>
@@ -152,8 +160,8 @@ const CampaignRegions = ({
   );
 };
 const mapState = (state) => {
-  const {campaign} = state;
-  const {region} = state;
+  const { campaign } = state;
+  const { region } = state;
   return {
     regions: campaign.regions,
     campaigns: campaign.campaigns,
@@ -168,20 +176,13 @@ const mapState = (state) => {
       };
     }),
     form: campaign.form,
-    activePage:
-      campaign && campaign.activePage ? campaign.activePage : 0,
+    activePage: campaign && campaign.activePage ? campaign.activePage : 0,
     totalItemsCount:
-      campaign && campaign.totalItemsCount
-        ? campaign.totalItemsCount
-        : 0,
+      campaign && campaign.totalItemsCount ? campaign.totalItemsCount : 0,
     itemsCountPerPage:
-      campaign && campaign.itemsCountPerPage
-        ? campaign.itemsCountPerPage
-        : 0,
+      campaign && campaign.itemsCountPerPage ? campaign.itemsCountPerPage : 0,
     pageRangeDisplayed:
-      campaign && campaign.pageRangeDisplayed
-        ? campaign.pageRangeDisplayed
-        : 0,
+      campaign && campaign.pageRangeDisplayed ? campaign.pageRangeDisplayed : 0,
   };
 };
 const mapDispatch = (dispatch) => ({

@@ -230,14 +230,16 @@ export function* assignRequestAsync(action) {
     if (request.error) {
       yield put(assignRequestFailure(request));
     } else {
-      yield put({
-        type: "FETCH_DONATION_REQUEST_THREAD_START",
-        payload: action.payload.donationRequestOrganizationId,
-      });
-      yield put({
-        type: "FETCH_DONATION_DETAILS_START",
-        payload: action.payload.donationRequestOrganizationId,
-      });
+      if (action.payload.donationRequestOrganizationId) {
+        yield put({
+          type: "FETCH_DONATION_REQUEST_THREAD_START",
+          payload: action.payload.donationRequestOrganizationId,
+        });
+        yield put({
+          type: "FETCH_DONATION_DETAILS_START",
+          payload: action.payload.donationRequestOrganizationId,
+        });
+      }
       yield put(assignRequestSuccess({ request, result: action.payload }));
     }
   } catch (error) {
