@@ -135,15 +135,16 @@ const OrganizationDetail = ({
       //return fetchOrgCampaignsStart(organization.Id);
       case "items":
         fetchOrgRequestsStart({
-          type: "FETCH_PERIFERAL_ITEMS_START",
-          id,
-          params,
-        });
-        return fetchOrgRequestsStart({
           type: "FETCH_ORG_ITEMS_START",
           id,
           params,
         });
+        fetchOrgRequestsStart({
+          type: "FETCH_PERIFERAL_ITEMS_START",
+          id,
+          params,
+        });
+        return;
       case "attachments":
         return fetchOrgRequestsStart({
           type: "FETCH_ORG_ATTACHMENTS_START",

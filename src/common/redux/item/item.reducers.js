@@ -12,6 +12,7 @@ const INITIAL_STATE = {
   current: {},
   fetching: false,
   selectedFilters: { Item: [] },
+  itemsLoading: false,
 };
 let newItems = [];
 const item = (state = INITIAL_STATE, action) => {
@@ -107,18 +108,21 @@ const item = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         fetching: true,
+        itemsLoading: true,
       };
     case "FETCH_PERIFERAL_ITEMS_SUCCESS":
       return {
         ...state,
         periferalItems: [...action.payload.result],
         fetching: false,
+        itemsLoading: false,
       };
     case "FETCH_ROOT_ITEMS_SUCCESS":
       return {
         ...state,
         rootItems: [...action.payload.result],
         fetching: false,
+        itemsLoading: false,
       };
     case itemTypes.ADD_ITEM_START:
       return {

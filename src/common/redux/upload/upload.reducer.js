@@ -21,6 +21,17 @@ const upload = (state = INITIAL_STATE, action) => {
         ...state,
         progress: action.payload,
       };
+    case "ADD_CAMPAIGN_OFFICE_SUCCESS":
+    case "ADD_CAMPAIGN_ACCOUNT_SUCCESS":
+    case "ADD_CAMPAIGN_CAMPAIGN_SUCCESS":
+    case "ADD_CAMPAIGN_PACKAGE_SUCCESS":
+    case "ADD_CAMPAIGN_SUCCESS":
+    case "ADD_ORG_OFFICE_SUCCESS":
+    case "ADD_ORG_ACCOUNT_SUCCESS":
+    case "ADD_ORG_CAMPAIGN_SUCCESS":
+    case "ADD_ORG_PACKAGE_SUCCESS":
+    case "ADD_ORGANIZATION_SUCCESS":
+    case "ADD_ORG_REGION_SUCCESS":
     case "ADD_DONATION_REQUEST_SUCCESS":
     case "OPEN_MODAL":
     case "ADD_DONATION_SUCCESS":
