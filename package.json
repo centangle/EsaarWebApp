@@ -10,7 +10,7 @@
     "frontend-collective-react-dnd-scrollzone": "^1.0.2",
     "geojson-world-map": "0.0.2",
     "leaflet": "^1.6.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "lodash.isequal": "^4.5.0",
     "lodash.orderby": "^4.6.0",
     "lodash.sortby": "^4.7.0",
